@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://academy.hackthebox.com/module/144/section/1257 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Information Gathering - Web Edition</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+<meta content="Themesbrand" name="author">
+<link rel="shortcut icon" href="https://academy.hackthebox.com/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://academy.hackthebox.com/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://academy.hackthebox.com/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://academy.hackthebox.com/images/apple-touch-icon.png">
+<link rel="mask-icon" href="https://academy.hackthebox.com/images/safari-pinned-tab.svg">
+<link href="./Information Gathering - Web Edition8_files/bootstrap-dark.css" id="bootstrap-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Information Gathering - Web Edition8_files/icons.css" rel="stylesheet" type="text/css">
+<link href="./Information Gathering - Web Edition8_files/app-dark.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Information Gathering - Web Edition8_files/prism.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Information Gathering - Web Edition8_files/toastr.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Information Gathering - Web Edition8_files/ryt3opf.css">
+<script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/awwxrc0h"></script><script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/uwt.js.download"></script><script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/insight.min.js.download"></script><script src="./Information Gathering - Web Edition8_files/346791856678772" async=""></script><script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/analytics.js.download"></script><script type="text/javascript" src="./Information Gathering - Web Edition8_files/commons.54701049fd6fb8497e9e.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Information Gathering - Web Edition8_files/intercom.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Information Gathering - Web Edition8_files/twitter-ads.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Information Gathering - Web Edition8_files/linkedin-insight-tag.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Information Gathering - Web Edition8_files/facebook-pixel.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Information Gathering - Web Edition8_files/google-analytics.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/recaptcha__en.js.download" crossorigin="anonymous" integrity="sha384-TE9Ls1LqNaomGaFdDlxBJIkg+bFnKWbASEx9XrnnCV1SiORfW/qiKK2lsAbkVeBa"></script><script type="text/javascript" async="" src="./Information Gathering - Web Edition8_files/analytics.min.js.download"></script><script>
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+                analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                                        properties = {"platform":"Academy","platform_version":"V1","module_id":144,"module_name":"Information Gathering - Web Edition","module_difficulty":"Easy","section_id":1257,"section_title":"Virtual Hosts"};
+                                                analytics.page(
+                    "Module",
+                    properties
+                );
+                                            }
+        }();
+    </script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+</style>
+<script src="./Information Gathering - Web Edition8_files/api.js.download"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div class="container-fluid">
+<div id="layout-wrapper">
+<header id="page-topbar">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="./Information Gathering - Web Edition8_files/1782606024b767354a8c9d75e1a6323a" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">Tommy034</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> Vpn Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E"> <a onclick="$(this).closest(&#39;form&#39;).submit()" class="dropdown-item text-danger" href="https://academy.hackthebox.com/module/144/section/1257#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="./Information Gathering - Web Edition8_files/logo.svg" alt="" height="30">
+</span>
+<span class="logo-lg">
+<img src="./Information Gathering - Web Edition8_files/logo.svg" alt="" height="36">
+</span>
+</a>
+</div>
+<button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="main-content">
+<div class="page-content">
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1">Information Gathering - Web Edition &nbsp;<i style="cursor:pointer;" data-module-id="144" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa  fa-heart text-danger" data-original-title="" title=""></i></h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 8</a></li>
+<li class="breadcrumb-item active">Virtual Hosts</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>Virtual Hosts</h1>
+<hr>
+<p>A virtual host (<code>vHost</code>) is a feature that allows several websites to be hosted on a single server. This is an excellent solution if you have many websites and don't want to go through the time-consuming (and expensive) process of setting up a new web server for each one. Imagine having to set up a different webserver for a mobile and desktop version of the same page. There are two ways to configure virtual hosts:</p>
+<ul>
+<li>
+<code>IP</code>-based virtual hosting</li>
+<li>
+<code>Name</code>-based virtual hosting</li>
+</ul>
+<h4>IP-based Virtual Hosting</h4>
+<p>For this type, a host can have multiple network interfaces. Multiple IP addresses, or interface aliases, can be configured on each network interface of a host. The servers or virtual servers running on the host can bind to one or more IP addresses. This means that different servers can be addressed under different IP addresses on this host. From the client's point of view, the servers are independent of each other.</p>
+<h4>Name-based Virtual Hosting</h4>
+<p>The distinction for which domain the service was requested is made at the application level. For example, several domain names, such as <code>admin.inlanefreight.htb</code> and <code>backup.inlanefreight.htb</code>, can refer to the same IP. Internally on the server, these are separated and distinguished using different folders. Using this example, on a Linux server, the vHost <code>admin.inlanefreight.htb</code> could point to the folder <code>/var/www/admin</code>. For <code>backup.inlanefreight.htb</code> the folder name would then be adapted and could look something like <code>/var/www/backup</code>.</p>
+<p>During our subdomain discovering activities, we have seen some subdomains having the same IP address that can either be virtual hosts or, in some cases, different servers sitting behind a proxy.</p>
+<p>Imagine we have identified a web server at <code>192.168.10.10</code> during an internal pentest, and it shows a default website using the following command. Are there any virtual hosts present?</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Name-based Virtual Hosting</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -s http://192.168.10.10</span></span>
+
+<span class="token output">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&lt;/p&gt;
+
+&lt;p&gt;For online documentation and support please refer to
+&lt;a href="http://nginx.org/"&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial support is available at
+&lt;a href="http://nginx.com/"&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</span></code></pre></div></div>
+<p>Let's make a <code>cURL</code> request sending a domain previously identified during the information gathering in the <code>HOST</code> header. We can do that like so:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Name-based Virtual Hosting</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -s http://192.168.10.10 -H <span class="token string">"Host: randomtarget.com"</span></span></span>
+
+<span class="token output">&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;Welcome to randomtarget.com!&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Success! The randomtarget.com server block is working!&lt;/h1&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</span></code></pre></div></div>
+<p>Now we can automate this by using a dictionary file of possible vhost names (such as <code>/opt/useful/SecLists/Discovery/DNS/namelist.txt</code> on the Pwnbox) and examining the Content-Length header to look for any differences.</p>
+<h4>vHosts List</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">vHosts List</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output">app
+blog
+dev-admin
+forum
+help
+m
+my
+shop
+some
+store
+support
+www
+</span></code></pre></div></div>
+<h4>vHost Fuzzing</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">vHost Fuzzing</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">cat</span> ./vhosts <span class="token operator">|</span> <span class="token keyword">while</span> <span class="token builtin class-name">read</span> vhost<span class="token punctuation">;</span><span class="token keyword">do</span> <span class="token builtin class-name">echo</span> <span class="token string">"<span class="token entity" title="\n">\n</span>********<span class="token entity" title="\n">\n</span>FUZZING: <span class="token variable">${vhost}</span><span class="token entity" title="\n">\n</span>********"</span><span class="token punctuation">;</span><span class="token function">curl</span> -s -I http://192.168.10.10 -H <span class="token string">"HOST: <span class="token variable">${vhost}</span>.randomtarget.com"</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"Content-Length: "</span><span class="token punctuation">;</span><span class="token keyword">done</span></span></span>
+
+
+<span class="token output">********
+FUZZING: app
+********
+Content-Length: 612
+
+********
+FUZZING: blog
+********
+Content-Length: 612
+
+********
+FUZZING: dev-admin
+********
+Content-Length: 120
+
+********
+FUZZING: forum
+********
+Content-Length: 612
+
+********
+FUZZING: help
+********
+Content-Length: 612
+
+********
+FUZZING: m
+********
+Content-Length: 612
+
+********
+FUZZING: my
+********
+Content-Length: 612
+
+********
+FUZZING: shop
+********
+Content-Length: 612
+
+********
+FUZZING: some
+********
+Content-Length: 195
+
+********
+FUZZING: store
+********
+Content-Length: 612
+
+********
+FUZZING: support
+********
+Content-Length: 612
+
+********
+FUZZING: www
+********
+Content-Length: 185
+</span></code></pre></div></div>
+<p>We have successfully identified a virtual host called <code>dev-admin</code>, which we can access using a <code>cURL</code> request.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">vHost Fuzzing</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -s http://192.168.10.10 -H <span class="token string">"Host: dev-admin.randomtarget.com"</span></span></span>
+
+<span class="token output">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+
+&lt;h1&gt;Randomtarget.com Admin Website&lt;/h1&gt;
+
+&lt;p&gt;You shouldn't be here!&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</span></code></pre></div></div>
+<hr>
+<h2>Automating Virtual Hosts Discovery</h2>
+<p>We can use this manual approach for a small list of virtual hosts, but it will not be feasible if we have an extensive list. Using <a href="https://github.com/ffuf/ffuf" target="_blank" rel="noopener nofollow">ffuf</a>, we can speed up the process and filter based on parameters present in the response. Let's replicate the same process we did with ffuf, but first, let's look at some of its options.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">vHost Fuzzing</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session">
+<span class="token output">MATCHER OPTIONS:
+  -mc                 Match HTTP status codes, or "all" for everything. (default: 200,204,301,302,307,401,403,405)
+  -ml                 Match amount of lines in response
+  -mr                 Match regexp
+  -ms                 Match HTTP response size
+  -mw                 Match amount of words in response
+
+FILTER OPTIONS:
+  -fc                 Filter HTTP status codes from response. Comma separated list of codes and ranges
+  -fl                 Filter by amount of lines in response. Comma separated list of line counts and ranges
+  -fr                 Filter regexp
+  -fs                 Filter HTTP response size. Comma separated list of sizes and ranges
+  -fw                 Filter by amount of words in response. Comma separated list of word counts and ranges
+</span></code></pre></div></div>
+<p>We can match or filter responses based on different options. The web server responds with a default and static website every time we issue an invalid virtual host in the <code>HOST</code> header. We can use the filter by size <code>-fs</code> option to discard the default response as it will always have the same size.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">vHost Fuzzing</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">ffuf -w ./vhosts -u http://192.168.10.10 -H <span class="token string">"HOST: FUZZ.randomtarget.com"</span> -fs <span class="token number">612</span></span></span>
+
+<span class="token output">        /'___\  /'___\           /'___\
+       /\ \__/ /\ \__/  __  __  /\ \__/
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+         \ \_\   \ \_\  \ \____/  \ \_\
+          \/_/    \/_/   \/___/    \/_/
+
+       v1.1.0-git
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://192.168.10.10
+ :: Wordlist         : FUZZ: ./vhosts
+ :: Header           : Host: FUZZ.randomtarget.com
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200,204,301,302,307,401,403,405
+ :: Filter           : Response size: 612
+________________________________________________
+
+dev-admin               [Status: 200, Size: 120, Words: 7, Lines: 12]
+www                     [Status: 200, Size: 185, Words: 41, Lines: 9]
+some                    [Status: 200, Size: 195, Words: 41, Lines: 9]
+:: Progress: [12/12] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Errors: 0 ::
+</span></code></pre></div></div>
+<p>where:</p>
+<ul>
+<li>
+<code>-w</code>: Path to our wordlist</li>
+<li>
+<code>-u</code>: URL we want to fuzz</li>
+<li>
+<code>-H "HOST: FUZZ.randomtarget.com"</code>: This is the <code>HOST</code> Header, and the word <code>FUZZ</code> will be used as the fuzzing point.</li>
+<li>
+<code>-fs 612</code>: Filter responses with a size of 612, default response size in this case.</li>
+</ul>
+<div id="screen" style="height: 600px; border: 1px solid;">
+<div class="screenPlaceholder">
+<div class="instanceLoading" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Instance is starting...</div>
+</div>
+<div class="instanceTerminating" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Terminating instance...</div>
+</div>
+<div class="row instanceStart max-width-canvas">
+<div class="col-4"></div>
+<div class="col-4">
+<button class=" startInstanceBtn btn btn-primary btn-lg btn-block" style="margin-top: 270px;">Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<div class="col-4"></div>
+</div>
+</div>
+</div>
+<div class="row align-center justify-center my-4">
+<div class="col-5 justify-start">
+<button style="display:none;" target="_blank" class="instance-button fullScreenBtn btn btn-light btn-sm float-left "><i class="fad fa-expand text-success mr-1"></i> &nbsp;Full Screen</button>
+<button style="display:none;" class="instance-button terminateInstanceBtn btn btn-light btn-sm ml-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="instance-button resetInstanceBtn btn btn-light btn-sm ml-1"><i class="fad fa-sync text-warning mr-2"></i> &nbsp;Reset</button>
+<div class="btn-group " role="group">
+<button style="display:none;cursor: default;" class="instance-button extendInstanceBtn btn btn-light btn-sm ml-1">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm " data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+<div id="statusText" class="col-7 justify-end pt-2 pr-2 font-size-small text-right">Waiting to start...</div>
+</div>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Questions</h4>
+<p class="card-title-desc font-size-large font-size-15">Answer the question(s) below to complete this Section and earn cubes!</p>
+<p class="card-title-desc font-size-large font-size-15">
+Target: <span class="text-success"><span class="target" style="cursor:pointer;"><span class="spawnTargetBtn">Click here to spawn the target system!</span></span></span>
+<button class="resetTargetBtn btn btn-light btn-sm " data-toggle="tooltip" data-title="Reset Target" style="cursor: pointer; display: none;" data-original-title="" title=""><i class="fad fa-sync text-warning"></i></button>
+<br>
+<span class="targetLifeTimeContainer" style="display: none;">Time Left: <span class="targetLifeTime  font-size-15">0</span> minutes</span>
+</p>
+<span>vHosts needed for these questions:</span>
+<ul>
+<li>
+<code>www.inlanefreight.htb</code>
+</li>
+</ul>
+</div>
+<div class="col-3 text-right float-right">
+<button class="btn btn-light bg-color-blue-nav mt-2" data-toggle="modal" data-target="#cheatSheetModal"><i class="fad fa-file-alt mr-2"></i> Cheat Sheet</button>
+<a href="https://academy.hackthebox.com/vpn/key" class="btn btn-light bg-color-blue-nav mt-2" data-toggle="tooltip" data-title="Key is already installed in &quot;My Workstation&quot;" target="_blank" rel="noopener nofollow" data-original-title="" title=""><i class="fad fa-chart-network mr-2"></i>Get VPN Key</a>
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="879"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> Enumerate the target and find a vHost that contains flag No. 1. Submit the flag value as your answer (in the format HTB{DATA}).</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer879" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+ <div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer879" data-question-id="879"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=" custom-hr "></div>
+</div>
+<div>
+<label class="module-question" for="880"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> Enumerate the target and find a vHost that contains flag No. 2. Submit the flag value as your answer (in the format HTB{DATA}).</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer880" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer880" data-question-id="880"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=" custom-hr "></div>
+</div>
+<div>
+<label class="module-question" for="881"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> Enumerate the target and find a vHost that contains flag No. 3. Submit the flag value as your answer (in the format HTB{DATA}).</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer881" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer881" data-question-id="881"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=" custom-hr "></div>
+</div>
+<div>
+<label class="module-question" for="882"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> Enumerate the target and find a vHost that contains flag No. 4. Submit the flag value as your answer (in the format HTB{DATA}).</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer882" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer882" data-question-id="882"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=" custom-hr "></div>
+</div>
+<div>
+<label class="module-question" for="883"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> Find the specific vHost that starts with the letter "d" and submit the flag value as your answer (in the format HTB{DATA}).</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer883" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer883" data-question-id="883"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=""></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/144/section/1256" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="144">
+<input type="hidden" name="page_id" value="9">
+<input type="hidden" name="completed" value="1">
+<button id="completeBtn" class="btn btn-outline-success" style="display:none;"><i class="fa fa-check-circle"></i> Mark Complete &amp; Next</button>
+</form>
+<a href="https://academy.hackthebox.com/module/144/section/1258" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<button class="btn btn-light btn-block module-button" data-toggle="modal" data-target="#cheatSheetModal"><i class="fad fa-file-alt mr-2"></i> Cheat Sheet</button>
+<a href="https://academy.hackthebox.com/module/144/section/1257#questionsDiv" class="btn btn-light btn-block module-button"><i class="fad fa-question mr-2"></i> Go to Questions</a>
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<a href="https://academy.hackthebox.com/module/144/section/1247" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Information Gathering</span>
+</a>
+<h6 class="mt-4 mb-2">Passive Information Gathering</h6> <a href="https://academy.hackthebox.com/module/144/section/1248" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">WHOIS</span>
+</a>
+<a href="https://academy.hackthebox.com/module/144/section/1251" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">DNS</span>
+</a>
+<a href="https://academy.hackthebox.com/module/144/section/1252" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Passive Subdomain Enumeration</span>
+</a>
+<a href="https://academy.hackthebox.com/module/144/section/1253" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Passive Infrastructure Identification</span>
+</a>
+<h6 class="mt-4 mb-2">Active Information Gathering</h6> <a href="https://academy.hackthebox.com/module/144/section/1255" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Active Infrastructure Identification</span>
+</a>
+ <a href="https://academy.hackthebox.com/module/144/section/1256" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Active Subdomain Enumeration</span>
+</a>
+<a href="https://academy.hackthebox.com/module/144/section/1257" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Virtual Hosts</span>
+</a>
+<a href="https://academy.hackthebox.com/module/144/section/1258" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Crawling</span>
+</a>
+<h6 class="mt-4 mb-2">Putting it all Together</h6> <a href="https://academy.hackthebox.com/module/144/section/1311" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Information Gathering - Web - Skills Assessment</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class=" startInstanceBtn btn btn-light btn-sm mt-2 btn-block module-button py-2"><i class="fad fa-play-circle text-success"></i> &nbsp;Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2" data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint879" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint879" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint880" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint880" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint881" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint881" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint882" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint882" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint883" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint883" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is as a useful command reference for this module.</p>
+<h2>WHOIS</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>export TARGET="domain.tld"</code></td>
+<td>Assign target to an environment variable.</td>
+</tr>
+<tr>
+<td><code>whois $TARGET</code></td>
+<td>WHOIS lookup for the target.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>DNS Enumeration</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nslookup $TARGET</code></td>
+<td>Identify the <code>A</code> record for the target domain.</td>
+</tr>
+<tr>
+<td><code>nslookup -query=A $TARGET</code></td>
+<td>Identify the <code>A</code> record for the target domain.</td>
+</tr>
+<tr>
+<td><code>dig $TARGET @&lt;nameserver/IP&gt;</code></td>
+<td>Identify the <code>A</code> record for the target domain.</td>
+</tr>
+<tr>
+<td><code>dig a $TARGET @&lt;nameserver/IP&gt;</code></td>
+<td>Identify the <code>A</code> record for the target domain.</td>
+</tr>
+<tr>
+<td><code>nslookup -query=PTR &lt;IP&gt;</code></td>
+<td>Identify the <code>PTR</code> record for the target IP address.</td>
+</tr>
+<tr>
+<td><code>dig -x &lt;IP&gt; @&lt;nameserver/IP&gt;</code></td>
+<td>Identify the <code>PTR</code> record for the target IP address.</td>
+</tr>
+<tr>
+<td><code>nslookup -query=ANY $TARGET</code></td>
+<td>Identify <code>ANY</code> records for the target domain.</td>
+</tr>
+<tr>
+<td><code>dig any $TARGET @&lt;nameserver/IP&gt;</code></td>
+<td>Identify <code>ANY</code> records for the target domain.</td>
+</tr>
+<tr>
+<td><code>nslookup -query=TXT $TARGET</code></td>
+<td>Identify the <code>TXT</code> records for the target domain.</td>
+</tr>
+<tr>
+<td><code>dig txt $TARGET @&lt;nameserver/IP&gt;</code></td>
+<td>Identify the <code>TXT</code> records for the target domain.</td>
+</tr>
+<tr>
+<td><code>nslookup -query=MX $TARGET</code></td>
+<td>Identify the <code>MX</code> records for the target domain.</td>
+</tr>
+<tr>
+<td><code>dig mx $TARGET @&lt;nameserver/IP&gt;</code></td>
+<td>Identify the <code>MX</code> records for the target domain.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Passive Subdomain Enumeration</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Resource/Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VirusTotal</code></td>
+<td><a href="https://www.virustotal.com/gui/home/url">https://www.virustotal.com/gui/home/url</a></td>
+</tr>
+<tr>
+<td><code>Censys</code></td>
+<td><a href="https://censys.io/">https://censys.io/</a></td>
+</tr>
+<tr>
+<td><code>Crt.sh</code></td>
+<td><a href="https://crt.sh/">https://crt.sh/</a></td>
+</tr>
+<tr>
+<td><code>curl -s https://sonar.omnisint.io/subdomains/{domain} | jq -r '.[]' | sort -u</code></td>
+<td>All subdomains for a given domain.</td>
+</tr>
+<tr>
+<td><code>curl -s https://sonar.omnisint.io/tlds/{domain} | jq -r '.[]' | sort -u</code></td>
+<td>All TLDs found for a given domain.</td>
+</tr>
+<tr>
+<td><code>curl -s https://sonar.omnisint.io/all/{domain} | jq -r '.[]' | sort -u</code></td>
+<td>All results across all TLDs for a given domain.</td>
+</tr>
+<tr>
+<td><code>curl -s https://sonar.omnisint.io/reverse/{ip} | jq -r '.[]' | sort -u</code></td>
+<td>Reverse DNS lookup on IP address.</td>
+</tr>
+<tr>
+<td><code>curl -s https://sonar.omnisint.io/reverse/{ip}/{mask} | jq -r '.[]' | sort -u</code></td>
+<td>Reverse DNS lookup of a CIDR range.</td>
+</tr>
+<tr>
+<td><code>curl -s "https://crt.sh/?q=${TARGET}&amp;output=json" | jq -r '.[] | "\(.name_value)\n\(.common_name)"' | sort -u</code></td>
+<td>Certificate Transparency.</td>
+</tr>
+<tr>
+<td><code>cat sources.txt | while read source; do theHarvester -d "${TARGET}" -b $source -f "${source}-${TARGET}";done</code></td>
+<td>Searching for subdomains and other information on the sources provided in the source.txt list.</td>
+</tr>
+</tbody>
+</table></div>
+<h4>Sources.txt</h4>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">txt</span></div><pre class=" language-txt"><code class=" language-txt">baidu
+bufferoverun
+crtsh
+hackertarget
+otx
+projecdiscovery
+rapiddns
+sublist3r
+threatcrowd
+trello
+urlscan
+vhost
+virustotal
+zoomeye
+</code></pre></div></div>
+<hr>
+<h2>Passive Infrastructure Identification</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Resource/Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Netcraft</code></td>
+<td><a href="https://www.netcraft.com/">https://www.netcraft.com/</a></td>
+</tr>
+<tr>
+<td><code>WayBackMachine</code></td>
+<td><a href="http://web.archive.org/">http://web.archive.org/</a></td>
+</tr>
+<tr>
+<td><code>WayBackURLs</code></td>
+<td><a href="https://github.com/tomnomnom/waybackurls">https://github.com/tomnomnom/waybackurls</a></td>
+</tr>
+<tr>
+<td><code>waybackurls -dates https://$TARGET &gt; waybackurls.txt</code></td>
+<td>Crawling URLs from a domain with the date it was obtained.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Active Infrastructure Identification</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Resource/Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curl -I "http://${TARGET}"</code></td>
+<td>Display HTTP headers of the target webserver.</td>
+</tr>
+<tr>
+<td><code>whatweb -a https://www.facebook.com -v</code></td>
+<td>Technology identification.</td>
+</tr>
+<tr>
+<td><code>Wappalyzer</code></td>
+<td><a href="https://www.wappalyzer.com/">https://www.wappalyzer.com/</a></td>
+</tr>
+<tr>
+<td><code>wafw00f -v https://$TARGET</code></td>
+<td>WAF Fingerprinting.</td>
+</tr>
+<tr>
+<td><code>Aquatone</code></td>
+<td><a href="https://github.com/michenriksen/aquatone">https://github.com/michenriksen/aquatone</a></td>
+</tr>
+<tr>
+<td><code>cat subdomain.list | aquatone -out ./aquatone -screenshot-timeout 1000</code></td>
+<td>Makes screenshots of all subdomains in the subdomain.list.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Active Subdomain Enumeration</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Resource/Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HackerTarget</code></td>
+<td><a href="https://hackertarget.com/zone-transfer/">https://hackertarget.com/zone-transfer/</a></td>
+</tr>
+<tr>
+<td><code>SecLists</code></td>
+<td><a href="https://github.com/danielmiessler/SecLists">https://github.com/danielmiessler/SecLists</a></td>
+</tr>
+<tr>
+<td><code>nslookup -type=any -query=AXFR $TARGET nameserver.target.domain</code></td>
+<td>Zone Transfer using Nslookup against the target domain and its nameserver.</td>
+</tr>
+<tr>
+<td><code>gobuster dns -q -r "${NS}" -d "${TARGET}" -w "${WORDLIST}" -p ./patterns.txt -o "gobuster_${TARGET}.txt"</code></td>
+<td>Bruteforcing subdomains.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Virtual Hosts</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Resource/Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>curl -s http://192.168.10.10 -H "Host: randomtarget.com"</code></td>
+<td>Changing the HOST HTTP header to request a specific domain.</td>
+</tr>
+<tr>
+<td><code>cat ./vhosts.list | while read vhost;do echo "\n********\nFUZZING: ${vhost}\n********";curl -s -I http://&lt;IP address&gt; -H "HOST: ${vhost}.target.domain" | grep "Content-Length: ";done</code></td>
+<td>Bruteforcing for possible virtual hosts on the target domain.</td>
+</tr>
+<tr>
+<td><code>ffuf -w ./vhosts -u http://&lt;IP address&gt; -H "HOST: FUZZ.target.domain" -fs 612</code></td>
+<td>Bruteforcing for possible virtual hosts on the target domain using <code>ffuf</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Crawling</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Resource/Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZAP</code></td>
+<td><a href="https://www.zaproxy.org/">https://www.zaproxy.org/</a></td>
+</tr>
+<tr>
+<td><code>ffuf -recursion -recursion-depth 1 -u http://192.168.10.10/FUZZ -w /opt/useful/SecLists/Discovery/Web-Content/raft-small-directories-lowercase.txt</code></td>
+<td>Discovering files and folders that cannot be spotted by browsing the website.</td>
+</tr>
+<tr>
+<td><code>ffuf -w ./folders.txt:FOLDERS,./wordlist.txt:WORDLIST,./extensions.txt:EXTENSIONS -u http://www.target.domain/FOLDERS/WORDLISTEXTENSIONS</code></td>
+<td>Mutated bruteforcing against the target web server.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/144">Download Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com/" target="_blank"><img style="margin-bottom: 1px;" src="./Information Gathering - Web Edition8_files/logo-htb.svg" height="20px"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src="./Information Gathering - Web Edition8_files/jquery.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/bootstrap.bundle.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/metisMenu.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/simplebar.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/waves.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/toastr.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/axios.min.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/prism.js.download"></script>
+<script src="./Information Gathering - Web Edition8_files/main.js.download"></script>
+<script>
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': 'OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': 'Bearer ' + 'jgfghW9jOUxTYrPOMG9i2ujbtUFdtKuilcFrKtLWJpv9gAzKxNnjcsm7Dg2wIx8ivYvDBp7jCWD5XRNP'
+    };
+</script>
+<script>
+    $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+    $('.training-module a').attr('target','_blank').attr('rel','noopener nofollow');
+
+    $( ".favouriteBtn" ).click(function() {
+        let id = $(this).data('module-id');
+
+        axios.get('/api/modules/favourite/'+id).then(response => {
+            let data = response.data;
+            if (data.fav === 1) {
+                $(this).removeClass('far fa').addClass('fa');
+                toastr["success"](data.message, "Success");
+            } else {
+                $(this).removeClass('far fa').addClass('far');
+                toastr["success"](data.message, "Success");
+            }
+        });
+    });
+
+    function encode_utf8(string) {
+    return unescape(encodeURIComponent(string));
+  }
+
+  $('.btnAnswer').click(function() {
+    let question_id = $(this).data('question-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+    axios.post('/api/check/answer', {
+      answer: btoa(utf8EncodedString),
+      question_id: question_id
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $('#answer' + question_id).attr('disabled', 1);
+        $('#answer' + question_id).addClass('text-success');
+        $('#hintBtn' + question_id).attr('disabled', 1);
+        toastr['success'](data.message, 'Success');
+        completeCheck();
+      }
+    });
+  });
+
+  $('.btnAnswerExercise').click(function() {
+    let exercise_id = $(this).data('exercise-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+    axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+      answer: btoa(utf8EncodedString)
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+        toastr['success'](data.message, 'Success');
+      }
+    });
+  });
+
+    
+    $('.reveal-modal').click(e => {
+        let id = $(e.target).data('exercise-id');
+        $(`#revealExerciseAnswer${id}`).modal('hide');
+    });
+
+    $( document ).ready(function() {
+
+        $('pre').filter(function () {
+            return this.className.match(/\blanguage-/);
+        }).each(function () {
+            let heading = $(this).prevAll().closest('h4').last().text();
+
+            if (this.className === ' language-shell-session') {
+                wrapTerminal(this, heading);
+            } else if (this.className === ' language-powershell-session') {
+                wrapPSTerminal(this, heading);
+            } else if (this.className === ' language-cmd-session') {
+                wrapCMDTerminal(this, heading);
+            } else if (this.className.startsWith(' language-')) {
+                var language = this.className.split('-').pop();
+                wrapCodeBlock(this,language);
+            }
+        });
+
+        wrapBrowser($('.website-screenshot'));
+        completeCheck();
+
+        $("span:contains('[!bash!]')").html('<span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span>');
+    });
+
+    function completeCheck()
+    {
+        axios.get('/api/check/complete/1257').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.completed === true) {
+                    $('#completeBtn').show();
+                }
+            }
+        });
+    }
+
+    function wrapTerminal(element, heading)
+    {
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapPSTerminal(element, heading)
+    {
+        $(element).css('background', '#012456').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCMDTerminal(element, heading)
+    {
+        $(element).css('background', 'black').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCodeBlock(element,lang)
+    {
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend('<div class="window_top">Code: <span class="text-success">'+lang+'</div>');
+    }
+    function wrapBrowserOld(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+        let url = element.data('url');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <input type="text" class="website-screenshot-url" disabled value="${url}">
+                    <span class="float-right"><i class="fa fa-home"></i></span>
+                </div>
+            `);
+    }
+    function wrapBrowser(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+
+        $(element).each( function(index,e) {
+            let url = $(e).data('url');
+            $(e).wrap('<div class="window_content"></div>')
+                .parent().wrap('<div class="window_container"></div>')
+                .prepend(`
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled value="${url}">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                `);
+        })
+    }
+</script>
+<script type="module">
+    import RFB from '/assets/libs/vnc/core/rfb.js';
+
+    let rfb;
+    let sidePreview;
+    let desktopName;
+    let pwnboxActive = false;
+
+    function connectedToServer(e) {
+        status("Connected to " + desktopName);
+        $('.fullScreenBtn').show();
+        $('.resetInstanceBtn').show();
+        $('.terminateInstanceBtn').show();
+        $('.extendInstanceBtn').show();
+        $('.instanceLoading').hide();
+        $('.instanceStart').hide();
+        $('.resetInstanceBtn').prop('disabled',false);
+        $('.fullScreenBtn').prop('disabled',false);
+        $('.extendInstanceBtn').prop('disabled',false);
+        $('.terminateInstanceBtn').prop('disabled',false);
+
+        document.querySelector('canvas').addEventListener('focus', (event) => {
+            navigator.clipboard.readText()
+                .then(text => {
+                    writeToClipboard(text);
+                })
+                .catch(err => {
+                    console.log('Something went wrong while accessing clipboard', err);
+                })
+        });
+
+    }
+
+    function disconnectedFromServer(e) {
+        status("Disconnected");
+        $('.screenPlaceholder').show();
+        stopCountdown();
+    }
+
+    function clipboardReceived(e) {
+        navigator.clipboard.writeText(e.detail.text)
+            .then(() => {
+                // Success!
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    }
+
+    function updateDesktopName(e) {
+        desktopName = e.detail.name;
+    }
+
+    function status(text) {
+        console.log(text);
+        $("#statusText").html(text);
+    }
+
+    function readQueryVariable(name) {
+        const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+            match = document.location.href.match(re);
+
+        if (match) {
+            return decodeURIComponent(match[1]);
+        }
+
+        return null;
+    }
+
+    function writeToClipboard(text) {
+        rfb.clipboardPasteFrom(text);
+    }
+
+    let host = '';
+    let password = '';
+    let countdown = '';
+    let targetCountdown = '';
+    let url= '';
+    let spawnInterval = null;
+
+    function getPwnbox() {
+        axios.get('/api/get/pwnbox').then(response => {
+            let data = response.data;
+
+            if (spawnInterval !== null && data.instance.action_log !== null) {
+                let error = data.instance.action_log.find(log => log.error === true);
+                if (error) {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+
+                    clearInterval(spawnInterval);
+                    disconnectedFromServer();
+
+                    let errorMessage = `${error.text}. Please contact support.`;
+                    toastr["error"](errorMessage, "Error");
+
+                    status(errorMessage);
+                    return;
+                }
+            }
+
+            if (data.success === 1 && data.instance.vnc_password !== null) {
+                if (data.instance.action_log.find(log => log.action === 'ready')) {
+                    host = 'proxy-uk.htb-cloud.com/bird/' + data.instance.hostname;
+                    password = data.instance.vnc_password;
+                    $('.lifeLeft').html(data.instance.life_remaining);
+                    startCountdown();
+                    $('.screenPlaceholder').hide();
+                    url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                    pwnboxActive = true;
+                    connect();
+
+                    if (spawnInterval !== null) {
+                        clearInterval(spawnInterval);
+                    }
+                }
+            } else {
+                $('.screenPlaceholder').show();
+            }
+
+        });
+    }
+
+        function extendPwnbox() {
+        axios.get('/api/extend/pwnbox').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.lifeLeft').html(data.instance.life_remaining);
+                stopCountdown();
+                startCountdown();
+                toastr["success"]("Time extended for 60 minutes.", "Success");
+            } else {
+                toastr["error"](data.message, "Error");
+            }
+
+        });
+    }
+    
+    getPwnbox();
+
+    function startCountdown() {
+        countdown = setInterval(function() {
+            let life = parseInt($('.lifeLeft').html()) -1;
+            $('.lifeLeft').html(life)
+        }, 60 * 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdown);
+    }
+
+    function terminatePwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+
+        $('.instanceTerminating').show();
+
+        status('Terminating Interactive Instance...');
+
+        axios.delete('/api/terminate/pwnbox')
+            .then(({ data }) => {
+                if (data.success === 1) {
+                    $('.startInstanceBtn').show();
+                    $('.instanceStart').show();
+                    $('.instanceTerminating').hide();
+                    $('.resetInstanceBtn').hide();
+                    $('.terminateInstanceBtn').hide();
+                    $('.fullScreenBtn').hide();
+                    $('.extendInstanceBtn').hide();
+
+                    pwnboxActive = false;
+
+                    toastr['success']('Instance has been terminated.', 'Success');
+                } else {
+                    toastr['error'](data.message, 'Error');
+                    connect();
+                    $('.resetInstanceBtn').prop("disabled", false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                }
+            });
+    }
+
+    function startPwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+        $('.instanceLoading').show();
+        $('.startInstanceBtn').hide();
+
+        status("Starting Interactive Instance...");
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', {action: 'spawnPwnbox'}).then(function(token) {
+                if (token) {
+                    axios.get('/api/spawn/pwnbox?g-recaptcha-response= '+token).then(response => {
+                        let data = response.data;
+                        if (data.success === 1) {
+                            spawnInterval = setInterval(() => {
+                                getPwnbox();
+                            }, 2000);
+                        } else {
+                            if(data.code === 1 || (data.code === 3 && pwnboxActive)) {
+                                $('.resetInstanceBtn').prop("disabled", false);
+                                $('.fullScreenBtn').prop('disabled',false);
+                                $('.extendInstanceBtn').prop('disabled',false);
+                                $('.terminateInstanceBtn').prop('disabled',false);
+                                connect();
+
+                                if (data.code === 3) {
+                                    $('.instanceLoading').hide();
+                                    startCountdown();
+                                }
+                            } else {
+                                $('.startInstanceBtn').show();
+                                $('.instanceStart').show();
+                                $('.instanceLoading').hide();
+                            }
+
+                            toastr["error"](data.message, "Error");
+                        }
+
+                    });
+                } else {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+                }
+            });
+        });
+    }
+
+    $('.fullScreenBtn').click(function() {
+        window.open(url, "_blank");
+    });
+
+    $('.startInstanceBtn').click(function() {
+        startPwnbox();
+            });
+
+    $('.resetInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        startPwnbox();
+    });
+
+    $('.terminateInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        terminatePwnbox();
+    });
+
+    $('.extendInstanceBtnClicker').click(function() {
+       extendPwnbox();
+    });
+
+    $('.resetTargetBtn').click(function(){
+        $(this).prop('disabled',true);
+                            spawnVMs();
+            });
+
+    function connect() {
+        status("Connecting to " + host.split('/')[2] + "...");
+
+                rfb = new RFB(document.getElementById('screen'), 'wss://' + host,
+            { credentials: { password: password } });
+        //Listeners
+        rfb.addEventListener("desktopname", updateDesktopName);
+        rfb.addEventListener("clipboard",clipboardReceived);
+
+        rfb.resizeSession = true;
+        rfb.viewOnly = false;
+        
+        sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+            { credentials: { password: password } });
+
+        sidePreview.addEventListener("connect",  connectedToServer);
+        sidePreview.addEventListener("disconnect", disconnectedFromServer);
+
+        sidePreview.resizeSession = false;
+        sidePreview.viewOnly = true;
+        sidePreview.scaleViewport = true;
+    }
+
+    $('.target, .targetIp').click(e => {
+        if ($('.resetTargetBtn').is(':hidden')) return;
+        navigator.clipboard.writeText($(e.target).html())
+            .then(() => {
+                toastr['success']('Target copied to clipboard', 'Success');
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    });
+
+            $('.spawnTargetBtn').click(function() {
+        spawnVMs();
+    })
+
+    let vmCheckTimer;
+
+    function spawnVMs() {
+        $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+        $('.targetIp').html('<i class="fad fa-circle-notch fa-spin"></i>');
+        axios.get('/api/spawn/vms/1257').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                vmCheckTimer = setInterval(function() {
+                    checkVMs();
+                }, 5 * 1000);
+            } else {
+                toastr["error"](data.message, "Error");
+                $('.target').html('<span class="spawnTargetBtn" style="cursor:pointer;">Click here to spawn the target system!</span>');
+            }
+        });
+    }
+
+    function checkVMs() {
+        axios.get('/api/get/vms/1257').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.ready === 1) {
+                    $('.target').html(data.ip);
+                    $('.resetTargetBtn').show();
+                    $('.targetIp').html(data.ip);
+                    $('.targetLifeTimeContainer').show();
+                    $('.targetLifeTime').html(data.life_remaining);
+                    clearInterval(vmCheckTimer);
+                    $('.resetTargetBtn').prop('disabled',false);
+                    startTargetCountdown();
+                }
+            }
+        });
+    }
+
+    checkVMs();
+
+    
+    function startTargetCountdown() {
+        targetCountdown = setInterval(function() {
+            let life = parseInt($('.targetLifeTime').html()) -1;
+            $('.targetLifeTime').html(life)
+            if (life == 0) {
+                $('.targetLifeTimeContainer').hide();
+            }
+        }, 60 * 1000);
+    }
+</script>
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./Information Gathering - Web Edition8_files/anchor.html" width="256" height="60" role="presentation" name="a-tjzv9z4hmj6i" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;" src="./Information Gathering - Web Edition8_files/saved_resource.html"></iframe></div><img src="./Information Gathering - Web Edition8_files/adsct" height="1" width="1" style="display: none;"><img src="./Information Gathering - Web Edition8_files/adsct(1)" height="1" width="1" style="display: none;"><iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./Information Gathering - Web Edition8_files/saved_resource(1).html"></iframe><div id="torrent-scanner-popup" style="display: none;"></div><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path></svg></div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #85C700;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    animation: intercom-lightweight-app-launcher 250ms ease;
+  }
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 28px;
+    height: 32px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 56px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 36px;
+    max-width: 36px;
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg {
+    width: 16px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: white;
+    animation: intercom-lightweight-app-messenger 250ms ease-out;
+    
+        width: 376px;
+        height: calc(100% - 120px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 100px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+        border-radius: 8px;
+      
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 75px;
+    background: linear-gradient(
+      135deg,
+      rgb(17, 25, 39) 0%,
+      rgb(0, 0, 0) 100%
+    );
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div></body></html>

