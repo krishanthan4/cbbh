@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<!-- saved from url=(0054)https://academy.hackthebox.com/module/160/section/1471 -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Web Service &amp; API Attacks</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="Premium Multipurpose Admin &amp; Dashboard Template" name="description">
+<meta content="Themesbrand" name="author">
+<link rel="shortcut icon" href="https://academy.hackthebox.com/images/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://academy.hackthebox.com/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://academy.hackthebox.com/images/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://academy.hackthebox.com/images/apple-touch-icon.png">
+<link rel="mask-icon" href="https://academy.hackthebox.com/images/safari-pinned-tab.svg">
+<link href="./Web Service &amp; API Attacks2_files/bootstrap-dark.css" id="bootstrap-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Web Service &amp; API Attacks2_files/icons.css" rel="stylesheet" type="text/css">
+<link href="./Web Service &amp; API Attacks2_files/app-dark.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Web Service &amp; API Attacks2_files/prism.css" id="app-style" rel="stylesheet" data-style="dark" type="text/css">
+<link href="./Web Service &amp; API Attacks2_files/toastr.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="./Web Service &amp; API Attacks2_files/ryt3opf.css">
+<script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/awwxrc0h"></script><script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/uwt.js.download"></script><script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/insight.min.js.download"></script><script src="./Web Service &amp; API Attacks2_files/346791856678772" async=""></script><script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/fbevents.js.download"></script><script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/analytics.js.download"></script><script type="text/javascript" src="./Web Service &amp; API Attacks2_files/commons.54701049fd6fb8497e9e.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Web Service &amp; API Attacks2_files/intercom.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Web Service &amp; API Attacks2_files/twitter-ads.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Web Service &amp; API Attacks2_files/linkedin-insight-tag.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Web Service &amp; API Attacks2_files/facebook-pixel.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" src="./Web Service &amp; API Attacks2_files/google-analytics.dynamic.js.gz" async="" status="loaded"></script><script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/recaptcha__en.js.download" crossorigin="anonymous" integrity="sha384-TE9Ls1LqNaomGaFdDlxBJIkg+bFnKWbASEx9XrnnCV1SiORfW/qiKK2lsAbkVeBa"></script><script type="text/javascript" async="" src="./Web Service &amp; API Attacks2_files/analytics.min.js.download"></script><script>
+        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I";analytics.SNIPPET_VERSION="4.13.2";
+                analytics.load("eLzeD0QoARKZ42pc8AGEUYpcFLpYkf0I");
+                                                        properties = {"platform":"Academy","platform_version":"V1","module_id":160,"module_name":"Web Service \u0026 API Attacks","module_difficulty":"Medium","section_id":1471,"section_title":"Web Services Description Language (WSDL)"};
+                                                analytics.page(
+                    "Module",
+                    properties
+                );
+                                            }
+        }();
+    </script>
+<style>
+    .website-screenshot-url {
+        height: 22px;
+        cursor: text;
+        padding-left: 10px;
+    }
+</style>
+<script src="./Web Service &amp; API Attacks2_files/api.js.download"></script>
+</head>
+<body data-layout="detached" data-topbar="colored">
+<div class="container-fluid">
+<div id="layout-wrapper">
+<header id="page-topbar">
+<div class="navbar-header">
+<div class="container-fluid">
+<div class="float-right">
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<a href="https://academy.hackthebox.com/billing">
+<button type="button" class="btn btn-extra-light">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;Purchase Cubes
+</button>
+</a>
+</div>
+<div class="dropdown d-none d-lg-inline-block ml-1">
+<button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+<i class="mdi mdi-fullscreen"></i>
+</button>
+</div>
+<div class="dropdown d-inline-block">
+<button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<img class="rounded-circle header-profile-user" src="./Web Service &amp; API Attacks2_files/1782606024b767354a8c9d75e1a6323a" alt="Header Avatar">
+<span class="d-none d-xl-inline-block ml-1">Tommy034</span>
+<i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+</button>
+<div class="dropdown-menu dropdown-menu-right">
+<a class="dropdown-item" href="https://academy.hackthebox.com/billing"><i class="bx bx-wallet font-size-16 align-middle mr-1"></i> Billing</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/settings"><i class="bx bx-wrench font-size-16 align-middle mr-1"></i> Settings</a>
+<a class="dropdown-item d-block" href="https://academy.hackthebox.com/vpn"><i class="bx bx-server font-size-16 align-middle mr-1"></i> Vpn Settings</a>
+<div class="dropdown-divider"></div>
+<form method="POST" action="https://academy.hackthebox.com/logout"> <input type="hidden" name="_token" value="OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E"> <a onclick="$(this).closest(&#39;form&#39;).submit()" class="dropdown-item text-danger" href="https://academy.hackthebox.com/module/160/section/1471#"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+</form>
+</div>
+</div>
+</div>
+<div class="d-flex align-items-center">
+<div class="navbar-brand-box">
+<a href="https://academy.hackthebox.com/dashboard" class="logo">
+<span class="logo-sm">
+<img src="./Web Service &amp; API Attacks2_files/logo.svg" alt="" height="30">
+</span>
+<span class="logo-lg">
+<img src="./Web Service &amp; API Attacks2_files/logo.svg" alt="" height="36">
+</span>
+</a>
+</div>
+<button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
+<i class="fa fa-fw fa-bars"></i>
+</button>
+<div class="topnav">
+<nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+<div class="collapse navbar-collapse" id="topnav-menu-content">
+<ul class="navbar-nav active">
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/dashboard"><i class="mdi mdi-monitor-dashboard"></i> Dashboard</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/modules"><i class="mdi mdi-book-open"></i>
+Modules</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="https://academy.hackthebox.com/paths"><i class="mdi mdi-map-marker-path"></i> Paths</a>
+</li>
+</ul>
+</div>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="main-content">
+<div class="page-content">
+<div class="row">
+<div class="col-12">
+<div class="page-title-box d-flex align-items-center justify-content-between">
+<h4 class="page-title mb-0 font-size-18 letter-spacing-1">Web Service &amp; API Attacks &nbsp;<i style="cursor:pointer;" data-module-id="160" data-toggle="tooltip" data-title="Toggle To-Do" class="favouriteBtn  fa  fa-heart text-danger" data-original-title="" title=""></i></h4>
+<div class="page-title-right">
+<ol class="breadcrumb m-0">
+<li class="breadcrumb-item"><a href="javascript: void(0);">Page 2</a></li>
+<li class="breadcrumb-item active">Web Services Description Language (WSDL)</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="row justify-content-xl-center">
+<div class="col-md-12 col-xl-9 col-xxl-7">
+<div class="training-module">
+<h1>Web Services Description Language (WSDL)</h1>
+<hr>
+<p>WSDL stands for Web Service Description Language. WSDL is an XML-based file exposed by web services that informs clients of the provided services/methods, including where they reside and the method-calling convention.</p>
+<p>A web service's WSDL file should not always be accessible. Developers may not want to publicly expose a web service's WSDL file, or they may expose it through an uncommon location, following a security through obscurity approach. In the latter case, directory/parameter fuzzing may reveal the location and content of a WSDL file.</p>
+<p>Proceed to the end of this section and click on <code>Click here to spawn the target system!</code> or the <code>Reset Target</code> icon. Use the provided Pwnbox or a local VM with the supplied VPN key to reach the target service and follow along.</p>
+<p>Suppose we are assessing a SOAP service residing in <code>http://&lt;TARGET IP&gt;:3002</code>. We have not been informed of a WSDL file.</p>
+<p>Let us start by performing basic directory fuzzing against the web service.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title"></span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">dirb http://</span></span><span class="token output">&lt;TARGET IP&gt;:3002
+
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Fri Mar 25 11:53:09 2022
+URL_BASE: http://&lt;TARGET IP&gt;:3002/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://&lt;TARGET IP&gt;:3002/ ----
++ http://&lt;TARGET IP&gt;:3002/wsdl (CODE:200|SIZE:0)                            
+                                                                               
+-----------------
+END_TIME: Fri Mar 25 11:53:24 2022
+DOWNLOADED: 4612 - FOUND: 1
+</span></code></pre></div></div>
+<p>It looks like <code>http://&lt;TARGET IP&gt;:3002/wsdl</code> exists. Let us inspect its content as follows.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title"></span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> http://</span></span><span class="token output">&lt;TARGET IP&gt;:3002/wsdl 
+</span></code></pre></div></div>
+<p>The response is empty! Maybe there is a parameter that will provide us with access to the SOAP web service's WSDL file. Let us perform parameter fuzzing using <em>ffuf</em> and the <a href="https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/burp-parameter-names.txt" target="_blank" rel="noopener nofollow">burp-parameter-names.txt</a> list, as follows. <em>-fs 0</em> filters out empty responses (size = 0) and <em>-mc 200</em> matches <em>HTTP 200</em> responses.</p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title"></span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash">ffuf -w <span class="token string">"/home/htb-acxxxxx/Desktop/Useful Repos/SecLists/Discovery/Web-Content/burp-parameter-names.txt"</span> -u <span class="token string">'http://&lt;TARGET IP&gt;:3002/wsdl?FUZZ'</span> -fs <span class="token number">0</span> -mc <span class="token number">200</span></span></span>
+
+<span class="token output">        /'___\  /'___\           /'___\       
+       /\ \__/ /\ \__/  __  __  /\ \__/       
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      
+         \ \_\   \ \_\  \ \____/  \ \_\       
+          \/_/    \/_/   \/___/    \/_/       
+
+       v1.3.1 Kali Exclusive &lt;3
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://&lt;TARGET IP&gt;:3002/wsdl?FUZZ
+ :: Wordlist         : FUZZ: /home/htb-acxxxxx/Desktop/Useful Repos/SecLists/Discovery/Web-Content/burp-parameter-names.txt
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200
+ :: Filter           : Response size: 0
+________________________________________________
+
+:: Progress: [40/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Error
+:: Progress: [537/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Erro
+wsdl [Status: 200, Size: 4461, Words: 967, Lines: 186]
+:: Progress: [982/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Erro:: 
+Progress: [1153/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Err::
+Progress: [1780/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Err:: 
+Progress: [2461/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Err:: 
+Progress: [2588/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Err:: 
+Progress: [2588/2588] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Errors: 0 ::
+</span></code></pre></div></div>
+<p>It loos like <em>wsdl</em> is a valid parameter. Let us now issue a request for <code>http://&lt;TARGET IP&gt;:3002/wsdl?wsdl</code></p>
+<div class="window_container"><div class="window_content">
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title"></span>
+                </div>
+            <pre class=" language-shell-session" style="line-height: 0px;"><code class=" language-shell-session"><span class="token output"><span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span></span><span class="token command"><span class="token shell-symbol important">$</span> <span class="token bash language-bash"><span class="token function">curl</span> http://</span></span><span class="token output">&lt;TARGET IP&gt;:3002/wsdl?wsdl 
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;wsdl:definitions targetNamespace="http://tempuri.org/"
+	xmlns:s="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:tns="http://tempuri.org/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"&gt;
+	&lt;wsdl:types&gt;
+		&lt;s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/"&gt;
+			&lt;s:element name="LoginRequest"&gt;
+				&lt;s:complexType&gt;
+					&lt;s:sequence&gt;
+						&lt;s:element minOccurs="1" maxOccurs="1" name="username" type="s:string"/&gt;
+						&lt;s:element minOccurs="1" maxOccurs="1" name="password" type="s:string"/&gt;
+					&lt;/s:sequence&gt;
+				&lt;/s:complexType&gt;
+			&lt;/s:element&gt;
+			&lt;s:element name="LoginResponse"&gt;
+				&lt;s:complexType&gt;
+					&lt;s:sequence&gt;
+						&lt;s:element minOccurs="1" maxOccurs="unbounded" name="result" type="s:string"/&gt;
+					&lt;/s:sequence&gt;
+				&lt;/s:complexType&gt;
+			&lt;/s:element&gt;
+			&lt;s:element name="ExecuteCommandRequest"&gt;
+				&lt;s:complexType&gt;
+					&lt;s:sequence&gt;
+						&lt;s:element minOccurs="1" maxOccurs="1" name="cmd" type="s:string"/&gt;
+					&lt;/s:sequence&gt;
+				&lt;/s:complexType&gt;
+			&lt;/s:element&gt;
+			&lt;s:element name="ExecuteCommandResponse"&gt;
+				&lt;s:complexType&gt;
+					&lt;s:sequence&gt;
+						&lt;s:element minOccurs="1" maxOccurs="unbounded" name="result" type="s:string"/&gt;
+					&lt;/s:sequence&gt;
+				&lt;/s:complexType&gt;
+			&lt;/s:element&gt;
+		&lt;/s:schema&gt;
+	&lt;/wsdl:types&gt;
+	&lt;!-- Login Messages --&gt;
+	&lt;wsdl:message name="LoginSoapIn"&gt;
+		&lt;wsdl:part name="parameters" element="tns:LoginRequest"/&gt;
+	&lt;/wsdl:message&gt;
+	&lt;wsdl:message name="LoginSoapOut"&gt;
+		&lt;wsdl:part name="parameters" element="tns:LoginResponse"/&gt;
+	&lt;/wsdl:message&gt;
+	&lt;!-- ExecuteCommand Messages --&gt;
+	&lt;wsdl:message name="ExecuteCommandSoapIn"&gt;
+		&lt;wsdl:part name="parameters" element="tns:ExecuteCommandRequest"/&gt;
+	&lt;/wsdl:message&gt;
+	&lt;wsdl:message name="ExecuteCommandSoapOut"&gt;
+		&lt;wsdl:part name="parameters" element="tns:ExecuteCommandResponse"/&gt;
+	&lt;/wsdl:message&gt;
+	&lt;wsdl:portType name="HacktheBoxSoapPort"&gt;
+		&lt;!-- Login Operaion | PORT --&gt;
+		&lt;wsdl:operation name="Login"&gt;
+			&lt;wsdl:input message="tns:LoginSoapIn"/&gt;
+			&lt;wsdl:output message="tns:LoginSoapOut"/&gt;
+		&lt;/wsdl:operation&gt;
+		&lt;!-- ExecuteCommand Operation | PORT --&gt;
+		&lt;wsdl:operation name="ExecuteCommand"&gt;
+			&lt;wsdl:input message="tns:ExecuteCommandSoapIn"/&gt;
+			&lt;wsdl:output message="tns:ExecuteCommandSoapOut"/&gt;
+		&lt;/wsdl:operation&gt;
+	&lt;/wsdl:portType&gt;
+	&lt;wsdl:binding name="HacktheboxServiceSoapBinding" type="tns:HacktheBoxSoapPort"&gt;
+		&lt;soap:binding transport="http://schemas.xmlsoap.org/soap/http"/&gt;
+		&lt;!-- SOAP Login Action --&gt;
+		&lt;wsdl:operation name="Login"&gt;
+			&lt;soap:operation soapAction="Login" style="document"/&gt;
+			&lt;wsdl:input&gt;
+				&lt;soap:body use="literal"/&gt;
+			&lt;/wsdl:input&gt;
+			&lt;wsdl:output&gt;
+				&lt;soap:body use="literal"/&gt;
+			&lt;/wsdl:output&gt;
+		&lt;/wsdl:operation&gt;
+		&lt;!-- SOAP ExecuteCommand Action --&gt;
+		&lt;wsdl:operation name="ExecuteCommand"&gt;
+			&lt;soap:operation soapAction="ExecuteCommand" style="document"/&gt;
+			&lt;wsdl:input&gt;
+				&lt;soap:body use="literal"/&gt;
+			&lt;/wsdl:input&gt;
+			&lt;wsdl:output&gt;
+				&lt;soap:body use="literal"/&gt;
+			&lt;/wsdl:output&gt;
+		&lt;/wsdl:operation&gt;
+	&lt;/wsdl:binding&gt;
+	&lt;wsdl:service name="HacktheboxService"&gt;
+		&lt;wsdl:port name="HacktheboxServiceSoapPort" binding="tns:HacktheboxServiceSoapBinding"&gt;
+			&lt;soap:address location="http://localhost:80/wsdl"/&gt;
+		&lt;/wsdl:port&gt;
+	&lt;/wsdl:service&gt;
+&lt;/wsdl:definitions&gt;
+</span></code></pre></div></div>
+<p>We identified the SOAP service's WSDL file!</p>
+<p><strong>Note</strong>: WSDL files can be found in many forms, such as <code>/example.wsdl</code>, <code>?wsdl</code>, <code>/example.disco</code>, <code>?disco</code> etc. <a href="https://docs.microsoft.com/en-us/archive/msdn-magazine/2002/february/xml-files-publishing-and-discovering-web-services-with-disco-and-uddi" target="_blank" rel="noopener nofollow">DISCO</a> is a Microsoft technology for publishing and discovering Web Services.</p>
+<h2>WDSL File Breakdown</h2>
+<hr>
+<p>Let us now go over the identified WSDL file above together.</p>
+<p>The above WSDL file follows the <a href="https://www.w3.org/TR/2001/NOTE-wsdl-20010315" target="_blank" rel="noopener nofollow">WSDL version 1.1</a> layout and consists of the following elements.</p>
+<ul>
+<li>
+<code>Definition</code>
+<ul>
+<li>The root element of all WSDL files. Inside the definition, the name of the web service is specified, all namespaces used across the WSDL document are declared, and all other service elements are defined.</li>
+<li>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">xml</span></div><pre class=" language-xml"><code class=" language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>definitions</span> <span class="token attr-name">targetNamespace</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://tempuri.org/<span class="token punctuation">"</span></span> 
+
+    <span class="token attr-name"><span class="token namespace">&lt;wsdl:</span>types</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>types</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>message</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>LoginSoapIn<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>message</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>portType</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheBoxSoapPort<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>operation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>operation</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>portType</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>binding</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheboxServiceSoapBinding<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:HacktheBoxSoapPort<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>operation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>operation</span> <span class="token attr-name">soapAction</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>document<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>input</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>input</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>output</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>output</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>operation</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>binding</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>service</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheboxService<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>service</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>definitions</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<code>Data Types</code>
+<ul>
+<li>The data types to be used in the exchanged messages.</li>
+<li>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">xml</span></div><pre class=" language-xml"><code class=" language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>types</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>schema</span> <span class="token attr-name">elementFormDefault</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>qualified<span class="token punctuation">"</span></span> <span class="token attr-name">targetNamespace</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://tempuri.org/<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>LoginRequest<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  				  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">minOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">maxOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>username<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>s:string<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  				  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">minOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">maxOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>password<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>s:string<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>element</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>LoginResponse<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  				  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">minOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">maxOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>unbounded<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>result<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>s:string<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>element</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommandRequest<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  				  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">minOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">maxOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cmd<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>s:string<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>element</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommandResponse<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  				  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">s:</span>element</span> <span class="token attr-name">minOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1<span class="token punctuation">"</span></span> <span class="token attr-name">maxOccurs</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>unbounded<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>result<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>s:string<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  			  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>sequence</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>complexType</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>element</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">s:</span>schema</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>types</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<code>Messages</code>
+<ul>
+<li>Defines input and output operations that the web service supports. In other words, through the <em>messages</em> element, the messages to be exchanged, are defined and presented either as an entire document or as arguments to be mapped to a method invocation.</li>
+<li>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">xml</span></div><pre class=" language-xml"><code class=" language-xml"><span class="token comment">&lt;!-- Login Messages --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>message</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>LoginSoapIn<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>part</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>parameters<span class="token punctuation">"</span></span> <span class="token attr-name">element</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:LoginRequest<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>message</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>message</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>LoginSoapOut<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>part</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>parameters<span class="token punctuation">"</span></span> <span class="token attr-name">element</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:LoginResponse<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>message</span><span class="token punctuation">&gt;</span></span>
+<span class="token comment">&lt;!-- ExecuteCommand Messages --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>message</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommandSoapIn<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>part</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>parameters<span class="token punctuation">"</span></span> <span class="token attr-name">element</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:ExecuteCommandRequest<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>message</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>message</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommandSoapOut<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>part</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>parameters<span class="token punctuation">"</span></span> <span class="token attr-name">element</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:ExecuteCommandResponse<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>message</span><span class="token punctuation">&gt;</span></span>
+  ```	
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<code>Operation</code>
+<ul>
+<li>Defines the available SOAP actions alongside the encoding of each message.</li>
+</ul>
+</li>
+<li>
+<code>Port Type</code>
+<ul>
+<li>Encapsulates every possible input and output message into an operation. More specifically, it defines the web service, the available operations and the exchanged messages. Please note that in WSDL version 2.0, the <em>interface</em> element is tasked with defining the available operations and when it comes to messages the (data) types element handles defining them.</li>
+<li>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">xml</span></div><pre class=" language-xml"><code class=" language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>portType</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheBoxSoapPort<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token comment">&lt;!-- Login Operaion | PORT --&gt;</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>operation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>input</span> <span class="token attr-name">message</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:LoginSoapIn<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>output</span> <span class="token attr-name">message</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:LoginSoapOut<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>operation</span><span class="token punctuation">&gt;</span></span>
+    <span class="token comment">&lt;!-- ExecuteCommand Operation | PORT --&gt;</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>operation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommand<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>input</span> <span class="token attr-name">message</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:ExecuteCommandSoapIn<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>output</span> <span class="token attr-name">message</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:ExecuteCommandSoapOut<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>operation</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>portType</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<code>Binding</code>
+<ul>
+<li>Binds the operation to a particular port type. Think of bindings as interfaces. A client will call the relevant port type and, using the details provided by the binding, will be able to access the operations bound to this port type. In other words, bindings provide web service access details, such as the message format, operations, messages, and interfaces (in the case of WSDL version 2.0).</li>
+<li>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">xml</span></div><pre class=" language-xml"><code class=" language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>binding</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheboxServiceSoapBinding<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:HacktheBoxSoapPort<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>binding</span> <span class="token attr-name">transport</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://schemas.xmlsoap.org/soap/http<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+    <span class="token comment">&lt;!-- SOAP Login Action --&gt;</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>operation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>operation</span> <span class="token attr-name">soapAction</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Login<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>document<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>input</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>body</span> <span class="token attr-name">use</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>literal<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>input</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>output</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>body</span> <span class="token attr-name">use</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>literal<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>output</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>operation</span><span class="token punctuation">&gt;</span></span>
+    <span class="token comment">&lt;!-- SOAP ExecuteCommand Action --&gt;</span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>operation</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommand<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>operation</span> <span class="token attr-name">soapAction</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ExecuteCommand<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>document<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>input</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>body</span> <span class="token attr-name">use</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>literal<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>input</span><span class="token punctuation">&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>output</span><span class="token punctuation">&gt;</span></span>
+  		  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>body</span> <span class="token attr-name">use</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>literal<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+  	  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>output</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>operation</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>binding</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+<li>
+<code>Service</code>
+<ul>
+<li>A client makes a call to the web service through the name of the service specified in the service tag. Through this element, the client identifies the location of the web service.</li>
+<li>
+<div class="window_container"><div class="window_content"><div class="window_top">Code: <span class="text-success">xml</span></div><pre class=" language-xml"><code class=" language-xml">    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>service</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheboxService<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">wsdl:</span>port</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>HacktheboxServiceSoapPort<span class="token punctuation">"</span></span> <span class="token attr-name">binding</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tns:HacktheboxServiceSoapBinding<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">soap:</span>address</span> <span class="token attr-name">location</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://localhost:80/wsdl<span class="token punctuation">"</span></span><span class="token punctuation">/&gt;</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>port</span><span class="token punctuation">&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">wsdl:</span>service</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div></div>
+</li>
+</ul>
+</li>
+</ul>
+<p>In the <code>SOAP Action Spoofing</code> section, later on, we will see how we can leverage the identified WSDL file to interact with the web service.</p>
+<div id="screen" style="height: 600px; border: 1px solid;">
+<div class="screenPlaceholder">
+<div class="instanceLoading" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Instance is starting...</div>
+</div>
+<div class="instanceTerminating" style="display: none;">
+<h1 class="text-center" style="margin-top: 270px;"><i class="fa fa-circle-notch fa-spin"></i></h1>
+<div class="text-center">Terminating instance...</div>
+</div>
+<div class="row instanceStart max-width-canvas">
+<div class="col-4"></div>
+<div class="col-4">
+<button class=" startInstanceBtn btn btn-primary btn-lg btn-block" style="margin-top: 270px;">Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+ </span> / 1 spawns left
+</p>
+</div>
+<div class="col-4"></div>
+</div>
+</div>
+</div>
+<div class="row align-center justify-center my-4">
+<div class="col-5 justify-start">
+<button style="display:none;" target="_blank" class="instance-button fullScreenBtn btn btn-light btn-sm float-left "><i class="fad fa-expand text-success mr-1"></i> &nbsp;Full Screen</button>
+<button style="display:none;" class="instance-button terminateInstanceBtn btn btn-light btn-sm ml-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="instance-button resetInstanceBtn btn btn-light btn-sm ml-1"><i class="fad fa-sync text-warning mr-2"></i> &nbsp;Reset</button>
+<div class="btn-group " role="group">
+<button style="display:none;cursor: default;" class="instance-button extendInstanceBtn btn btn-light btn-sm ml-1">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm " data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+<div id="statusText" class="col-7 justify-end pt-2 pr-2 font-size-small text-right">Waiting to start...</div>
+</div>
+<div class="card" id="questionsDiv">
+<div class="card-body">
+<div class="row">
+<div class="col-9">
+<h4 class="card-title mt-0 font-size-medium">Questions</h4>
+<p class="card-title-desc font-size-large font-size-15">Answer the question(s) below to complete this Section and earn cubes!</p>
+<p class="card-title-desc font-size-large font-size-15">
+Target: <span class="text-success"><span class="target" style="cursor:pointer;"><span class="spawnTargetBtn">Click here to spawn the target system!</span></span></span>
+<button class="resetTargetBtn btn btn-light btn-sm " data-toggle="tooltip" data-title="Reset Target" style="cursor: pointer; display: none;" data-original-title="" title=""><i class="fad fa-sync text-warning"></i></button>
+<br>
+<span class="targetLifeTimeContainer" style="display: none;">Time Left: <span class="targetLifeTime  font-size-15">0</span> minutes</span>
+</p>
+</div>
+<div class="col-3 text-right float-right">
+<a href="https://academy.hackthebox.com/vpn/key" class="btn btn-light bg-color-blue-nav mt-2" data-toggle="tooltip" data-title="Key is already installed in &quot;My Workstation&quot;" target="_blank" rel="noopener nofollow" data-original-title="" title=""><i class="fad fa-chart-network mr-2"></i>Get VPN Key</a>
+</div>
+</div>
+<div>
+<div>
+<label class="module-question" for="1066"><span class="badge badge-soft-dark font-size-14 mr-2">+ 1 <i class="fad fa-cube text-success"></i></span> If you should think of the operation object in WSDL as a programming concept, which of the following is closer in terms of the provided functionality? Answer options (without quotation marks): "Data Structure", "Method", "Class"</label>
+<div class="row">
+<div class=" col-lg-8  mb-4">
+<input class="form-control bg-color-blue-nav" id="answer1066" type="text" color="green" placeholder="Submit your answer here..." maxlength="191">
+</div>
+<div class="col-lg-2 mb-4">
+<button class="btn btn-primary btn-block btnAnswer" id="btnAnswer1066" data-question-id="1066"><i class="fad fa-flag-checkered mr-2"></i> Submit</button>
+</div>
+<div class="col-lg-2 mb-4">
+</div>
+</div>
+<div class=""></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="card bg-color-blue-nav" style="margin: 30px 0">
+<div class="card-body">
+<a href="https://academy.hackthebox.com/module/160/section/1498" class="btn btn-light module-button py-2" style="float: left"><i class="fa fa-arrow-alt-left mr-1"></i> Previous</a>
+<form action="https://academy.hackthebox.com/module" method="POST" class="form-inline" id="completeForm" style="float: right">
+<input type="hidden" name="module_id" value="160">
+<input type="hidden" name="page_id" value="3">
+<input type="hidden" name="completed" value="1">
+<button id="completeBtn" class="btn btn-outline-success" style="display:none;"><i class="fa fa-check-circle"></i> Mark Complete &amp; Next</button>
+</form>
+<a href="https://academy.hackthebox.com/module/160/section/1482" class="btn btn-light ml-2 module-button py-2" style="float: left">Next <i class="ml-1 fa fa-arrow-alt-right"></i></a>
+</div>
+</div>
+</div>
+<div class="col-md-12 col-xl-3 col-xxl-3">
+<div id="table-of-contents">
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<a href="https://academy.hackthebox.com/module/160/section/1471#questionsDiv" class="btn btn-light btn-block module-button"><i class="fad fa-question mr-2"></i> Go to Questions</a>
+</div>
+</div>
+<div class="card" id="TOC">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title font-size-15 mb-4">Table of Contents</h5>
+<h6 class="mt-4 mb-2">Web Service &amp; API Fundamentals</h6> <a href="https://academy.hackthebox.com/module/160/section/1498" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Introduction to Web Services and APIs</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1471" class="btn   text-primary  btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Web Services Description Language (WSDL)</span>
+</a>
+<h6 class="mt-4 mb-2">Web Service Attacks</h6> <a href="https://academy.hackthebox.com/module/160/section/1482" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">SOAPAction Spoofing</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1473" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Command Injection</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1472" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<span class="font-size-13">Attacking WordPress' 'xmlrpc.php'</span>
+</a>
+<h6 class="mt-4 mb-2">API Attacks</h6> <a href="https://academy.hackthebox.com/module/160/section/1474" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Information Disclosure (with a twist of SQLi)</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1500" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Arbitrary File Upload</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1501" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Local File Inclusion (LFI)</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1503" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Cross-Site Scripting</span>
+ </a>
+<a href="https://academy.hackthebox.com/module/160/section/1479" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Server-Side Request Forgery (SSRF)</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1480" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Regular Expression Denial of Service (ReDoS)</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1481" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">XML External Entity (XXE) Injection</span>
+</a>
+<a href="https://academy.hackthebox.com/module/160/section/1475" class="btn   btn-sm btn-block mt-1 py-2 text-left btn-lighter">
+<i class="fad fa-cube text-success mt-1 mr-2"></i>&nbsp;
+<span class="font-size-13">Web Service &amp; API Attacks - Skills Assessment</span>
+</a>
+</div>
+</div>
+<div class="card">
+<div class="card-body bg-color-blue-nav">
+<h5 class="card-title mb-4">My Workstation</h5>
+<div class="row">
+<div class="col-12">
+<div id="sidePreview" style="height: 160px; border: 1px solid #323232; border-radius: 5px; background-color: #0a121c; text-align: center">
+<div class="screenPlaceholder">
+<p class="instanceStart" style="padding-top:70px; letter-spacing: 5px;">OFFLINE</p>
+<p class="instanceLoading " style="padding-top:70px; display: none"><i class="fa fa-circle-notch fa-spin"></i> Starting...</p>
+</div>
+</div>
+</div>
+<div class="col-12 mt-2">
+<div class="instanceStart">
+<button class=" startInstanceBtn btn btn-light btn-sm mt-2 btn-block module-button py-2"><i class="fad fa-play-circle text-success"></i> &nbsp;Start Instance</button>
+<p class="text-center mt-2 font-size-13 font-secondary">
+<span class="text-success spawnsLeft">
+<i class="fal fa-infinity"></i>
+</span> / 1 spawns left
+</p>
+</div>
+<button style="display:none;" class="fullScreenBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-expand text-success"></i> &nbsp;Interact</button>
+<button style="display:none;" class="terminateInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-times text-danger"></i> &nbsp;Terminate</button>
+<button style="display:none;" class="resetInstanceBtn btn btn-light btn-sm mt-2 module-button py-2"><i class="fad fa-sync text-warning"></i> &nbsp;Reset</button>
+<div class="btn-group" role="group">
+<button style="display:none; cursor: default;" class=" extendInstanceBtn btn btn-light btn-sm mt-2 module-button py-2">Life Left: <span class="lifeLeft"></span>m</button>
+<button style="display:none;" data-toggle="tooltip" data-title="Extend Life" class=" extendInstanceBtn extendInstanceBtnClicker btn btn-light btn-sm mt-2 module-button py-2" data-original-title="" title=""><i class="fa fa-plus text-success"></i></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="hint1066" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="hint1066" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center">
+<h5><i class="fad fa-life-ring text-success"></i>&nbsp; Hint</h5>
+<br>
+<h6></h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="cheatSheetModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="unlockModuleModal" aria-hidden="true">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<div class="modal-body">
+<div class="text-center text-break">
+<h5><i class="fad fa-file-alt"></i>&nbsp; Cheat Sheet</h5>
+<p>The cheat sheet is as a useful command reference for this module.</p>
+</div>
+</div>
+<div class="modal-footer">
+<a class="btn btn-light btn-block" href="https://academy.hackthebox.com/module/cheatsheet/160">Download Cheatsheet</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<footer class="footer">
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-6">
+</div>
+<div class="col-sm-6">
+<div class="text-sm-right d-none d-sm-block">
+Powered by &nbsp; <a href="https://www.hackthebox.com/" target="_blank"><img style="margin-bottom: 1px;" src="./Web Service &amp; API Attacks2_files/logo-htb.svg" height="20px"></a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+<script src="./Web Service &amp; API Attacks2_files/jquery.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/bootstrap.bundle.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/metisMenu.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/simplebar.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/waves.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/toastr.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/axios.min.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/prism.js.download"></script>
+<script src="./Web Service &amp; API Attacks2_files/main.js.download"></script>
+<script>
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': 'OEgK0JdzOZwGIHHODUXYrzCqZr0uFSlpTj7r9g5E',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': 'Bearer ' + 'jgfghW9jOUxTYrPOMG9i2ujbtUFdtKuilcFrKtLWJpv9gAzKxNnjcsm7Dg2wIx8ivYvDBp7jCWD5XRNP'
+    };
+</script>
+<script>
+    $('table').addClass('table table-striped text-left').wrap('<div class="table-responsive"></div>');
+
+    $('.training-module a').attr('target','_blank').attr('rel','noopener nofollow');
+
+    $( ".favouriteBtn" ).click(function() {
+        let id = $(this).data('module-id');
+
+        axios.get('/api/modules/favourite/'+id).then(response => {
+            let data = response.data;
+            if (data.fav === 1) {
+                $(this).removeClass('far fa').addClass('fa');
+                toastr["success"](data.message, "Success");
+            } else {
+                $(this).removeClass('far fa').addClass('far');
+                toastr["success"](data.message, "Success");
+            }
+        });
+    });
+
+    function encode_utf8(string) {
+    return unescape(encodeURIComponent(string));
+  }
+
+  $('.btnAnswer').click(function() {
+    let question_id = $(this).data('question-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($('#answer' + question_id).val());
+    axios.post('/api/check/answer', {
+      answer: btoa(utf8EncodedString),
+      question_id: question_id
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $('#answer' + question_id).attr('disabled', 1);
+        $('#answer' + question_id).addClass('text-success');
+        $('#hintBtn' + question_id).attr('disabled', 1);
+        toastr['success'](data.message, 'Success');
+        completeCheck();
+      }
+    });
+  });
+
+  $('.btnAnswerExercise').click(function() {
+    let exercise_id = $(this).data('exercise-id');
+    $(this).attr('disabled', 1);
+    let utf8EncodedString = encode_utf8($(`#exerciseAnswer${exercise_id}`).val());
+    axios.post(`/api/check/exercise/${exercise_id}/answer`, {
+      answer: btoa(utf8EncodedString)
+    }).then(response => {
+      $(this).removeAttr('disabled');
+      let data = response.data;
+      if (data.success === 0) {
+        toastr['error'](data.message, 'Error');
+      } else {
+        $(this).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).attr('disabled', 1);
+        $(`#exerciseAnswer${exercise_id}`).addClass('text-success');
+        toastr['success'](data.message, 'Success');
+      }
+    });
+  });
+
+    
+    $('.reveal-modal').click(e => {
+        let id = $(e.target).data('exercise-id');
+        $(`#revealExerciseAnswer${id}`).modal('hide');
+    });
+
+    $( document ).ready(function() {
+
+        $('pre').filter(function () {
+            return this.className.match(/\blanguage-/);
+        }).each(function () {
+            let heading = $(this).prevAll().closest('h4').last().text();
+
+            if (this.className === ' language-shell-session') {
+                wrapTerminal(this, heading);
+            } else if (this.className === ' language-powershell-session') {
+                wrapPSTerminal(this, heading);
+            } else if (this.className === ' language-cmd-session') {
+                wrapCMDTerminal(this, heading);
+            } else if (this.className.startsWith(' language-')) {
+                var language = this.className.split('-').pop();
+                wrapCodeBlock(this,language);
+            }
+        });
+
+        wrapBrowser($('.website-screenshot'));
+        completeCheck();
+
+        $("span:contains('[!bash!]')").html('<span class="text-gray">Tommy034@htb</span><span class="text-success">[/htb]</span>');
+    });
+
+    function completeCheck()
+    {
+        axios.get('/api/check/complete/1471').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.completed === true) {
+                    $('#completeBtn').show();
+                }
+            }
+        });
+    }
+
+    function wrapTerminal(element, heading)
+    {
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapPSTerminal(element, heading)
+    {
+        $(element).css('background', '#012456').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCMDTerminal(element, heading)
+    {
+        $(element).css('background', 'black').children().css('color','white');
+        $(element).css('line-height', '0px');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <span class="window_title">${heading}</span>
+                </div>
+            `);
+    }
+    function wrapCodeBlock(element,lang)
+    {
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend('<div class="window_top">Code: <span class="text-success">'+lang+'</div>');
+    }
+    function wrapBrowserOld(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+        let url = element.data('url');
+        $(element).wrap('<div class="window_content"></div>')
+            .parent().wrap('<div class="window_container"></div>')
+            .prepend(`
+                <div class="window_top">
+                    <span class="window_dot bg-danger"></span>
+                    <span class="window_dot bg-warning"></span>
+                    <span class="window_dot bg-success"></span>
+                    <input type="text" class="website-screenshot-url" disabled value="${url}">
+                    <span class="float-right"><i class="fa fa-home"></i></span>
+                </div>
+            `);
+    }
+    function wrapBrowser(element)
+    {
+        $(element).css("border", "0px").css("border-radius","0");
+
+        $(element).each( function(index,e) {
+            let url = $(e).data('url');
+            $(e).wrap('<div class="window_content"></div>')
+                .parent().wrap('<div class="window_container"></div>')
+                .prepend(`
+                    <div class="window_top">
+                        <span class="mr-2">
+                            <i class="fa fa-arrow-circle-left"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-redo"></i> <i class="fa fa-home"></i>
+                        </span>
+                        <input type="text" class="website-screenshot-url" disabled value="${url}">
+                        <span class="float-right"><i class="fa fa-bars"></i></span>
+                    </div>
+                `);
+        })
+    }
+</script>
+<script type="module">
+    import RFB from '/assets/libs/vnc/core/rfb.js';
+
+    let rfb;
+    let sidePreview;
+    let desktopName;
+    let pwnboxActive = false;
+
+    function connectedToServer(e) {
+        status("Connected to " + desktopName);
+        $('.fullScreenBtn').show();
+        $('.resetInstanceBtn').show();
+        $('.terminateInstanceBtn').show();
+        $('.extendInstanceBtn').show();
+        $('.instanceLoading').hide();
+        $('.instanceStart').hide();
+        $('.resetInstanceBtn').prop('disabled',false);
+        $('.fullScreenBtn').prop('disabled',false);
+        $('.extendInstanceBtn').prop('disabled',false);
+        $('.terminateInstanceBtn').prop('disabled',false);
+
+        document.querySelector('canvas').addEventListener('focus', (event) => {
+            navigator.clipboard.readText()
+                .then(text => {
+                    writeToClipboard(text);
+                })
+                .catch(err => {
+                    console.log('Something went wrong while accessing clipboard', err);
+                })
+        });
+
+    }
+
+    function disconnectedFromServer(e) {
+        status("Disconnected");
+        $('.screenPlaceholder').show();
+        stopCountdown();
+    }
+
+    function clipboardReceived(e) {
+        navigator.clipboard.writeText(e.detail.text)
+            .then(() => {
+                // Success!
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    }
+
+    function updateDesktopName(e) {
+        desktopName = e.detail.name;
+    }
+
+    function status(text) {
+        console.log(text);
+        $("#statusText").html(text);
+    }
+
+    function readQueryVariable(name) {
+        const re = new RegExp('.*[?&]' + name + '=([^&#]*)'),
+            match = document.location.href.match(re);
+
+        if (match) {
+            return decodeURIComponent(match[1]);
+        }
+
+        return null;
+    }
+
+    function writeToClipboard(text) {
+        rfb.clipboardPasteFrom(text);
+    }
+
+    let host = '';
+    let password = '';
+    let countdown = '';
+    let targetCountdown = '';
+    let url= '';
+    let spawnInterval = null;
+
+    function getPwnbox() {
+        axios.get('/api/get/pwnbox').then(response => {
+            let data = response.data;
+
+            if (spawnInterval !== null && data.instance.action_log !== null) {
+                let error = data.instance.action_log.find(log => log.error === true);
+                if (error) {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+
+                    clearInterval(spawnInterval);
+                    disconnectedFromServer();
+
+                    let errorMessage = `${error.text}. Please contact support.`;
+                    toastr["error"](errorMessage, "Error");
+
+                    status(errorMessage);
+                    return;
+                }
+            }
+
+            if (data.success === 1 && data.instance.vnc_password !== null) {
+                if (data.instance.action_log.find(log => log.action === 'ready')) {
+                    host = 'proxy-uk.htb-cloud.com/bird/' + data.instance.hostname;
+                    password = data.instance.vnc_password;
+                    $('.lifeLeft').html(data.instance.life_remaining);
+                    startCountdown();
+                    $('.screenPlaceholder').hide();
+                    url = 'https://vnc.htb-cloud.com/index.html?host=' + host + '&password=' + password;
+                    pwnboxActive = true;
+                    connect();
+
+                    if (spawnInterval !== null) {
+                        clearInterval(spawnInterval);
+                    }
+                }
+            } else {
+                $('.screenPlaceholder').show();
+            }
+
+        });
+    }
+
+        function extendPwnbox() {
+        axios.get('/api/extend/pwnbox').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                $('.lifeLeft').html(data.instance.life_remaining);
+                stopCountdown();
+                startCountdown();
+                toastr["success"]("Time extended for 60 minutes.", "Success");
+            } else {
+                toastr["error"](data.message, "Error");
+            }
+
+        });
+    }
+    
+    getPwnbox();
+
+    function startCountdown() {
+        countdown = setInterval(function() {
+            let life = parseInt($('.lifeLeft').html()) -1;
+            $('.lifeLeft').html(life)
+        }, 60 * 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdown);
+    }
+
+    function terminatePwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+
+        $('.instanceTerminating').show();
+
+        status('Terminating Interactive Instance...');
+
+        axios.delete('/api/terminate/pwnbox')
+            .then(({ data }) => {
+                if (data.success === 1) {
+                    $('.startInstanceBtn').show();
+                    $('.instanceStart').show();
+                    $('.instanceTerminating').hide();
+                    $('.resetInstanceBtn').hide();
+                    $('.terminateInstanceBtn').hide();
+                    $('.fullScreenBtn').hide();
+                    $('.extendInstanceBtn').hide();
+
+                    pwnboxActive = false;
+
+                    toastr['success']('Instance has been terminated.', 'Success');
+                } else {
+                    toastr['error'](data.message, 'Error');
+                    connect();
+                    $('.resetInstanceBtn').prop("disabled", false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                }
+            });
+    }
+
+    function startPwnbox() {
+        $('.resetInstanceBtn').prop('disabled',true);
+        $('.fullScreenBtn').prop('disabled',true);
+        $('.extendInstanceBtn').prop('disabled',true);
+        $('.terminateInstanceBtn').prop('disabled',true);
+        $('.instanceStart').hide();
+        $('.instanceLoading').show();
+        $('.startInstanceBtn').hide();
+
+        status("Starting Interactive Instance...");
+
+        grecaptcha.ready(function() {
+            grecaptcha.execute('6LeI6LsaAAAAAKgdStgBC6B4UVbXlpYNaYGN46Ah', {action: 'spawnPwnbox'}).then(function(token) {
+                if (token) {
+                    axios.get('/api/spawn/pwnbox?g-recaptcha-response= '+token).then(response => {
+                        let data = response.data;
+                        if (data.success === 1) {
+                            spawnInterval = setInterval(() => {
+                                getPwnbox();
+                            }, 2000);
+                        } else {
+                            if(data.code === 1 || (data.code === 3 && pwnboxActive)) {
+                                $('.resetInstanceBtn').prop("disabled", false);
+                                $('.fullScreenBtn').prop('disabled',false);
+                                $('.extendInstanceBtn').prop('disabled',false);
+                                $('.terminateInstanceBtn').prop('disabled',false);
+                                connect();
+
+                                if (data.code === 3) {
+                                    $('.instanceLoading').hide();
+                                    startCountdown();
+                                }
+                            } else {
+                                $('.startInstanceBtn').show();
+                                $('.instanceStart').show();
+                                $('.instanceLoading').hide();
+                            }
+
+                            toastr["error"](data.message, "Error");
+                        }
+
+                    });
+                } else {
+                    $('.resetInstanceBtn').prop('disabled',false);
+                    $('.fullScreenBtn').prop('disabled',false);
+                    $('.extendInstanceBtn').prop('disabled',false);
+                    $('.terminateInstanceBtn').prop('disabled',false);
+                    $('.instanceStart').show();
+                    $('.instanceLoading').hide();
+                    $('.startInstanceBtn').show();
+                }
+            });
+        });
+    }
+
+    $('.fullScreenBtn').click(function() {
+        window.open(url, "_blank");
+    });
+
+    $('.startInstanceBtn').click(function() {
+        startPwnbox();
+            });
+
+    $('.resetInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        startPwnbox();
+    });
+
+    $('.terminateInstanceBtn').click(function() {
+        $('.screenPlaceholder').show();
+        $('.instanceStart').show();
+                rfb.disconnect();
+                sidePreview.disconnect();
+        terminatePwnbox();
+    });
+
+    $('.extendInstanceBtnClicker').click(function() {
+       extendPwnbox();
+    });
+
+    $('.resetTargetBtn').click(function(){
+        $(this).prop('disabled',true);
+                            spawnVMs();
+            });
+
+    function connect() {
+        status("Connecting to " + host.split('/')[2] + "...");
+
+                rfb = new RFB(document.getElementById('screen'), 'wss://' + host,
+            { credentials: { password: password } });
+        //Listeners
+        rfb.addEventListener("desktopname", updateDesktopName);
+        rfb.addEventListener("clipboard",clipboardReceived);
+
+        rfb.resizeSession = true;
+        rfb.viewOnly = false;
+        
+        sidePreview = new RFB(document.getElementById('sidePreview'), 'wss://' + host,
+            { credentials: { password: password } });
+
+        sidePreview.addEventListener("connect",  connectedToServer);
+        sidePreview.addEventListener("disconnect", disconnectedFromServer);
+
+        sidePreview.resizeSession = false;
+        sidePreview.viewOnly = true;
+        sidePreview.scaleViewport = true;
+    }
+
+    $('.target, .targetIp').click(e => {
+        if ($('.resetTargetBtn').is(':hidden')) return;
+        navigator.clipboard.writeText($(e.target).html())
+            .then(() => {
+                toastr['success']('Target copied to clipboard', 'Success');
+            })
+            .catch(err => {
+                console.log('Something went wrong while copying to clipboard.', err);
+            });
+    });
+
+            $('.spawnTargetBtn').click(function() {
+        spawnVMs();
+    })
+
+    let vmCheckTimer;
+
+    function spawnVMs() {
+        $('.target').html('<i class="fad fa-circle-notch fa-spin"></i> Target is spawning...');
+        $('.targetIp').html('<i class="fad fa-circle-notch fa-spin"></i>');
+        axios.get('/api/spawn/vms/1471').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                vmCheckTimer = setInterval(function() {
+                    checkVMs();
+                }, 5 * 1000);
+            } else {
+                toastr["error"](data.message, "Error");
+                $('.target').html('<span class="spawnTargetBtn" style="cursor:pointer;">Click here to spawn the target system!</span>');
+            }
+        });
+    }
+
+    function checkVMs() {
+        axios.get('/api/get/vms/1471').then(response => {
+            let data = response.data;
+            if (data.success === 1) {
+                if (data.ready === 1) {
+                    $('.target').html(data.ip);
+                    $('.resetTargetBtn').show();
+                    $('.targetIp').html(data.ip);
+                    $('.targetLifeTimeContainer').show();
+                    $('.targetLifeTime').html(data.life_remaining);
+                    clearInterval(vmCheckTimer);
+                    $('.resetTargetBtn').prop('disabled',false);
+                    startTargetCountdown();
+                }
+            }
+        });
+    }
+
+    checkVMs();
+
+    
+    function startTargetCountdown() {
+        targetCountdown = setInterval(function() {
+            let life = parseInt($('.targetLifeTime').html()) -1;
+            $('.targetLifeTime').html(life)
+            if (life == 0) {
+                $('.targetLifeTimeContainer').hide();
+            }
+        }, 60 * 1000);
+    }
+</script>
+
+
+<div><div class="grecaptcha-badge" data-style="bottomright" style="width: 256px; height: 60px; display: block; transition: right 0.3s ease 0s; position: fixed; bottom: 14px; right: -186px; box-shadow: gray 0px 0px 5px; border-radius: 2px; overflow: hidden;"><div class="grecaptcha-logo"><iframe title="reCAPTCHA" src="./Web Service &amp; API Attacks2_files/anchor.html" width="256" height="60" role="presentation" name="a-o1mctby7r3y3" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><div class="grecaptcha-error"></div><textarea id="g-recaptcha-response-100000" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid rgb(193, 193, 193); margin: 10px 25px; padding: 0px; resize: none; display: none;"></textarea></div><iframe style="display: none;" src="./Web Service &amp; API Attacks2_files/saved_resource.html"></iframe></div><div id="torrent-scanner-popup" style="display: none;"></div><iframe id="intercom-frame" style="position: absolute !important; opacity: 0 !important; width: 1px !important; height: 1px !important; top: 0 !important; left: 0 !important; border: none !important; display: block !important; z-index: -1 !important; pointer-events: none;" aria-hidden="true" tabindex="-1" title="Intercom" src="./Web Service &amp; API Attacks2_files/saved_resource(1).html"></iframe><div class="intercom-lightweight-app"><div class="intercom-lightweight-app-launcher intercom-launcher" role="button" tabindex="0" aria-label="Open Intercom Messenger" aria-live="polite"><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-open"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 32"><path d="M28 32s-4.714-1.855-8.527-3.34H3.437C1.54 28.66 0 27.026 0 25.013V3.644C0 1.633 1.54 0 3.437 0h21.125c1.898 0 3.437 1.632 3.437 3.645v18.404H28V32zm-4.139-11.982a.88.88 0 00-1.292-.105c-.03.026-3.015 2.681-8.57 2.681-5.486 0-8.517-2.636-8.571-2.684a.88.88 0 00-1.29.107 1.01 1.01 0 00-.219.708.992.992 0 00.318.664c.142.128 3.537 3.15 9.762 3.15 6.226 0 9.621-3.022 9.763-3.15a.992.992 0 00.317-.664 1.01 1.01 0 00-.218-.707z"></path></svg></div><div class="intercom-lightweight-app-launcher-icon intercom-lightweight-app-launcher-icon-minimize"><svg viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M.116 4.884l1.768-1.768L8 9.232l6.116-6.116 1.768 1.768L8 12.768.116 4.884z"></path></svg></div></div><style id="intercom-lightweight-app-style" type="text/css">
+  @keyframes intercom-lightweight-app-launcher {
+    from {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes intercom-lightweight-app-gradient {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes intercom-lightweight-app-messenger {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .intercom-lightweight-app {
+    position: fixed;
+    z-index: 2147483001;
+    width: 0;
+    height: 0;
+    font-family: intercom-font, "Helvetica Neue", "Apple Color Emoji", Helvetica, Arial, sans-serif;
+  }
+
+  .intercom-lightweight-app-gradient {
+    position: fixed;
+    z-index: 2147483002;
+    width: 500px;
+    height: 500px;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at bottom right,
+      rgba(29, 39, 54, 0.16) 0%,
+      rgba(29, 39, 54, 0) 72%);
+    animation: intercom-lightweight-app-gradient 200ms ease-out;
+  }
+
+  .intercom-lightweight-app-launcher {
+    position: fixed;
+    z-index: 2147483003;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #85C700;
+    cursor: pointer;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    animation: intercom-lightweight-app-launcher 250ms ease;
+  }
+
+  .intercom-lightweight-app-launcher:focus {
+    outline: none;
+    
+  }
+
+  .intercom-lightweight-app-launcher-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    transition: transform 100ms linear, opacity 80ms linear;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg {
+    width: 28px;
+    height: 32px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-open svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve {
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg {
+    height: 56px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-self-serve svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-launcher-custom-icon-open {
+    max-height: 36px;
+    max-width: 36px;
+    
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize {
+    
+        opacity: 0;
+        transform: rotate(-60deg) scale(0);
+      
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg {
+    width: 16px;
+  }
+
+  .intercom-lightweight-app-launcher-icon-minimize svg path {
+    fill: rgb(255, 255, 255);
+  }
+
+  .intercom-lightweight-app-messenger {
+    position: fixed;
+    z-index: 2147483003;
+    overflow: hidden;
+    background-color: white;
+    animation: intercom-lightweight-app-messenger 250ms ease-out;
+    
+        width: 376px;
+        height: calc(100% - 120px);
+        max-height: 704px;
+        min-height: 250px;
+        right: 20px;
+        bottom: 100px;
+        box-shadow: 0 5px 40px rgba(0,0,0,0.16);
+        border-radius: 8px;
+      
+  }
+
+  .intercom-lightweight-app-messenger-header {
+    height: 75px;
+    background: linear-gradient(
+      135deg,
+      rgb(17, 25, 39) 0%,
+      rgb(0, 0, 0) 100%
+    );
+  }
+
+  @media print {
+    .intercom-lightweight-app {
+      display: none;
+    }
+  }
+</style></div><img src="./Web Service &amp; API Attacks2_files/adsct" height="1" width="1" style="display: none;"><img src="./Web Service &amp; API Attacks2_files/adsct(1)" height="1" width="1" style="display: none;"></body></html>
